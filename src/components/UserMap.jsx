@@ -1,5 +1,6 @@
-
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { faUpload } from '@fortawesome/free-solid-svg-icons';
+import { MapContainer, TileLayer, Popup } from 'react-leaflet'
+import Marker from 'react-leaflet-enhanced-marker'
 import 'leaflet/dist/leaflet.css'
 
 const UserMap = () =>{
@@ -11,9 +12,9 @@ const UserMap = () =>{
     <MapContainer center={location} zoom={13} scrollWheelZoom={false}>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
       />
-    <Marker position={[51.505, -0.09]}>
+    <Marker position={location} icon={<img src={faUpload}/>}>
       <Popup>
         A pretty CSS3 popup. <br /> Easily customizable.
       </Popup>

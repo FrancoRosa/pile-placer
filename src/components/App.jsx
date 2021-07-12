@@ -9,7 +9,7 @@ const App = () => {
     <div className="container">
       <Tabs />
       <Switch>
-        <Redirect exact from="/" to="/home" />
+        <Redirect exact from="/" to="/map" />
         <Route path="/config" component={Config} />
         <Route path="/map" component={Home} />
       </Switch>
