@@ -1,6 +1,10 @@
+import UserMap from "./UserMap";
+
 const Home = () => {
   return (
-    <div> Home! </div>
+    <div className="container">
+      <UserMap />
+    </div>
   );
 };
 
