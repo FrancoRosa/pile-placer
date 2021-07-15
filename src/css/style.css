@@ -56,12 +56,6 @@
   justify-content: center !important;
 }
 
-/* leaflet modifiers */
-.leaflet-container {
-  width: 100%;
-  height: 80vh;
-}
-
 /* others */
 .flag-icon {
   display: flex;
@@ -73,9 +67,10 @@
   color: red;
 }
 
+/* maps modifiers */
 .map {
   height: 60vh;
-   padding: 0 0 0 0;
-   margin: 0 0 0 0;
-   display: block;
+  padding: 0 0 0 0;
+  margin: 0 0 0 0;
+  display: block;
 }
