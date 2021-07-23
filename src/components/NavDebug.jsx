@@ -5,10 +5,12 @@ import { useState } from 'react';
 
 const NavDebug = ({google}) => {
   const [course, setCourse] = useState(0)
+  const [markerLatLng, setMarkerLatLng] = useState({lat:0,lng:0})
   
   const getMapCordinates = (mapProps, map, clickEvent) => {
     let lat = clickEvent.latLng.lat().toFixed(5)
     let lng = clickEvent.latLng.lng().toFixed(5)
+    setMarkerLatLng({lat,lng})
     console.log(lat, lng)
   }
   
@@ -23,16 +25,23 @@ const NavDebug = ({google}) => {
         <Map 
           google={google} zoom={10} 
           onClick={getMapCordinates}
-        />
+        >
+          <Marker 
+            name={'target'}
+            position={markerLatLng}
+          />
+        </Map>
       </div>
       <div className="container mt-4 pt-4">
         <div className="columns">
           <div className="column">
-            <p>Heading: {course}° </p>
+            <p className="ml-4">Coordinates: {markerLatLng.lat}, {markerLatLng.lng}</p>
+            <p className="ml-4">Heading: {course}° </p>
           </div>
           <div className="column">
+            <p className="ml-4">Set heading:</p>
             <input 
-              class="slider is-fullwidth" 
+              class="slider m-4" 
               step="1" min="0" max="100" 
               value={course} type="range"
               onInput={setCourseValue}
