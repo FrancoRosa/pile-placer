@@ -30,8 +30,12 @@ def rows_to_json(rows):
   return result
 
 
-
 rows = cvs_to_rows('data.csv')
 json = rows_to_json(rows)
 for i in json:
   print('%s,'%i)
+
+  # transform longitudes and latitudes to OSGB36 Eastings and Northings very accurately:
+# use convert_bng()
+# transform OSGB36 Eastings and Northings to longitude and latitude, very accurately:
+# use convert_lonlat()
