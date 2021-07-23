@@ -2,20 +2,25 @@
 // and heading info to change the main map behavior
 import {Map, Marker, GoogleApiWrapper, Polyline} from 'google-maps-react';
 import { useState } from 'react';
+import { setHeading, setLatLng } from '../js/api';
 
 const NavDebug = ({google}) => {
   const [course, setCourse] = useState(0)
   const [markerLatLng, setMarkerLatLng] = useState({lat:0,lng:0})
   
   const getMapCordinates = (mapProps, map, clickEvent) => {
-    let lat = clickEvent.latLng.lat().toFixed(5)
-    let lng = clickEvent.latLng.lng().toFixed(5)
-    setMarkerLatLng({lat,lng})
-    console.log(lat, lng)
+    let location = {
+      lat: clickEvent.latLng.lat().toFixed(5),
+      lng: clickEvent.latLng.lng().toFixed(5)
+    }
+    setMarkerLatLng(location)
+    setLatLng(location)
+    console.log(location)
   }
   
   const setCourseValue = e => {
     const sliderValue = parseFloat(e.target.value).toFixed(1)
+    setHeading({heading: sliderValue})
     setCourse(sliderValue)
   }
 
