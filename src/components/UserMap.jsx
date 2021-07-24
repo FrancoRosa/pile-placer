@@ -20,7 +20,7 @@ const UserMap = ({ google }) =>{
 
   const changeHeading = (mapProps, map) => {
     console.log('changeHeading')
-    map.setHeading(parseFloat(center.heading))
+    map.setHeading(180)
   }
 
   const get_icon = color => ({
@@ -65,7 +65,7 @@ const UserMap = ({ google }) =>{
       <Map google={google} zoom={16} 
         initialCenter={center} center={center}
         onClick={changeHeading}
-        mapId="WeatherMap"
+        mapId="2f571dc2d7296a3a"
       >
         {waypoints.map(waypoint => (
           <Marker onClick={()=>console.log('click')} 
