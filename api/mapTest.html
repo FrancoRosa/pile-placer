@@ -17,12 +17,13 @@
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: -34.397, lng: 150.644},
     zoom: 8,
-    mapId: '2f571dc2d7296a3a'
+    mapId: '2f571dc2d7296a3a',
+    heading: 90,
   });
 
   button = document.getElementById('button')
   button.addEventListener('click', () => {
-    map.setHeading(180);
+    map.setHeading(map.getHeading() +10);
     console.log('This')
   })
 </script>
