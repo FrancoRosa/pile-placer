@@ -2,7 +2,7 @@ import {Map, Marker, GoogleApiWrapper, Polyline} from 'google-maps-react';
 import { useEffect, useState } from 'react';
 import { socket } from '../js/api';
 
-const UserMap = ({ google, map }) =>{
+const UserMap = ({ google }) =>{
   const [center, setCenter] = useState({ heading: 0, lat: 0, lng: 0 })
   
   useEffect(() => {
@@ -18,8 +18,9 @@ const UserMap = ({ google, map }) =>{
     };
   }, [])
 
-  const changeHeading = map => {
-    map.setHeading(180);
+  const changeHeading = (mapProps, map) => {
+    console.log('changeHeading')
+    map.setHeading(parseFloat(center.heading))
   }
 
   const get_icon = color => ({
@@ -62,8 +63,9 @@ const UserMap = ({ google, map }) =>{
   return (
     <div className="container map">
       <Map google={google} zoom={16} 
-        initialCenter={center} center={center} heading={center.heading}
+        initialCenter={center} center={center}
         onClick={changeHeading}
+        mapId="WeatherMap"
       >
         {waypoints.map(waypoint => (
           <Marker onClick={()=>console.log('click')} 
@@ -78,5 +80,5 @@ const UserMap = ({ google, map }) =>{
 };
 
 export default GoogleApiWrapper({
-  apiKey: ('AIzaSyBsgd5A9q-23gHy8tL6e5O0lct6JoD97xo')
+  apiKey: ('AIzaSyBsgd5A9q-23gHy8tL6e5O0lct6JoD97xo&v=beta')
 })(UserMap)
