@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { socket } from '../js/api';
 
 const UserMap = ({ google }) =>{
-  const [center, setCenter] = useState({ heading: 0, lat: 0, lng: 0 })
+  const [center, setCenter] = useState({ heading: 0, lat: -13.52, lng: -72.72 })
   
   useEffect(() => {
     
@@ -20,7 +20,9 @@ const UserMap = ({ google }) =>{
 
   const changeHeading = (mapProps, map) => {
     console.log('changeHeading')
-    map.setHeading(180)
+    console.log(map.getHeading())
+    map.setHeading(map.getHeading() + 10)
+    console.log('changed ppau')
   }
 
   const get_icon = color => ({
@@ -62,10 +64,11 @@ const UserMap = ({ google }) =>{
     
   return (
     <div className="container map">
-      <Map google={google} zoom={16} 
+      <Map google={google} zoom={10} 
         initialCenter={center} center={center}
         onClick={changeHeading}
-        mapId="2f571dc2d7296a3a"
+        // mapId="2f571dc2d7296a3a"
+        heading={180}
       >
         {waypoints.map(waypoint => (
           <Marker onClick={()=>console.log('click')} 
@@ -80,5 +83,6 @@ const UserMap = ({ google }) =>{
 };
 
 export default GoogleApiWrapper({
-  apiKey: ('AIzaSyBsgd5A9q-23gHy8tL6e5O0lct6JoD97xo&v=beta')
+  apiKey: ('AIzaSyBsgd5A9q-23gHy8tL6e5O0lct6JoD97xo'),
+  version: 'beta'
 })(UserMap)

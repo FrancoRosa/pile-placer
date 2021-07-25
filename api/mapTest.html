@@ -18,13 +18,13 @@
     center: {lat: -34.397, lng: 150.644},
     zoom: 8,
     mapId: '2f571dc2d7296a3a',
-    heading: 90,
+    heading: 135
   });
 
   button = document.getElementById('button')
   button.addEventListener('click', () => {
     map.setHeading(map.getHeading() +10);
-    console.log('This')
+    console.log(map.getHeading())
   })
 </script>
 <style>
