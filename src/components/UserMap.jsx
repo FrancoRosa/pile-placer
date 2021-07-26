@@ -1,5 +1,4 @@
-import {Map, Marker, GoogleApiWrapper, Polyline} from 'google-maps-react';
-import { map } from 'leaflet';
+import {Map, Marker, GoogleApiWrapper, Rectangle} from 'google-maps-react';
 import { useEffect, useState } from 'react';
 import { socket } from '../js/api';
 
@@ -33,28 +32,28 @@ const UserMap = ({ google }) =>{
   const waypoints = [
     {'lat': 13.68653627, 'lng': 30.12913939, 'color': 'lightblue'},
     {'lat': 13.68650949, 'lng': 30.12913939, 'color': 'pink'},
-    {'lat': 13.68648272, 'lng': 30.12913939, 'color': 'lightblue'},
-    {'lat': 13.68645524, 'lng': 30.12913939, 'color': 'lightblue'},
-    {'lat': 13.68642776, 'lng': 30.12913939, 'color': 'lightblue'},
-    {'lat': 13.68640029, 'lng': 30.12913939, 'color': 'lightblue'},
-    {'lat': 13.68637617, 'lng': 30.12913939, 'color': 'lightblue'},
-    {'lat': 13.68666693, 'lng': 30.12933939, 'color': 'lightblue'},
-    {'lat': 13.68664618, 'lng': 30.12933939, 'color': 'lightblue'},
-    {'lat': 13.6866187, 'lng': 30.12933939, 'color': 'lightblue'},
-    {'lat': 13.68619023, 'lng': 30.11747276, 'color': 'darkblue'},
-    {'lat': 13.68616346, 'lng': 30.11747276, 'color': 'lightblue'},
-    {'lat': 13.68613598, 'lng': 30.11747276, 'color': 'lightblue'},
-    {'lat': 13.6861085, 'lng': 30.11747276, 'color': 'lightblue'},
-    {'lat': 13.68629944, 'lng': 30.13053939, 'color': 'white'},
-    {'lat': 13.68627196, 'lng': 30.13053939, 'color': 'white'},
-    {'lat': 13.68624448, 'lng': 30.13053939, 'color': 'white'},
-    {'lat': 13.68621701, 'lng': 30.13053939, 'color': 'white'},
-    {'lat': 13.68619023, 'lng': 30.13053939, 'color': 'purple'},
-    {'lat': 13.68616346, 'lng': 30.13053939, 'color': 'white'},
-    {'lat': 13.68613598, 'lng': 30.13053939, 'color': 'darkgreen'},
-    {'lat': 13.6861085, 'lng': 30.13053939, 'color': 'darkgreen'},
-    {'lat': 13.68608102, 'lng': 30.13053939, 'color': 'darkgreen'},
-    {'lat': 13.68605691, 'lng': 30.13053939, 'color': 'darkgreen'},
+    // {'lat': 13.68648272, 'lng': 30.12913939, 'color': 'lightblue'},
+    // {'lat': 13.68645524, 'lng': 30.12913939, 'color': 'lightblue'},
+    // {'lat': 13.68642776, 'lng': 30.12913939, 'color': 'lightblue'},
+    // {'lat': 13.68640029, 'lng': 30.12913939, 'color': 'lightblue'},
+    // {'lat': 13.68637617, 'lng': 30.12913939, 'color': 'lightblue'},
+    // {'lat': 13.68666693, 'lng': 30.12933939, 'color': 'lightblue'},
+    // {'lat': 13.68664618, 'lng': 30.12933939, 'color': 'lightblue'},
+    // {'lat': 13.6866187, 'lng': 30.12933939, 'color': 'lightblue'},
+    // {'lat': 13.68619023, 'lng': 30.11747276, 'color': 'darkblue'},
+    // {'lat': 13.68616346, 'lng': 30.11747276, 'color': 'lightblue'},
+    // {'lat': 13.68613598, 'lng': 30.11747276, 'color': 'lightblue'},
+    // {'lat': 13.6861085, 'lng': 30.11747276, 'color': 'lightblue'},
+    // {'lat': 13.68629944, 'lng': 30.13053939, 'color': 'white'},
+    // {'lat': 13.68627196, 'lng': 30.13053939, 'color': 'white'},
+    // {'lat': 13.68624448, 'lng': 30.13053939, 'color': 'white'},
+    // {'lat': 13.68621701, 'lng': 30.13053939, 'color': 'white'},
+    // {'lat': 13.68619023, 'lng': 30.13053939, 'color': 'purple'},
+    // {'lat': 13.68616346, 'lng': 30.13053939, 'color': 'white'},
+    // {'lat': 13.68613598, 'lng': 30.13053939, 'color': 'darkgreen'},
+    // {'lat': 13.6861085, 'lng': 30.13053939, 'color': 'darkgreen'},
+    // {'lat': 13.68608102, 'lng': 30.13053939, 'color': 'darkgreen'},
+    // {'lat': 13.68605691, 'lng': 30.13053939, 'color': 'darkgreen'},
   ]
     
   return (
@@ -72,6 +71,19 @@ const UserMap = ({ google }) =>{
             icon={get_icon(waypoint.color)}
           />
         ))}
+        <Rectangle 
+          strokeColor= {"#FF0000"}
+          strokeOpacity= {0.8}
+          strokeWeight= {2}
+          fillColor= {"#FF0000"}
+          fillOpacity= {0.35}
+          bounds={{
+            north: parseFloat(center.lat) + 0.1,
+            south: parseFloat(center.lat) - 0.05,
+            east: parseFloat(center.lng) + 0.15,
+            west: parseFloat(center.lng) - 0.3,
+          }}
+        />
       </Map>
     </div>
   );
