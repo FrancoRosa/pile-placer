@@ -1,6 +1,9 @@
 # Pile Placer
 > Set of software to optimize the location of piles on the field
 
+- [Pile Placer](#pile-placer)
+  - [Project description](#project-description)
+
 ## Project description
 The main goal is to develop a tool that can be used by the truck driver and operators of a pile placer.
 This software is supposed to be "served" from a raspberry pi, gps and compass devices are also required.

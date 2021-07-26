@@ -47,7 +47,7 @@ const NavDebug = ({google}) => {
             <p className="ml-4">Set heading:</p>
             <input 
               class="slider m-4" 
-              step="1" min="0" max="100" 
+              step={1} min={0} max={360} 
               value={course} type="range"
               onInput={setCourseValue}
               />
