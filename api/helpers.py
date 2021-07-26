@@ -34,8 +34,8 @@ def rows_to_json(rows):
       latlng = transformer.transform(x, y)
       result.append({
         "pile_id": value[0],
-        "x": latlng[0],
-        "y": latlng[1],
+        "lat": latlng[0],
+        "lng": latlng[1],
         "color": color_convert(value[1])
       })
   return result
