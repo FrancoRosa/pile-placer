@@ -48,7 +48,7 @@ def get_status():
 def get_waypoints():
   global waypoints
   response = make_response(jsonify({
-    "waypoints": waypoints[:20],
+    "waypoints": waypoints[:100],
   }), 200)
   response.headers["Content-Type"] = "application/json"
   return response
