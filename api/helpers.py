@@ -1,7 +1,6 @@
 from os import getcwd
 from time import sleep
 
-import pandas as pd
 from pyproj import Transformer
 
 print(getcwd())
@@ -19,11 +18,12 @@ def cvs_to_rows(path):
 def color_convert(str):
   return str.replace(' ', '').lower()
 
-def rows_to_json(rows):
-  fips0405 = "+proj=lcc +lat_1=34.03333333333333 +lat_2=35.46666666666667 +lat_0=33.5 +lon_0=-118 +x_0=2000000 +y_0=500000.0000000002 +ellps=GRS80 +datum=NAD83 +to_meter=0.3048006096012192 +no_defs"
-  wgs84 = "+init=EPSG:4326"
-  transformer =  Transformer.from_crs(fips0405, wgs84)
-
+def rows_to_json(rows, epsg_code):
+  try:
+    transformer =  Transformer.from_crs('epsg:%s'%epsg_code,'epsg:4326')
+  except:
+    print('... invalid crs code')
+    return
   result = []
   headers = rows[0]
   values = rows[1:]
@@ -40,16 +40,8 @@ def rows_to_json(rows):
       })
   return result
 
+# rows = cvs_to_rows('data.csv')
+# json = rows_to_json(rows, '6424')
 
-
-
-rows = cvs_to_rows('data.csv')
-json = rows_to_json(rows)
-
-for i in json:
-  print('%s,'%i)
-
-  # transform longitudes and latitudes to OSGB36 Eastings and Northings very accurately:
-# use convert_bng()
-# transform OSGB36 Eastings and Northings to longitude and latitude, very accurately:
-# use convert_lonlat()
+# for i in json[:20]:
+#   print('%s,'%i)
