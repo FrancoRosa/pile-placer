@@ -6,7 +6,6 @@ from os import uname, path
 from werkzeug.utils import secure_filename
 import json
 
-
 rpi = uname()[4] != 'x86_64'
 
 UPLOAD_FOLDER = 'cvs_files'
@@ -47,9 +46,9 @@ def get_status():
 
 @app.route('/api/waypoints', methods=['get'])
 def get_waypoints():
-  global heading, location
+  global waypoints
   response = make_response(jsonify({
-    "message": True,
+    "waypoints": waypoints[:20],
   }), 200)
   response.headers["Content-Type"] = "application/json"
   return response
