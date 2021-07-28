@@ -16,18 +16,22 @@ def cvs_to_rows(path):
       return result
 
 def color_convert(str):
+  if '-' in str:
+    return str.replace(' - ', '').replace('"', '').lower()
   return str.replace(' ', '').lower()
 
 def rows_to_json(rows, epsg_code):
   try:
-    transformer =  Transformer.from_crs('epsg:%s'%epsg_code,'epsg:4326')
+    if epsg_code != '0':
+      transformer =  Transformer.from_crs('epsg:%s'%epsg_code,'epsg:4326')
   except:
     print('... invalid crs code')
     return
   result = []
   headers = rows[0]
+  print("... headers:", headers)
   values = rows[1:]
-  if headers == 'PILE ID,Pile Color,X,Y,Z\n':
+  if 'PILE ID,Pile Color,X,Y,Z' in headers:
     for value in values:
       value = value.split(',')
       x, y = float(value[2]), float(value[3])
@@ -36,12 +40,23 @@ def rows_to_json(rows, epsg_code):
         "pile_id": value[0],
         "lat": latlng[0],
         "lng": latlng[1],
-        "color": color_convert(value[1])
+        "color": color_convert(value[1]),
+        "x": x,
+        "y": y,
       })
+  
+
+  if 'Name,Latitude,Longitude,Special WP,Dominant' in headers:
+    for value in values:
+      value = value.split(',')
+      result.append({
+        "pile_id": value[0],
+        "lat": value[1],
+        "lng": value[2],
+        "color": color_convert(value[4]),
+        "x": 0,
+        "y": 0,
+      })
+
   return result
 
-# rows = cvs_to_rows('data.csv')
-# json = rows_to_json(rows, '6424')
-
-# for i in json[:20]:
-#   print('%s,'%i)

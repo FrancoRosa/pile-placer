@@ -7,6 +7,7 @@ const FileInput = () => {
   const [path, setPath] = useState('');
   const [name, setName] = useState('Nothing selected yet');
   const [epsg, setEpsg] = useState('');
+  const [fileStatus, setFileStatus] = useState({})
 
   useEffect(()=>{
     const handleFiles = e => {
@@ -22,7 +23,7 @@ const FileInput = () => {
 
   const handleFiles = (file, epsg_code) => {
     uploadFile(file, epsg_code).then(res => {
-      console.log(res)
+      setFileStatus(res)
     })
   }
 
@@ -49,7 +50,7 @@ const FileInput = () => {
           <label className="label">EPSG Code:</label>
           <div className="control">
             <input 
-              className="input" type="text" 
+              className="input" type="number" 
               placeholder="Zone code"
               onChange={e => setEpsg(e.target.value)}
               value={epsg}
@@ -63,7 +64,18 @@ const FileInput = () => {
                 className="button is-outlined is-success" 
                 onClick={() => handleFiles(path, epsg)}>Upload
               </button>
-            </div>  :
+            </div> :
+            ''
+          }
+          { fileStatus.message ?
+            <div className="is-flex is-align-content-center m-1 is-flex-direction-column">
+              <p className={fileStatus.message ? 'has-text-success' : 'has-text-fail'}>
+                {fileStatus.message ? 'Success' : 'Fail'}
+              </p>
+              <p>
+                Waypoints found: {fileStatus.rows}
+              </p>
+            </div> : 
             ''
           }
         </div>
