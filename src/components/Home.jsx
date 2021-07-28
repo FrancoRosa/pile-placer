@@ -1,8 +1,12 @@
 import UserMap from "./UserMap";
 import { faFlag } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useContext } from "react";
+import { WayPointContext } from "../js/WayPointContext";
 
 const Home = () => {
+  const waypoint = useContext(WayPointContext)
+
   return (
     <div className="container">
       <div className="columns">
@@ -10,9 +14,17 @@ const Home = () => {
           <UserMap />
         </div>
         <div className="column is-one-fifth">
-          <p className="title is-5 has-text-centered mt-4"> Next at: </p>
+          <p className="title is-5 has-text-centered mt-4"> Next pile: </p>
+          <div className="is-flex is-flex-direction-column is-align-content-center mb-4">
+            <p>Lat: {waypoint.waypoint.lat}</p>
+            <p>Lng: {waypoint.waypoint.lng}</p>
+            <p>x: {waypoint.waypoint.x}</p>
+            <p>y: {waypoint.waypoint.y}</p>
+            <p>Color: {waypoint.waypoint.color}</p>
+          </div>
           <div className="flag-icon color_red">
-            <FontAwesomeIcon icon={faFlag} />
+            
+            <FontAwesomeIcon icon={faFlag} color={waypoint.waypoint.color}/>
           </div>
           <p className="title is-3 has-text-centered mt-3 mb-4"> 10 ft </p>
           <hr />

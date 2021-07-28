@@ -1,12 +1,13 @@
 import {Map, Marker, GoogleApiWrapper, Rectangle} from 'google-maps-react';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getWaypoints, socket } from '../js/api';
+import { WayPointContext } from '../js/WayPointContext';
 
 const UserMap = ({ google }) =>{
   const [center, setCenter] = useState({ heading: 0, lat: 0, lng: 0 })
   const [waypoints, setWaypoints] = useState([])
-  const [pile, setPile] = useState({})
-  
+  const { waypoint, setWaypoint } = useContext(WayPointContext)
+
   useEffect(() => {
     getWaypoints().then(res => {
       console.log(res.waypoints)
@@ -60,7 +61,7 @@ const UserMap = ({ google }) =>{
             <Marker
               position={waypoint}
               icon={get_icon(waypoint.color)}
-              onClick={() => setPile(waypoint)}
+              onClick={() => setWaypoint(waypoint)}
             />
           ))}
           <Rectangle 

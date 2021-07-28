@@ -16,9 +16,14 @@ def cvs_to_rows(path):
       return result
 
 def color_convert(str):
-  if '-' in str:
-    return str.replace(' - ', '').replace('"', '').lower()
-  return str.replace(' ', '').lower()
+  
+  if ' - ' in str:
+    str = str.split(' - ')[0]
+  if '"' in str:
+    str = str.replace('"', '')
+  if ' ' in str:
+    str = str.replace(' ', '')  
+  return str.lower()
 
 def rows_to_json(rows, epsg_code):
   try:
