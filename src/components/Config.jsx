@@ -2,19 +2,26 @@ import FileInput from "./FileInput"
 import NumberInput from "./NumberInput"
 import { useState } from "react";
 import { setConfig } from "../js/api";
+import { useLocalStorage } from "../js/helpers";
 
 const Config = () => {
    
-  const [truckLen, setTruckLen] =  useState(20)
-  const [truckWid, setTruckWid] =  useState(5)
-  const [antennaX, setAntennaX] =  useState(1)
-  const [antennaY, setAntennaY] =  useState(1)
-  const [bay1, setBay1] =  useState(15)
-  const [bay2, setBay2] =  useState(15)
-  const [epsg, setEpsg] =  useState(0)
+  const [localconfig, setLocalConfig] = useLocalStorage('config', {})
+  const [truckLen, setTruckLen] =  useState(localconfig.truckLen)
+  const [truckWid, setTruckWid] =  useState(localconfig.truckWid)
+  const [antennaX, setAntennaX] =  useState(localconfig.antennaX)
+  const [antennaY, setAntennaY] =  useState(localconfig.antennaY)
+  const [bay1, setBay1] =  useState(localconfig.bay1)
+  const [bay2, setBay2] =  useState(localconfig.bay2)
+  const [epsg, setEpsg] =  useState(localconfig.epsg)
   const [feedback, setFeedback] =  useState('')
 
   const uploadConfig = () => {
+    setLocalConfig({
+      truckLen, truckWid,
+      antennaX, antennaY,
+      bay1, bay2, epsg
+    })
     setConfig({
       truckLen, truckWid,
       antennaX, antennaY,
