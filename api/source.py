@@ -1,4 +1,4 @@
-from helpers import cvs_to_rows, rows_to_json
+from helpers import polygon, cvs_to_rows, rows_to_json
 from flask import Flask, request, jsonify, make_response
 from flask_socketio import SocketIO
 from flask_cors import CORS
@@ -66,7 +66,8 @@ def get_waypoints():
 def set_location():
   global location
   location = request.get_json()
-  broadcast({**heading, **location})
+  truck = polygon(location, config)
+  broadcast({**heading, **location, **truck})
   response = make_response(jsonify({
     "message": True,
   }), 200)

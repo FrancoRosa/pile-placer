@@ -1,4 +1,4 @@
-import {Map, Marker, GoogleApiWrapper, Rectangle} from 'google-maps-react';
+import {Map, Marker, GoogleApiWrapper, Rectangle, Polygon} from 'google-maps-react';
 import { useContext, useEffect, useState } from 'react';
 import { getWaypoints, socket } from '../js/api';
 import { WayPointContext } from '../js/WayPointContext';
@@ -6,6 +6,7 @@ import { WayPointContext } from '../js/WayPointContext';
 const UserMap = ({ google }) =>{
   const [center, setCenter] = useState({ heading: 0, lat: 0, lng: 0 })
   const [waypoints, setWaypoints] = useState([])
+  const [truck, setTruck] = useState({})
   const { waypoint, setWaypoint } = useContext(WayPointContext)
 
   useEffect(() => {
@@ -21,6 +22,13 @@ const UserMap = ({ google }) =>{
       msg = JSON.parse(msg)
       console.log(msg);
       setCenter(msg);
+      setTruck([
+        {lat: msg.truck[0][0], lng: msg.truck[0][1]},
+        {lat: msg.truck[1][0], lng: msg.truck[1][1]},
+        {lat: msg.truck[2][0], lng: msg.truck[2][1]},
+        {lat: msg.truck[3][0], lng: msg.truck[3][1]},
+        {lat: msg.truck[0][0], lng: msg.truck[0][1]},
+      ])
     });
 
     return () => {
@@ -64,18 +72,13 @@ const UserMap = ({ google }) =>{
               onClick={() => setWaypoint(waypoint)}
             />
           ))}
-          <Rectangle 
+          <Polygon 
+            paths={truck}
             strokeColor= {"#FF0000"}
             strokeOpacity= {0.8}
             strokeWeight= {2}
             fillColor= {"#FF0000"}
             fillOpacity= {0.35}
-            bounds={{
-              north: parseFloat(center.lat) + 0.000001,
-              south: parseFloat(center.lat) - 0.000005,
-              east: parseFloat(center.lng) + 0.000015,
-              west: parseFloat(center.lng) - 0.000003,
-            }}
           />
         </Map>
       </div>

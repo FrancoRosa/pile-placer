@@ -1,7 +1,7 @@
 from os import getcwd
 from time import sleep
 
-from pyproj import Transformer
+from pyproj import Transformer, transformer
 
 print(getcwd())
 
@@ -65,3 +65,31 @@ def rows_to_json(rows, epsg_code):
 
   return result
 
+def polygon(center, config):
+  wgs84_to_proj = Transformer.from_crs('epsg:4326','epsg:%s'%config['epsg'])
+  proj_to_wgs84 = Transformer.from_crs('epsg:%s'%config['epsg'],'epsg:4326',)
+  proj_center = wgs84_to_proj.transform(float(center['lat']), float(center['lng']))
+  
+  proj_poly = {
+    'a':{
+      'x': proj_center[0] - float(config['antennaX']),
+      'y': proj_center[1] - float(config['antennaY'])},
+    'b':{
+      'x': proj_center[0] - float(config['antennaX']) + float(config['truckWid']),
+      'y': proj_center[1] - float(config['antennaY'])},
+    'c':{
+      'x': proj_center[0] - float(config['antennaX']) + float(config['truckWid']),
+      'y': proj_center[1] - float(config['antennaY']) + float(config['truckLen'])},
+    'd':{
+      'x': proj_center[0] - float(config['antennaX']),
+      'y': proj_center[1] - float(config['antennaY']) + float(config['truckLen'])},
+  }
+
+  return {
+    'truck': [
+      proj_to_wgs84.transform(proj_poly['a']['x'], proj_poly['a']['y']),
+      proj_to_wgs84.transform(proj_poly['b']['x'], proj_poly['b']['y']),
+      proj_to_wgs84.transform(proj_poly['c']['x'], proj_poly['c']['y']),
+      proj_to_wgs84.transform(proj_poly['d']['x'], proj_poly['d']['y']),
+    ]
+  }
