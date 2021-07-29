@@ -18,6 +18,13 @@ export const setHeading = async (heading) => {
   return response.data
 }
 
+export const setConfig = async (config) => {
+  console.log('... setting heading');
+  const url = `http://${host}/api/config`;
+  const response = await axios.post(url, config)
+  return response.data
+}
+
 export const getLocation = async () => {
   console.log('... getting location and heading');
   const url = `http://${host}/api/status`;

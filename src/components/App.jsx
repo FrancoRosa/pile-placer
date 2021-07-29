@@ -11,14 +11,14 @@ const App = () => {
   return (
     <div className="container">
       <Tabs />
-      <Switch>
-        <Redirect exact from="/" to="/map" />
-        <Route path="/config" component={Config} />
-        <WayPointContext.Provider value={{waypoint, setWaypoint}}>
+      <WayPointContext.Provider value={{waypoint, setWaypoint}}>
+        <Switch>
+          <Redirect exact from="/" to="/map" />
+          <Route path="/config" component={Config} />
           <Route path="/map" component={Home} />
-        </WayPointContext.Provider>
-        <Route path="/debug" component={NavDebug} />
-      </Switch>
+          <Route path="/debug" component={NavDebug} />
+        </Switch>
+      </WayPointContext.Provider>
     </div>
   );
 }

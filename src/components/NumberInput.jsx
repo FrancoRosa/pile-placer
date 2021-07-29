@@ -5,7 +5,7 @@ const NumberInput = ({label, value, placeholder, changeHandler}) => {
       <p className="control">
         <input className="input is-large" type="number" step={0.1}
           placeholder={placeholder}
-          onChange={changeHandler}
+          onChange={e => changeHandler(e.target.value)}
           value={value}
         />
       </p>

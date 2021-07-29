@@ -1,6 +1,6 @@
 // This component will send "POST" to set theoric current coordinates //
 // and heading info to change the main map behavior
-import {Map, Marker, GoogleApiWrapper, Polyline} from 'google-maps-react';
+import {Map, Marker, GoogleApiWrapper } from 'google-maps-react';
 import { useState } from 'react';
 import { setHeading, setLatLng } from '../js/api';
 

@@ -6,7 +6,6 @@ import { uploadFile } from '../js/api';
 const FileInput = () => {
   const [path, setPath] = useState('');
   const [name, setName] = useState('Nothing selected yet');
-  const [epsg, setEpsg] = useState('');
   const [fileStatus, setFileStatus] = useState({})
 
   useEffect(()=>{
@@ -21,8 +20,8 @@ const FileInput = () => {
     inputElement.addEventListener("change", handleFiles, false);
   },[])
 
-  const handleFiles = (file, epsg_code) => {
-    uploadFile(file, epsg_code).then(res => {
+  const handleFiles = (file) => {
+    uploadFile(file).then(res => {
       setFileStatus(res)
     })
   }
@@ -46,23 +45,12 @@ const FileInput = () => {
         </label>
       </div>
       <div className="columns">
-        <div className="field column mt-1">
-          <label className="label">EPSG Code:</label>
-          <div className="control">
-            <input 
-              className="input" type="number" 
-              placeholder="Zone code"
-              onChange={e => setEpsg(e.target.value)}
-              value={epsg}
-            />
-          </div>
-        </div>
         <div className="column mt-4">
-          { path && epsg ? 
+          { path ? 
             <div className="is-flex is-justify-content-center m-4">
               <button 
                 className="button is-outlined is-success" 
-                onClick={() => handleFiles(path, epsg)}>Upload
+                onClick={() => handleFiles(path)}>Upload
               </button>
             </div> :
             ''
