@@ -72,6 +72,7 @@ def polygon(center, heading, config):
   wgs84_to_proj = Transformer.from_crs('epsg:4326','epsg:%s'%config['epsg'])
   proj_to_wgs84 = Transformer.from_crs('epsg:%s'%config['epsg'],'epsg:4326',)
   proj_center = wgs84_to_proj.transform(float(center['lat']), float(center['lng']))
+  
   cenX = proj_center[0]
   cenY = proj_center[1]
   anX = float(config['antennaX'])
@@ -95,7 +96,14 @@ def polygon(center, heading, config):
     'd':{
       'x': cenX - anX,
       'y': cenY + anY - tLen},
-  }
+    'bay1':{
+      'x': cenX - anX,
+      'y': cenY + anY - bay1 },
+    'bay2':{
+      'x': cenX - anX + tWid,
+      'y': cenY + anY - bay2},
+}
+
 
   vectors = {
     'a': {
@@ -113,7 +121,15 @@ def polygon(center, heading, config):
     'd': {
       'dist': distance(cenX, cenY, proj_poly['d']['x'], proj_poly['d']['y']),
       'ang': atan2(proj_poly['d']['y'] - cenY, proj_poly['d']['x'] - cenX)
-    }
+    },
+    'bay1': {
+      'dist': distance(cenX, cenY, proj_poly['bay1']['x'], proj_poly['bay1']['y']),
+      'ang': atan2(proj_poly['bay1']['y'] - cenY, proj_poly['bay1']['x'] - cenX)
+    },
+    'bay2': {
+      'dist': distance(cenX, cenY, proj_poly['bay2']['x'], proj_poly['bay2']['y']),
+      'ang': atan2(proj_poly['bay2']['y'] - cenY, proj_poly['bay2']['x'] - cenX)
+    },
   }
   
   poly = {
@@ -133,17 +149,16 @@ def polygon(center, heading, config):
       'x': vectors['d']['dist']*cos(vectors['d']['ang'] - rot) + cenX,
       'y': vectors['d']['dist']*sin(vectors['d']['ang'] - rot) + cenY,
     },
+    'bay1': {
+      'x': vectors['bay1']['dist']*cos(vectors['bay1']['ang'] - rot) + cenX,
+      'y': vectors['bay1']['dist']*sin(vectors['bay1']['ang'] - rot) + cenY,
+    },
+    'bay2': {
+      'x': vectors['bay2']['dist']*cos(vectors['bay2']['ang'] - rot) + cenX,
+      'y': vectors['bay2']['dist']*sin(vectors['bay2']['ang'] - rot) + cenY,
+    },
   }
   
-  proj_bay = {
-    'a':{
-      'x': proj_center[0] - anX,
-      'y': proj_center[1] - anY + bay1 },
-    'b':{
-      'x': proj_center[0] - anX + tWid,
-      'y': proj_center[1] - anY + bay2},
-  }
-
   return {
     'truck': [
       proj_to_wgs84.transform(poly['a']['x'], poly['a']['y']),
@@ -152,7 +167,7 @@ def polygon(center, heading, config):
       proj_to_wgs84.transform(poly['d']['x'], poly['d']['y']),
     ],
     'bays': [
-      proj_to_wgs84.transform(proj_bay['a']['x'], proj_bay['a']['y']),
-      proj_to_wgs84.transform(proj_bay['b']['x'], proj_bay['b']['y']),
+      proj_to_wgs84.transform(poly['bay1']['x'], poly['bay1']['y']),
+      proj_to_wgs84.transform(poly['bay2']['x'], poly['bay2']['y']),
     ]
   }
