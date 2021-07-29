@@ -1,6 +1,6 @@
 from os import getcwd
 from time import sleep
-
+from math import sin, cos, atan2, sqrt, radians
 from pyproj import Transformer, transformer
 
 print(getcwd())
@@ -65,31 +65,94 @@ def rows_to_json(rows, epsg_code):
 
   return result
 
-def polygon(center, config):
+def distance(ax,ay,bx,by):
+  return sqrt((bx-ax)**2 + (by-ay)**2)
+
+def polygon(center, heading, config):
   wgs84_to_proj = Transformer.from_crs('epsg:4326','epsg:%s'%config['epsg'])
   proj_to_wgs84 = Transformer.from_crs('epsg:%s'%config['epsg'],'epsg:4326',)
   proj_center = wgs84_to_proj.transform(float(center['lat']), float(center['lng']))
-  
+  cenX = proj_center[0]
+  cenY = proj_center[1]
+  anX = float(config['antennaX'])
+  anY = float(config['antennaY'])
+  tWid = float(config['truckWid'])
+  tLen = float(config['truckLen'])
+  bay1 = float(config['bay1'])
+  bay2 = float(config['bay2'])
+  rot = radians(float(heading['heading']))
+
   proj_poly = {
     'a':{
-      'x': proj_center[0] - float(config['antennaX']),
-      'y': proj_center[1] - float(config['antennaY'])},
+      'x': cenX - anX,
+      'y': cenY + anY},
     'b':{
-      'x': proj_center[0] - float(config['antennaX']) + float(config['truckWid']),
-      'y': proj_center[1] - float(config['antennaY'])},
+      'x': cenX - (anX - tWid),
+      'y': cenY + anY},
     'c':{
-      'x': proj_center[0] - float(config['antennaX']) + float(config['truckWid']),
-      'y': proj_center[1] - float(config['antennaY']) + float(config['truckLen'])},
+      'x': cenX - (anX - tWid),
+      'y': cenY + anY - tLen},
     'd':{
-      'x': proj_center[0] - float(config['antennaX']),
-      'y': proj_center[1] - float(config['antennaY']) + float(config['truckLen'])},
+      'x': cenX - anX,
+      'y': cenY + anY - tLen},
+  }
+
+  vectors = {
+    'a': {
+      'dist': distance(cenX, cenY, proj_poly['a']['x'], proj_poly['a']['y']),
+      'ang': atan2(proj_poly['a']['y'] - cenY, proj_poly['a']['x'] - cenX)
+    },
+    'b': {
+      'dist': distance(cenX, cenY, proj_poly['b']['x'], proj_poly['b']['y']),
+      'ang': atan2(proj_poly['b']['y'] - cenY, proj_poly['b']['x'] - cenX)
+    },
+    'c': {
+      'dist': distance(cenX, cenY, proj_poly['c']['x'], proj_poly['c']['y']),
+      'ang': atan2(proj_poly['c']['y'] - cenY, proj_poly['c']['x'] - cenX)
+    },
+    'd': {
+      'dist': distance(cenX, cenY, proj_poly['d']['x'], proj_poly['d']['y']),
+      'ang': atan2(proj_poly['d']['y'] - cenY, proj_poly['d']['x'] - cenX)
+    }
+  }
+  
+  poly = {
+    'a': {
+      'x': vectors['a']['dist']*cos(vectors['a']['ang'] - rot) + cenX,
+      'y': vectors['a']['dist']*sin(vectors['a']['ang'] - rot) + cenY,
+    },
+    'b': {
+      'x': vectors['b']['dist']*cos(vectors['b']['ang'] - rot) + cenX,
+      'y': vectors['b']['dist']*sin(vectors['b']['ang'] - rot) + cenY,
+    },
+    'c': {
+      'x': vectors['c']['dist']*cos(vectors['c']['ang'] - rot) + cenX,
+      'y': vectors['c']['dist']*sin(vectors['c']['ang'] - rot) + cenY,
+    },
+    'd': {
+      'x': vectors['d']['dist']*cos(vectors['d']['ang'] - rot) + cenX,
+      'y': vectors['d']['dist']*sin(vectors['d']['ang'] - rot) + cenY,
+    },
+  }
+  
+  proj_bay = {
+    'a':{
+      'x': proj_center[0] - anX,
+      'y': proj_center[1] - anY + bay1 },
+    'b':{
+      'x': proj_center[0] - anX + tWid,
+      'y': proj_center[1] - anY + bay2},
   }
 
   return {
     'truck': [
-      proj_to_wgs84.transform(proj_poly['a']['x'], proj_poly['a']['y']),
-      proj_to_wgs84.transform(proj_poly['b']['x'], proj_poly['b']['y']),
-      proj_to_wgs84.transform(proj_poly['c']['x'], proj_poly['c']['y']),
-      proj_to_wgs84.transform(proj_poly['d']['x'], proj_poly['d']['y']),
+      proj_to_wgs84.transform(poly['a']['x'], poly['a']['y']),
+      proj_to_wgs84.transform(poly['b']['x'], poly['b']['y']),
+      proj_to_wgs84.transform(poly['c']['x'], poly['c']['y']),
+      proj_to_wgs84.transform(poly['d']['x'], poly['d']['y']),
+    ],
+    'bays': [
+      proj_to_wgs84.transform(proj_bay['a']['x'], proj_bay['a']['y']),
+      proj_to_wgs84.transform(proj_bay['b']['x'], proj_bay['b']['y']),
     ]
   }

@@ -21,6 +21,7 @@ port = 9999
 
 location = {"lat": 0, "lng": 0}
 heading = {"heading": 0}
+truck = {"truck":[], "bays":[]}
 config = {
   'truckLen': 0,
   'truckWid': 0,
@@ -64,9 +65,9 @@ def get_waypoints():
 
 @app.route('/api/location', methods=['post'])
 def set_location():
-  global location
+  global location, truck
   location = request.get_json()
-  truck = polygon(location, config)
+  truck = polygon(location, heading, config)
   broadcast({**heading, **location, **truck})
   response = make_response(jsonify({
     "message": True,
@@ -78,7 +79,7 @@ def set_location():
 def set_heading():
   global heading
   heading = request.get_json()
-  broadcast({**heading, **location})
+  broadcast({**heading, **location, **truck})
   response = make_response(jsonify({
     "message": True,
   }), 200)
