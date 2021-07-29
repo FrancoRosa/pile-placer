@@ -21,6 +21,15 @@ port = 9999
 
 location = {"lat": 0, "lng": 0}
 heading = {"heading": 0}
+config = {
+  'truckLen': 0,
+  'truckWid': 0,
+  'antennaX': 0,
+  'antennaY': 0,
+  'bay1': 0,
+  'bay2': 0,
+  'epsg': '0'
+}
 waypoints = []
 
 def allowed_file(filename):
@@ -75,13 +84,23 @@ def set_heading():
   response.headers["Content-Type"] = "application/json"
   return response
 
+@app.route('/api/config', methods=['post'])
+def set_config():
+  global config
+  config = request.get_json()
+  response = make_response(jsonify({
+    "message": True,
+  }), 200)
+  response.headers["Content-Type"] = "application/json"
+  return response
+
 @app.route('/api/file', methods=['post'])
 def process_file():
-  global waypoints
+  global waypoints, config
   message = False
   rows_processed = 0
   file = request.files['file']
-  code = request.form['code']
+  code = config['epsg']
   if file and allowed_file(file.filename):
       filename = secure_filename(file.filename)
       filedir = path.join(app.config['UPLOAD_FOLDER'], filename)

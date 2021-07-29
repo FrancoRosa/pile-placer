@@ -3,7 +3,7 @@ const NumberInput = ({label, value, placeholder, changeHandler}) => {
     <div className="field column">
       <label className="label">{label}</label>
       <p className="control">
-        <input className="input is-large" type="number" step={0.1}
+        <input className="input is-medium" type="number" step={0.1}
           placeholder={placeholder}
           onChange={e => changeHandler(e.target.value)}
           value={value}

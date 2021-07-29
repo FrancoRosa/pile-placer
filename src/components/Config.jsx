@@ -11,7 +11,7 @@ const Config = () => {
   const [antennaY, setAntennaY] =  useState(1)
   const [bay1, setBay1] =  useState(15)
   const [bay2, setBay2] =  useState(15)
-  const [epsg, setEpsg] =  useState('')
+  const [epsg, setEpsg] =  useState(0)
   const [feedback, setFeedback] =  useState('')
 
   const uploadConfig = () => {
