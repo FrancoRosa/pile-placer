@@ -19,9 +19,23 @@ export const setHeading = async (heading) => {
 }
 
 export const setConfig = async (config) => {
-  console.log('... setting heading');
+  console.log('... setting config');
   const url = `http://${host}/api/config`;
   const response = await axios.post(url, config)
+  return response.data
+}
+
+export const setRefBay = async (bay) => {
+  console.log('... setting reference bay');
+  const url = `http://${host}/api/bay`;
+  const response = await axios.post(url, bay)
+  return response.data
+}
+
+export const setRefWaypoint = async (waypoint) => {
+  console.log('... setting waypoint');
+  const url = `http://${host}/api/waypoint`;
+  const response = await axios.post(url, waypoint)
   return response.data
 }
 

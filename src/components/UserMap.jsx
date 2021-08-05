@@ -1,6 +1,6 @@
 import {Map, Marker, GoogleApiWrapper, Circle, Polygon} from 'google-maps-react';
 import { useContext, useEffect, useState } from 'react';
-import { getWaypoints, socket } from '../js/api';
+import { getWaypoints, setRefBay, setRefWaypoint, socket } from '../js/api';
 import { WayPointContext } from '../js/WayPointContext';
 
 const UserMap = ({ google }) =>{
@@ -12,7 +12,6 @@ const UserMap = ({ google }) =>{
 
   useEffect(() => {
     getWaypoints().then(res => {
-      console.log(res.waypoints)
       setWaypoints(res.waypoints)
       if (res.waypoints.length > 0){
         setCenter({...center, ...res.waypoints[0]});
@@ -21,7 +20,6 @@ const UserMap = ({ google }) =>{
     
     socket.on('message', msg => {
       msg = JSON.parse(msg)
-      console.log(msg);
       setCenter(msg);
       setTruck([
         {lat: msg.truck[0][0], lng: msg.truck[0][1]},
@@ -68,6 +66,8 @@ const UserMap = ({ google }) =>{
               lng: clickEvent.latLng.lng().toFixed(5)
             })
           }}
+          onDblclick={() => console.log('doubleClick')}
+          disableDoubleClickZoom
         >
           {waypoints.map(waypoint => (
             <Circle
@@ -77,10 +77,14 @@ const UserMap = ({ google }) =>{
               strokeOpacity= {0.8}
               strokeWeight= {2}
               fillColor= {waypoint.color}
-              onClick={() => setWaypoint(waypoint)}
+              onClick={() => {
+                setWaypoint(waypoint)
+                setRefWaypoint(waypoint)
+              }}
+              onDblclick={() => console.log('Toogle status')}
             />
           ))}
-          {bays.map(bay => (
+          {bays.map((bay, i) => (
             <Circle
               center={bay}
               radius={0.5}
@@ -89,6 +93,7 @@ const UserMap = ({ google }) =>{
               strokeWeight= {2}
               fillColor= {"#FF0000"}
               fillOpacity= {0.35}
+              onClick={() => setRefBay({bay: bays[i]})}
             />
           ))}
           <Polygon 

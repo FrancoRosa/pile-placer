@@ -31,6 +31,8 @@ config = {
   'bay2': 0,
   'epsg': '0'
 }
+bay_ref = 0
+waypoint = {"lat": 0, "lng": 0}
 waypoints = []
 
 def allowed_file(filename):
@@ -90,6 +92,28 @@ def set_heading():
 def set_config():
   global config
   config = request.get_json()
+  response = make_response(jsonify({
+    "message": True,
+  }), 200)
+  response.headers["Content-Type"] = "application/json"
+  return response
+
+@app.route('/api/bay', methods=['post'])
+def set_ref_bay():
+  global ref_bay
+  ref_bay = request.get_json()
+  print('... ', ref_bay)
+  response = make_response(jsonify({
+    "message": True,
+  }), 200)
+  response.headers["Content-Type"] = "application/json"
+  return response
+
+@app.route('/api/waypoint', methods=['post'])
+def set_waypoint():
+  global waypoint
+  waypoint = request.get_json()
+  print('... ', waypoint)
   response = make_response(jsonify({
     "message": True,
   }), 200)

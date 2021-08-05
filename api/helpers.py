@@ -49,15 +49,28 @@ def rows_to_json(rows, epsg_code):
         "x": x,
         "y": y,
       })
-  
+
+  if 'P,N,E,N,N' in headers:
+    for value in values:
+      value = value.split(',')
+      x, y = float(value[2]), float(value[1])
+      latlng = transformer.transform(x, y)
+      result.append({
+        "pile_id": value[0],
+        "lat": latlng[0],
+        "lng": latlng[1],
+        "color": '',
+        "x": x,
+        "y": y,
+      })
 
   if 'Name,Latitude,Longitude,Special WP,Dominant' in headers:
     for value in values:
       value = value.split(',')
       result.append({
         "pile_id": value[0],
-        "lat": value[1],
-        "lng": value[2],
+        "lat": float(value[1]),
+        "lng": float(value[2]),
         "color": color_convert(value[4]),
         "x": 0,
         "y": 0,

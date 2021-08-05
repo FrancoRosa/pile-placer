@@ -28,8 +28,9 @@ const NavDebug = ({google}) => {
     <>
       <div className="container map">
         <Map 
-          google={google} zoom={10} 
+          google={google} zoom={14} 
           onClick={getMapCordinates}
+          initialCenter={{lat: 35.02634950, lng: -118.13624929}}
         >
           <Marker 
             name={'target'}
