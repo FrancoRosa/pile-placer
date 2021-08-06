@@ -1,4 +1,4 @@
-from helpers import polygon, cvs_to_rows, rows_to_json
+from helpers import distance, polygon, cvs_to_rows, rows_to_json, coordinate_distance
 from flask import Flask, request, jsonify, make_response
 from flask_socketio import SocketIO
 from flask_cors import CORS
@@ -21,6 +21,7 @@ port = 9999
 
 location = {"lat": 0, "lng": 0}
 heading = {"heading": 0}
+bay_to_waypoint = {"distance": 0}
 truck = {"truck":[], "bays":[]}
 config = {
   'truckLen': 0,
@@ -31,8 +32,8 @@ config = {
   'bay2': 0,
   'epsg': '0'
 }
-bay_ref = 0
-waypoint = {"lat": 0, "lng": 0}
+ref_bay = {}
+waypoint = {}
 waypoints = []
 
 def allowed_file(filename):
@@ -67,10 +68,21 @@ def get_waypoints():
 
 @app.route('/api/location', methods=['post'])
 def set_location():
-  global location, truck
+  global location, truck, bay_to_waypoint, waypoint, ref_bay
   location = request.get_json()
   truck = polygon(location, heading, config)
-  broadcast({**heading, **location, **truck})
+  
+  if (len(waypoint) > 0 and len(ref_bay) > 0):
+    print('================')
+    print(ref_bay)
+    print('================')
+    bay = truck["bays"][int(ref_bay["bay"])]
+    print(bay)
+    print('================')
+    bay_to_waypoint = {
+      "distance": coordinate_distance(waypoint, {'lat': bay[0],'lng': bay[1]}, config["epsg"])
+    } 
+  broadcast({**heading, **location, **truck, **bay_to_waypoint})
   response = make_response(jsonify({
     "message": True,
   }), 200)

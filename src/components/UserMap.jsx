@@ -19,6 +19,7 @@ const UserMap = ({ google }) =>{
     })
     
     socket.on('message', msg => {
+      console.log(msg)
       msg = JSON.parse(msg)
       setCenter(msg);
       setTruck([
@@ -93,7 +94,7 @@ const UserMap = ({ google }) =>{
               strokeWeight= {2}
               fillColor= {"#FF0000"}
               fillOpacity= {0.35}
-              onClick={() => setRefBay({bay: bays[i]})}
+              onClick={() => setRefBay({bay: i})}
             />
           ))}
           <Polygon 

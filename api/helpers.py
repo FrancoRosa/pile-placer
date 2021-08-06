@@ -115,7 +115,7 @@ def polygon(center, heading, config):
     'bay2':{
       'x': cenX - anX + tWid,
       'y': cenY + anY - bay2},
-}
+  }
 
 
   vectors = {
@@ -184,3 +184,9 @@ def polygon(center, heading, config):
       proj_to_wgs84.transform(poly['bay2']['x'], poly['bay2']['y']),
     ]
   }
+
+def coordinate_distance(p1, p2, epsg_code):
+  transformer =  Transformer.from_crs('epsg:4326', 'epsg:%s'%epsg_code)
+  p1_proj = transformer.transform(p1['lat'], p1['lng'])
+  p2_proj = transformer.transform(p2['lat'], p2['lng'])
+  return distance(p1_proj[0], p1_proj[1], p2_proj[0], p2_proj[1])
