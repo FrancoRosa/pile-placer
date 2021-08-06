@@ -73,12 +73,7 @@ def set_location():
   truck = polygon(location, heading, config)
   
   if (len(waypoint) > 0 and len(ref_bay) > 0):
-    print('================')
-    print(ref_bay)
-    print('================')
     bay = truck["bays"][int(ref_bay["bay"])]
-    print(bay)
-    print('================')
     bay_to_waypoint = {
       "distance": coordinate_distance(waypoint, {'lat': bay[0],'lng': bay[1]}, config["epsg"])
     } 

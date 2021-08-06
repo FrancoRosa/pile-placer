@@ -26,7 +26,7 @@ const Home = () => {
             
             <FontAwesomeIcon icon={faFlag} color={waypoint.waypoint.color}/>
           </div>
-          <p className="title is-3 has-text-centered mt-3 mb-4"> 10 ft </p>
+          <p className="title is-3 has-text-centered mt-3 mb-4"> {waypoint.waypoint.distance.toFixed(1)} ft </p>
           <hr />
           <p className="title is-5 has-text-centered"> Landed </p>
           <p className="title is-3 has-text-centered"> 50 </p>
