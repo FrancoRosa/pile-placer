@@ -5,6 +5,8 @@ from flask_cors import CORS
 from os import uname, path
 from werkzeug.utils import secure_filename
 import json
+from threading import Thread
+
 
 rpi = uname()[4] != 'x86_64'
 
@@ -35,6 +37,20 @@ config = {
 ref_bay = {}
 waypoint = {}
 waypoints = []
+
+
+def read_uart():
+  global location, heading
+  while True:
+    nmea = ser.readline()
+    if b'$GNGGA' in nmea:
+        location = get_latlng(nmea)
+    if b'$GNVTG' in nmea:
+        heading = get_course(nmea)
+    truck = polygon(location, heading, config)
+    broadcast({**heading, **location, **truck, **bay_to_waypoint})
+
+Thread(target=read_uart, args=[]).start()
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -148,4 +164,4 @@ def process_file():
   response.headers["Content-Type"] = "application/json"
   return response
 
-app.run(debug=False, port=port)
+app.run(debug=False, port=port, host='0.0.0.0')

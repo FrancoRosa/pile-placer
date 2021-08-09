@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -O3 -DNDEBUG -shared -Wl,-soname,libgmock_main.so -o ../../lib/libgmock_main.so CMakeFiles/gmock_main.dir/src/gmock_main.cc.o   -L/home/pi/pile-placer/api/proj-8.1.0/build/lib  -Wl,-rpath,/home/pi/pile-placer/api/proj-8.1.0/build/lib ../../lib/libgmock.so ../../lib/libgtest.so -pthread 

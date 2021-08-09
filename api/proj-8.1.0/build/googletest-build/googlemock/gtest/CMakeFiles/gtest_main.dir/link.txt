@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -O3 -DNDEBUG -shared -Wl,-soname,libgtest_main.so -o ../../../lib/libgtest_main.so CMakeFiles/gtest_main.dir/src/gtest_main.cc.o   -L/home/pi/pile-placer/api/proj-8.1.0/build/lib  -Wl,-rpath,/home/pi/pile-placer/api/proj-8.1.0/build/lib ../../../lib/libgtest.so -pthread 
