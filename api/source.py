@@ -6,7 +6,8 @@ from os import uname, path
 from werkzeug.utils import secure_filename
 import json
 from threading import Thread
-
+from uart_procesor import ser, get_latlng, get_course
+from time import sleep
 
 rpi = uname()[4] != 'x86_64'
 
@@ -32,12 +33,11 @@ config = {
   'antennaY': 0,
   'bay1': 0,
   'bay2': 0,
-  'epsg': '0'
+  'epsg': '2229'
 }
 ref_bay = {}
 waypoint = {}
 waypoints = []
-
 
 def read_uart():
   global location, heading
@@ -45,10 +45,13 @@ def read_uart():
     nmea = ser.readline()
     if b'$GNGGA' in nmea:
         location = get_latlng(nmea)
+        truck = polygon(location, heading, config)
+        package = {**heading, **location, **truck, **bay_to_waypoint}
+        broadcast(package)
+
     if b'$GNVTG' in nmea:
-        heading = get_course(nmea)
-    truck = polygon(location, heading, config)
-    broadcast({**heading, **location, **truck, **bay_to_waypoint})
+        course = get_course(nmea)
+        heading = {'heading': 0} if course['heading'] == None else course
 
 Thread(target=read_uart, args=[]).start()
 
