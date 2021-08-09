@@ -51,10 +51,9 @@ def get_course(nmea):
         course = float(values['course1'])
     else:
         course = None  
-    return {'course': course}
+    return {'heading': course}
 
 def read_uart():
-    global pms, fmhds, tps, hds
     while True:
         nmea = ser.readline()
         # $GNVTG,,T,,M,0.074,N,0.138,K,A*34
@@ -63,5 +62,3 @@ def read_uart():
             print(get_latlng(nmea))
         if b'$GNVTG' in nmea:
             print(get_course(nmea))
-
-read_uart()

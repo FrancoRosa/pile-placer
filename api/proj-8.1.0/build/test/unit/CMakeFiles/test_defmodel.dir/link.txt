@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/test_defmodel.dir/main.cpp.o CMakeFiles/test_defmodel.dir/test_defmodel.cpp.o -o ../../bin/test_defmodel   -L/home/pi/pile-placer/api/proj-8.1.0/build/lib  -Wl,-rpath,/home/pi/pile-placer/api/proj-8.1.0/build/lib ../../lib/libgtest.so ../../lib/libproj.so.23.0.1 -pthread 
