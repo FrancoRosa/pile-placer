@@ -16,13 +16,14 @@ def cvs_to_rows(path):
       return result
 
 def color_convert(str):
-  
   if ' - ' in str:
     str = str.split(' - ')[0]
   if '"' in str:
     str = str.replace('"', '')
   if ' ' in str:
     str = str.replace(' ', '')  
+  if '/' in str:
+    str = str.split('/')[0]
   return str.lower()
 
 def rows_to_json(rows, epsg_code):
@@ -64,6 +65,20 @@ def rows_to_json(rows, epsg_code):
         "y": y,
       })
 
+  if 'P,N,E,N,C' in headers:
+    for value in values:
+      value = value.split(',')
+      x, y = float(value[2]), float(value[1])
+      latlng = transformer.transform(x, y)
+      result.append({
+        "pile_id": value[0],
+        "lat": latlng[0],
+        "lng": latlng[1],
+        "color": color_convert(value[4]),
+        "x": x,
+        "y": y,
+      })
+
   if 'Name,Latitude,Longitude,Special WP,Dominant' in headers:
     for value in values:
       value = value.split(',')
@@ -76,7 +91,25 @@ def rows_to_json(rows, epsg_code):
         "y": 0,
       })
 
+  if 'id.color, N, E' in headers:
+
+
   return result
+
+def achro_to_color(acro):
+  colors: {
+    'LBL': 'lightblack',
+    'LGR': 'lightgreen',
+    'LRD': 'lightred',
+    'YEL': 'yellow',
+  }
+  try:
+    color = colors['acro']
+    return color
+  except
+    return ''
+
+  
 
 def distance(ax,ay,bx,by):
   return sqrt((bx-ax)**2 + (by-ay)**2)

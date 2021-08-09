@@ -11,7 +11,7 @@ from time import sleep
 
 rpi = uname()[4] != 'x86_64'
 
-UPLOAD_FOLDER = 'cvs_files'
+UPLOAD_FOLDER = '/home/pi/pile-placer/api/cvs_files'
 ALLOWED_EXTENSIONS = {'csv'}
 
 app = Flask(__name__)
