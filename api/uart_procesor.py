@@ -1,5 +1,9 @@
 import serial
-ser = serial.Serial('/dev/ttyACM0')
+try:
+    ser = serial.Serial('/dev/ttyACM0')
+except:
+    pass
+
 
 def to_geo(ddmm_mmm, hemisfere):
     if len(ddmm_mmm) == 10:
@@ -10,8 +14,9 @@ def to_geo(ddmm_mmm, hemisfere):
         mm_mm = float(ddmm_mmm[3:])
     dd = dd + mm_mm/60
     if hemisfere == 'W' or hemisfere == 'S':
-        dd = -dd 
+        dd = -dd
     return dd
+
 
 def get_latlng(nmea):
     nmea = str(nmea)
@@ -31,7 +36,8 @@ def get_latlng(nmea):
     }
     lat = to_geo(values['latitude'], values['hemisfere_lat'])
     lng = to_geo(values['longitude'], values['hemisfere_lng'])
-    return {'lat':lat, 'lng':lng}
+    return {'lat': lat, 'lng': lng}
+
 
 def get_course(nmea):
     nmea = str(nmea)
@@ -47,11 +53,12 @@ def get_course(nmea):
         'speed2': nmea[7],
         'speed_unit2': nmea[8],
     }
-    if len(values['course1']) > 0: 
+    if len(values['course1']) > 0:
         course = float(values['course1'])
     else:
-        course = None  
+        course = None
     return {'heading': course}
+
 
 def read_uart():
     while True:
