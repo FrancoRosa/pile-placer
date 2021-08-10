@@ -21,8 +21,8 @@ color_codes = {
 }
 
 
-def is_cvs(filedir):
-    return filedir.split('.')[-1] == 'cvs'
+def is_csv(filedir):
+    return filedir.split('.')[-1] == 'csv'
 
 
 def xlsx_to_rows(filename):

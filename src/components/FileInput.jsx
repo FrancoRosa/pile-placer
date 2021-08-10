@@ -21,14 +21,16 @@ const FileInput = () => {
   },[])
 
   const handleFiles = (file) => {
-    uploadFile(file).then(res => {
-      setFileStatus(res)
-    })
+    uploadFile(file)
+      .then(res => {
+        setFileStatus(res)
+      })
+      .catch(() => setFileStatus({ message: false }))
   }
 
   return (
     <>
-      <div className="file has-name is-medium">
+      <div className="file has-name">
         <label className="file-label">
           <input className="file-input" type="file" accept=".csv, .xlsx"/>
           <span className="file-cta">
@@ -55,6 +57,7 @@ const FileInput = () => {
             </div> :
             ''
           }
+
           { fileStatus.message ?
             <div className="is-flex is-align-content-center m-1 is-flex-direction-column">
               <p className={fileStatus.message ? 'has-text-success' : 'has-text-fail'}>

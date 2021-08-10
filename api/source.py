@@ -1,4 +1,4 @@
-from helpers import distance, is_cvs, polygon, cvs_to_rows, rows_to_json, coordinate_distance, xlsx_to_rows, is_cvs
+from helpers import distance, is_csv, polygon, cvs_to_rows, rows_to_json, coordinate_distance, xlsx_to_rows, is_csv
 from flask import Flask, request, jsonify, make_response
 from flask_socketio import SocketIO
 from flask_cors import CORS
@@ -174,7 +174,7 @@ def process_file():
         filedir = path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filedir)
         message = True
-        if is_cvs(filedir):
+        if is_csv(filedir):
             rows = cvs_to_rows(filedir)
         else:
             rows = xlsx_to_rows(filedir)

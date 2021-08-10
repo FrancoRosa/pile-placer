@@ -6,7 +6,7 @@ import Tab from './Tab';
 
 const Tabs = () => {
     return (
-    <div className="tabs is-centered is-large">
+    <div className="tabs is-centered is-medium">
       <ul>
         <Tab name="Map" icon={faMapMarked} />
         <Tab name="Config" icon={faTools} />
