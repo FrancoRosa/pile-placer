@@ -103,13 +103,13 @@ const UserMap = ({ google }) =>{
       </div>
       <div className="columns mt-3">
         <div className="column">
-          <p className="heading">Lat: {center.lat}</p>
+          <p className="heading has-text-centered">Lat: {center.lat.toFixed(8)}</p>
         </div>
         <div className="column">
-          <p className="heading">Lng: {center.lng}</p>
+          <p className="heading has-text-centered">Lng: {center.lng.toFixed(8)}</p>
         </div>
         <div className="column">
-          <p className="heading">Heading: {center.heading}</p>
+          <p className="heading has-text-centered">Heading: {center.heading.toFixed(1)}॰</p>
         </div>
       </div>
     </>
