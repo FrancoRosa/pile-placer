@@ -3,6 +3,9 @@ import NumberInput from "./NumberInput"
 import { useState } from "react";
 import { setConfig } from "../js/api";
 import { useLocalStorage } from "../js/helpers";
+import epsgCodes from '../assets/epsg_codes.pdf'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFileAlt } from "@fortawesome/free-solid-svg-icons";
 
 const Config = () => {
    
@@ -84,6 +87,13 @@ const Config = () => {
               placeholder="Projected coordinate reference"
               changeHandler={setEpsg}
             />
+            <div className="column is-flex-direction-column is-flex is-flex-centered">
+              <p className="heading has-text-link">EPSG Reference</p>
+              <a href={epsgCodes} target="blank" className="has-text-white title is-2">
+                <FontAwesomeIcon icon={faFileAlt} /> 
+              </a>
+            </div>
+            
           </div>
           <div className="is-flex is-justify-content-center is-align-content-center">
             <button className="button ml-2" onClick={uploadConfig}>Save parameters</button>

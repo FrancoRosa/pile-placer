@@ -30,7 +30,7 @@ const FileInput = () => {
     <>
       <div className="file has-name is-medium">
         <label className="file-label">
-          <input className="file-input" type="file" accept=".csv"/>
+          <input className="file-input" type="file" accept=".csv, .xlsx"/>
           <span className="file-cta">
             <span className="file-icon">
             <FontAwesomeIcon icon={faUpload} />
