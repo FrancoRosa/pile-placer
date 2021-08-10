@@ -57,7 +57,8 @@ def read_uart():
             heading = {'heading': 0} if course['heading'] == None else course
 
 
-Thread(target=read_uart, args=[]).start()
+if rpi:
+    Thread(target=read_uart, args=[]).start()
 
 
 def allowed_file(filename):
