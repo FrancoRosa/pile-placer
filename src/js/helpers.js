@@ -33,3 +33,12 @@ export const useLocalStorage = (key, initialValue) => {
   };
   return [storedValue, setValue];
 }
+
+export const sortByColor = waypoints => {
+  const byColor = {}
+  waypoints.forEach(waypoint => {
+    if (byColor[waypoint.color]) byColor[waypoint.color] += 1
+    else byColor[waypoint.color] = 1 
+  });
+  return byColor
+}

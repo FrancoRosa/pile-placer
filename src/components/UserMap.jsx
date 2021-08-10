@@ -1,11 +1,14 @@
 import {Map, Marker, GoogleApiWrapper, Circle, Polygon} from 'google-maps-react';
 import { useContext, useEffect, useState } from 'react';
 import { getWaypoints, setRefBay, setRefWaypoint, socket } from '../js/api';
+import { sortByColor } from '../js/helpers';
 import { WayPointContext } from '../js/WayPointContext';
+import PileSummary from './PileSummary';
 
 const UserMap = ({ google }) =>{
   const [center, setCenter] = useState({ heading: 0, lat: 0, lng: 0 })
   const [waypoints, setWaypoints] = useState([])
+  const [colors, setColors] = useState({})
   const [truck, setTruck] = useState([])
   const [bays, setBays] = useState([])
   const { waypoint, setWaypoint } = useContext(WayPointContext)
@@ -15,11 +18,11 @@ const UserMap = ({ google }) =>{
       setWaypoints(res.waypoints)
       if (res.waypoints.length > 0){
         setCenter({...center, ...res.waypoints[0]});
+        setColors(sortByColor(res.waypoints))
       }
     })
     
     socket.on('message', msg => {
-      console.log(msg)
       msg = JSON.parse(msg)
       setCenter(msg);
       setTruck([
@@ -101,7 +104,7 @@ const UserMap = ({ google }) =>{
           />
         </Map>
       </div>
-      <div className="columns mt-3">
+      <div className="columns mt-3 has-text-link">
         <div className="column">
           <p className="heading has-text-centered">Lat: {center.lat.toFixed(8)}</p>
         </div>
@@ -112,6 +115,7 @@ const UserMap = ({ google }) =>{
           <p className="heading has-text-centered">Heading: {center.heading.toFixed(1)}॰</p>
         </div>
       </div>
+      <PileSummary colors={colors} /> 
     </>
   );
 };
