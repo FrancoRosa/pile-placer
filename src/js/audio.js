@@ -22,25 +22,15 @@ import red from '../assets/audio/colors/red.mp3'
 import white from '../assets/audio/colors/white.mp3'
 import yellow from '../assets/audio/colors/yellow.mp3'
 
-const colorSounds = [
-  { name: 'black', sound: black },
-  { name: 'blue', sound: blue },
-  { name: 'brown', sound: brown },
-  { name: 'darkblue', sound: darkblue },
-  { name: 'lightblue', sound: lightblue },
-  { name: 'lightgreen', sound: lightgreen },
-  { name: 'orange', sound: orange },
-  { name: 'pink', sound: pink },
-  { name: 'purple', sound: purple },
-  { name: 'red', sound: red },
-  { name: 'white', sound: white },
-  { name: 'yellow', sound: yellow },
-]
+import leftBay from '../assets/audio/other/left_bay.mp3'
+import rightBay from '../assets/audio/other/right_bay.mp3'
+import nextPile from '../assets/audio/other/next_pile.mp3'
 
+const colorSounds = {black, blue, brown, darkblue, lightblue, lightgreen, orange, pink, purple, red, white, yellow}
 const distanceSounds = [one, two, three, four, five, six, seven, eight, nine, ten]
+const otherSounds = {leftBay, rightBay, nextPile}
 
 export const playDistance = distance => {
-  
   const dist = parseInt(distance)
   console.log('... play distance', dist)
   if (dist < 10){
@@ -52,9 +42,15 @@ export const playDistance = distance => {
 }
 
 export const playColor = color => {
-  const target = colorSounds.filter(colorSound => colorSound.name == color)
-  if (target[0]) {
-    const a = new Audio(target[0].sound)
+  if (colorSounds[color]) {
+    const a = new Audio(colorSounds[color])
+    a.play()
+  }
+}
+
+export const playOther = sound => {
+  if (otherSounds[sound]) {
+    const a = new Audio(otherSounds[sound])
     a.play()
   }
 }
