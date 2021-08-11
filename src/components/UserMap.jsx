@@ -137,9 +137,9 @@ const UserMap = ({ google }) =>{
         <div className="column is-flex is-flex-centered">
           <p className="heading has-text-centered">Heading: {center.heading.toFixed(1)}॰</p>
         </div>
-        <div className="column">
+        <div className="column is-flex is-flex-centered">
           <button
-            className={`button is-outlined ${autoCenter ? 'is-success' : 'is-warning'}`}
+            className={`button is-outlined is-small ${autoCenter ? 'is-success' : 'is-warning'}`}
             onClick={() => setAutoCenter(!autoCenter)}>
             {autoCenter ? 'Auto center enabled': 'Auto center not enabled'}  
           </button>
