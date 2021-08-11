@@ -1,6 +1,7 @@
 import {Map, Marker, GoogleApiWrapper, Circle, Polygon} from 'google-maps-react';
 import { useContext, useEffect, useState } from 'react';
 import { getWaypoints, setRefBay, setRefWaypoint, socket } from '../js/api';
+import { playColor, playOther } from '../js/audio';
 import { sortByColor } from '../js/helpers';
 import { WayPointContext } from '../js/WayPointContext';
 import PileSummary from './PileSummary';
@@ -101,6 +102,7 @@ const UserMap = ({ google }) =>{
               onClick={() => {
                 setWaypoint(waypoint)
                 setRefWaypoint(waypoint)
+                playColor(waypoint.color)
               }}
               onDblclick={() => console.log('Toogle status')}
             />
@@ -114,7 +116,10 @@ const UserMap = ({ google }) =>{
               strokeWeight= {2}
               fillColor= {"#FF0000"}
               fillOpacity= {0.35}
-              onClick={() => setRefBay({bay: i})}
+              onClick={() => {
+                setRefBay({bay: i})
+                i == 0 ? playOther('leftBay') : playOther('rightBay')
+              }}
             />
           ))}
           <Polygon 
