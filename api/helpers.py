@@ -7,17 +7,17 @@ import openpyxl
 print(getcwd())
 
 color_codes = {
-    'WHT': 'white',
-    'PRP': 'purple',
-    'BRO': 'brown',
-    'RED': 'red',
-    'LBL': 'lightblue',
-    'DBL': 'darkblue',
-    'ORA': 'orange',
-    'YEL': 'yellow',
-    'PNK': 'pink',
     'BLK': 'black',
+    'BRO': 'brown',
+    'DBL': 'darkblue',
+    'LBL': 'lightblue',
     'LGR': 'lightgreen',
+    'ORA': 'orange',
+    'PNK': 'pink',
+    'PRP': 'purple',
+    'RED': 'red',
+    'WHT': 'white',
+    'YEL': 'yellow',
 }
 
 

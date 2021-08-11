@@ -53,6 +53,7 @@ const UserMap = ({ google }) =>{
       socket.off('message')
       socket.on('message', msg => {
         msg = JSON.parse(msg)
+        console.log(msg)
         setCenter(msg);
         setTruck([
           {lat: msg.truck[0][0], lng: msg.truck[0][1]},
