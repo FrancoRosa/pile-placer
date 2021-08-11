@@ -3,12 +3,13 @@ import { faFlag } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useEffect } from "react";
 import { WayPointContext } from "../js/WayPointContext";
+import { playDistance, playColor } from "../js/audio";
 
 const Home = () => {
   const waypoint = useContext(WayPointContext)
 
   useEffect(()=>{
-    console.log(waypoint.waypoint.distance)
+    playDistance(waypoint.waypoint.distance)
   },[waypoint])
 
   return (
@@ -26,7 +27,7 @@ const Home = () => {
             <p>y: {waypoint.waypoint.y}</p>
             <p>Color: {waypoint.waypoint.color}</p>
           </div>
-          <div className="flag-icon color_red">
+          <div className="flag-icon color_red" onClick={() => playColor(waypoint.waypoint.color)}>
             <FontAwesomeIcon icon={faFlag} color={waypoint.waypoint.color}/>
           </div>
           <p className="title is-3 has-text-centered mt-3 mb-4"> {waypoint.waypoint.distance?.toFixed(1)} ft </p>
