@@ -7,6 +7,7 @@ import PileSummary from './PileSummary';
 
 const UserMap = ({ google }) =>{
   const [center, setCenter] = useState({ heading: 0, lat: 0, lng: 0 })
+  const [autoCenter, setAutoCenter] = useState(true)
   const [waypoints, setWaypoints] = useState([])
   const [colors, setColors] = useState({})
   const [truck, setTruck] = useState([])
@@ -47,6 +48,28 @@ const UserMap = ({ google }) =>{
     setWaypoint({...waypoint, distance: center.distance})
   }, [center])
 
+  useEffect(()=>{
+    if (autoCenter){
+      socket.off('message')
+      socket.on('message', msg => {
+        msg = JSON.parse(msg)
+        setCenter(msg);
+        setTruck([
+          {lat: msg.truck[0][0], lng: msg.truck[0][1]},
+          {lat: msg.truck[1][0], lng: msg.truck[1][1]},
+          {lat: msg.truck[2][0], lng: msg.truck[2][1]},
+          {lat: msg.truck[3][0], lng: msg.truck[3][1]},
+          {lat: msg.truck[0][0], lng: msg.truck[0][1]},
+        ])
+        setBays([
+          {lat: msg.bays[0][0], lng: msg.bays[0][1]},
+          {lat: msg.bays[1][0], lng: msg.bays[1][1]},
+        ])
+      });
+    } else {
+      socket.off('message');
+    }
+  }, [autoCenter])
   
   return (
     <>
@@ -104,15 +127,22 @@ const UserMap = ({ google }) =>{
           />
         </Map>
       </div>
-      <div className="columns mt-3 has-text-link">
-        <div className="column">
-          <p className="heading has-text-centered">Lat: {center.lat.toFixed(8)}</p>
+      <div className="columns mt-3 has-text-link ">
+        <div className="column is-flex is-flex-centered">
+          <p className="heading has-text-centered">Lat: {parseFloat(center.lat).toFixed(8)}</p>
         </div>
-        <div className="column">
-          <p className="heading has-text-centered">Lng: {center.lng.toFixed(8)}</p>
+        <div className="column is-flex is-flex-centered">
+          <p className="heading has-text-centered">Lng: {parseFloat(center.lng).toFixed(8)}</p>
         </div>
-        <div className="column">
+        <div className="column is-flex is-flex-centered">
           <p className="heading has-text-centered">Heading: {center.heading.toFixed(1)}॰</p>
+        </div>
+        <div className="column">
+          <button
+            className={`button is-outlined ${autoCenter ? 'is-success' : 'is-warning'}`}
+            onClick={() => setAutoCenter(!autoCenter)}>
+            {autoCenter ? 'Auto center enabled': 'Auto center not enabled'}  
+          </button>
         </div>
       </div>
       <PileSummary colors={colors} /> 
