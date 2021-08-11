@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/cs2cs.dir/apps/cs2cs.cpp.o CMakeFiles/cs2cs.dir/apps/emess.cpp.o CMakeFiles/cs2cs.dir/apps/utils.cpp.o -o ../bin/cs2cs   -L/home/pi/pile-placer/api/proj-8.1.0/build/lib  -Wl,-rpath,/home/pi/pile-placer/api/proj-8.1.0/build/lib: ../lib/libproj.so.23.0.1 

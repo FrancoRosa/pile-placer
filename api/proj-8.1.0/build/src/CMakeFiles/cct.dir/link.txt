@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/cct.dir/apps/cct.cpp.o CMakeFiles/cct.dir/apps/proj_strtod.cpp.o -o ../bin/cct   -L/home/pi/pile-placer/api/proj-8.1.0/build/lib  -Wl,-rpath,/home/pi/pile-placer/api/proj-8.1.0/build/lib: ../lib/libproj.so.23.0.1 

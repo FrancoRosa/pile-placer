@@ -5,7 +5,7 @@ import { setConfig } from "../js/api";
 import { useLocalStorage } from "../js/helpers";
 import epsgCodes from '../assets/epsg_codes.pdf'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileAlt } from "@fortawesome/free-solid-svg-icons";
+import { faFileAlt, faSearch } from "@fortawesome/free-solid-svg-icons";
 
 const Config = () => {
    
@@ -91,6 +91,12 @@ const Config = () => {
               <p className="heading has-text-link">EPSG Reference</p>
               <a href={epsgCodes} target="blank" className="has-text-white title is-2">
                 <FontAwesomeIcon icon={faFileAlt} /> 
+              </a>
+            </div>
+            <div className="column is-flex-direction-column is-flex is-flex-centered">
+              <p className="heading has-text-link">EPSG Browser</p>
+              <a href="https://epsg.io/" target="blank" className="has-text-white title is-2">
+                <FontAwesomeIcon icon={faSearch} /> 
               </a>
             </div>
             

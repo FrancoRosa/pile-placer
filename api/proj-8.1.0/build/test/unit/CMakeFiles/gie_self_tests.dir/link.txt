@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/gie_self_tests.dir/main.cpp.o CMakeFiles/gie_self_tests.dir/gie_self_tests.cpp.o -o ../../bin/gie_self_tests   -L/home/pi/pile-placer/api/proj-8.1.0/build/lib  -Wl,-rpath,/home/pi/pile-placer/api/proj-8.1.0/build/lib ../../lib/libgtest.so ../../lib/libproj.so.23.0.1 -pthread 
