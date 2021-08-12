@@ -6,6 +6,7 @@ from os import uname, path
 from werkzeug.utils import secure_filename
 import json
 from threading import Thread
+from time import sleep
 
 rpi = uname()[4] != 'x86_64'
 if rpi:
@@ -45,7 +46,7 @@ waypoints = []
 def read_uart():
     global location, heading
     while True:
-        sleep(0.2)
+        sleep(0.1)
         nmea = ser.readline()
         if b'$GNGGA' in nmea:
             location = get_latlng(nmea)
