@@ -12,8 +12,8 @@ if rpi:
     from uart_procesor import ser, get_latlng, get_course
 
 
-UPLOAD_FOLDER = '/home/pi/pile-placer/api/cvs_files'
 UPLOAD_FOLDER = 'cvs_files'
+UPLOAD_FOLDER = '/home/pi/pile-placer/api/cvs_files'
 ALLOWED_EXTENSIONS = {'csv', 'xlsx'}
 
 app = Flask(__name__)
