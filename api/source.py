@@ -45,6 +45,7 @@ waypoints = []
 def read_uart():
     global location, heading
     while True:
+        sleep(0.2)
         nmea = ser.readline()
         if b'$GNGGA' in nmea:
             location = get_latlng(nmea)
