@@ -46,22 +46,21 @@ waypoints = []
 def read_uart():
     global location, heading
     while True:
+        sleep(0.8)
         ser.flushInput()
         ser.flushOutput()
-        sleep(0.5)
-        nmea = ser.readline()
-        if b'$GNGGA' in nmea:
-            location = get_latlng(nmea)
-            truck = polygon(location, heading, config)
-            package = {**heading, **location, **truck, **bay_to_waypoint}
-            broadcast(package)
-            sleep(0.1)
-        nmea = ser.readline()
-        if b'$GNVTG' in nmea:
-            course = get_course(nmea)
-            if course['heading'] != None:
-                heading = course
-            sleep(0.1)
+        sleep(0.1)
+        nmea1 = ser.readline()
+        nmea2 = ser.readline()
+        ggaLine = nmea1 if b'$GNGGA' in nmea1 else nmea2
+        vtgLine = nmea1 if b'$GNVTG' in nmea1 else nmea2
+        location = get_latlng(ggaLine)
+        truck = polygon(location, heading, config)
+        package = {**heading, **location, **truck, **bay_to_waypoint}
+        course = get_course(vtgLine)
+        if course['heading'] != None:
+            heading = course
+        broadcast(package)
 
 
 if rpi:
