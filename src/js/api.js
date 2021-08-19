@@ -1,9 +1,10 @@
 import axios from 'axios';
 import io from "socket.io-client";
 
-const host='raspberrypi.local:9999'
+// const host='raspberrypi.local:9999'
 // const host='localhost:9999'
 // const host='10.84.9.68:9999'
+const host='192.168.1.5:9999'
 export const socket = io.connect(`http://${host}`);
 
 export const setLatLng = async (location) => {
