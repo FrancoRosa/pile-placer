@@ -34,10 +34,12 @@ def get_latlng(nmea):
         'height': nmea[9],
         'unit': nmea[10],
     }
-    lat = to_geo(values['latitude'], values['hemisfere_lat'])
-    lng = to_geo(values['longitude'], values['hemisfere_lng'])
-    return {'lat': lat, 'lng': lng}
-
+    try:
+        lat = to_geo(values['latitude'], values['hemisfere_lat'])
+        lng = to_geo(values['longitude'], values['hemisfere_lng'])
+        return {'lat': lat, 'lng': lng}
+    except:
+        return {'lat': 0, 'lng': 0}
 
 def get_course(nmea):
     nmea = str(nmea)

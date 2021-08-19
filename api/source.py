@@ -43,33 +43,33 @@ waypoint = {}
 waypoints = []
 
 
-def read_uart():
-    global location, heading, bay_to_waypoint
-    while True:
-        sleep(0.8)
-        ser.flushInput()
-        ser.flushOutput()
-        sleep(0.1)
-        nmea1 = ser.readline()
-        nmea2 = ser.readline()
-        ggaLine = nmea1 if b'$GNGGA' in nmea1 else nmea2
-        vtgLine = nmea1 if b'$GNVTG' in nmea1 else nmea2
-        location = get_latlng(ggaLine)
-        truck = polygon(location, heading, config)
-        if (len(waypoint) > 0 and len(ref_bay) > 0):
-            bay = truck["bays"][int(ref_bay["bay"])]
-            bay_to_waypoint = {
-                "distance": coordinate_distance(waypoint, {'lat': bay[0], 'lng': bay[1]}, config["epsg"])
-            }
-        package = {**heading, **location, **truck, **bay_to_waypoint}
-        course = get_course(vtgLine)
-        if course['heading'] != None:
-            heading = course
-        broadcast(package)
+# def read_uart():
+#     global location, heading, bay_to_waypoint
+#     while True:
+#         sleep(0.8)
+#         ser.flushInput()
+#         ser.flushOutput()
+#         sleep(0.1)
+#         nmea1 = ser.readline()
+#         nmea2 = ser.readline()
+#         ggaLine = nmea1 if b'$GNGGA' in nmea1 else nmea2
+#         vtgLine = nmea1 if b'$GNVTG' in nmea1 else nmea2
+#         location = get_latlng(ggaLine)
+#         truck = polygon(location, heading, config)
+#         if (len(waypoint) > 0 and len(ref_bay) > 0):
+#             bay = truck["bays"][int(ref_bay["bay"])]
+#             bay_to_waypoint = {
+#                 "distance": coordinate_distance(waypoint, {'lat': bay[0], 'lng': bay[1]}, config["epsg"])
+#             }
+#         package = {**heading, **location, **truck, **bay_to_waypoint}
+#         course = get_course(vtgLine)
+#         if course['heading'] != None:
+#             heading = course
+#         broadcast(package)
 
 
-if rpi:
-    Thread(target=read_uart, args=[]).start()
+# if rpi:
+#     Thread(target=read_uart, args=[]).start()
 
 
 def allowed_file(filename):
