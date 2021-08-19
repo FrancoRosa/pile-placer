@@ -1,4 +1,4 @@
-from helpers import is_csv, polygon, cvs_to_rows, rows_to_json, coordinate_distance, xlsx_to_rows, is_csv
+from helpers import is_csv, polygon, cvs_to_rows, rows_to_json, coordinate_distance, xlsx_to_rows, is_csv, create_projs
 from flask import Flask, request, jsonify, make_response
 from flask_socketio import SocketIO
 from flask_cors import CORS
@@ -14,7 +14,9 @@ if rpi:
 
 
 UPLOAD_FOLDER = 'cvs_files'
-UPLOAD_FOLDER = '/home/pi/pile-placer/api/cvs_files'
+if rpi:
+    UPLOAD_FOLDER = '/home/pi/pile-placer/api/cvs_files'
+
 ALLOWED_EXTENSIONS = {'csv', 'xlsx'}
 
 app = Flask(__name__)
@@ -111,6 +113,7 @@ def get_waypoints():
 def set_location():
     global location, truck, bay_to_waypoint, waypoint, ref_bay, processing_file
     location = request.get_json()
+    print('... processing file', processing_file)
     if not(processing_file):
         truck = polygon(location, heading, config)
         if (len(waypoint) > 0 and len(ref_bay) > 0):
@@ -118,6 +121,7 @@ def set_location():
             bay_to_waypoint = {
                 "distance": coordinate_distance(waypoint, {'lat': bay[0], 'lng': bay[1]}, config["epsg"])
             }
+            print(truck)
         broadcast({**heading, **location, **truck, **bay_to_waypoint})
 
     response = make_response(jsonify({
@@ -143,6 +147,7 @@ def set_heading():
 def set_config():
     global config
     config = request.get_json()
+    create_projs(config['epsg'])
     response = make_response(jsonify({
         "message": True,
     }), 200)

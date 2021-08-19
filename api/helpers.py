@@ -1,5 +1,5 @@
 from os import getcwd
-from time import sleep
+from time import sleep, time
 from math import sin, cos, atan2, sqrt, radians
 from pyproj import Transformer, transformer
 import openpyxl
@@ -19,6 +19,8 @@ color_codes = {
     'WHT': 'white',
     'YEL': 'yellow',
 }
+
+global wgs84_to_proj, proj_to_wgs84
 
 
 def is_csv(filedir):
@@ -157,10 +159,7 @@ def distance(ax, ay, bx, by):
 
 
 def polygon(center, heading, config):
-    wgs84_to_proj = Transformer.from_crs(
-        'epsg:4326', 'epsg:%s' % config['epsg'])
-    proj_to_wgs84 = Transformer.from_crs(
-        'epsg:%s' % config['epsg'], 'epsg:4326',)
+    global wgs84_to_proj, proj_to_wgs84
     proj_center = wgs84_to_proj.transform(
         float(center['lat']), float(center['lng']))
 
@@ -263,8 +262,16 @@ def polygon(center, heading, config):
     }
 
 
-def coordinate_distance(p1, p2, epsg_code):
-    transformer = Transformer.from_crs('epsg:4326', 'epsg:%s' % epsg_code)
-    p1_proj = transformer.transform(p1['lat'], p1['lng'])
-    p2_proj = transformer.transform(p2['lat'], p2['lng'])
+def coordinate_distance(p1, p2):
+    global wgs84_to_proj
+    p1_proj = wgs84_to_proj(p1['lat'], p1['lng'])
+    p2_proj = wgs84_to_proj(p2['lat'], p2['lng'])
     return distance(p1_proj[0], p1_proj[1], p2_proj[0], p2_proj[1])
+
+
+def create_projs(epsg_code):
+    global wgs84_to_proj, proj_to_wgs84
+    wgs84_to_proj = Transformer.from_crs(
+        'epsg:4326', 'epsg:%s' % epsg_code)
+    proj_to_wgs84 = Transformer.from_crs(
+        'epsg:%s' % epsg_code, 'epsg:4326',)
