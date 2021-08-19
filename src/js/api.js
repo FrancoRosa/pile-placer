@@ -1,10 +1,27 @@
 import axios from 'axios';
 import io from "socket.io-client";
 
-// const host='raspberrypi.local:9999'
-// const host='localhost:9999'
-// const host='10.84.9.68:9999'
-const host='192.168.1.5:9999'
+const hosts = [
+  'raspberrypi.local:9999',
+  'localhost:9999',
+  '10.84.9.68:9999',
+  '192.168.1.5:9999'
+]
+
+let host = '';
+
+hosts.forEach(h => {
+  console.log('looking for hosts')
+  axios.get(`http://${h}`, {timeout: 1000})
+    .then(() => {
+      host = h
+      console.log('New host:', h)
+    })
+    .catch(() => {
+      console.log('...', h, 'unreachable')
+    })
+});
+
 export const socket = io.connect(`http://${host}`);
 
 export const setLatLng = async (location) => {

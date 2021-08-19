@@ -6,7 +6,7 @@ from os import uname, path
 from werkzeug.utils import secure_filename
 import json
 from threading import Thread
-from time import sleep
+from time import sleep, time
 
 rpi = uname()[4] != 'x86_64'
 if rpi:
@@ -41,7 +41,7 @@ config = {
 ref_bay = {}
 waypoint = {}
 waypoints = []
-
+processing_file = False
 
 # def read_uart():
 #     global location, heading, bay_to_waypoint
@@ -109,16 +109,17 @@ def get_waypoints():
 
 @app.route('/api/location', methods=['post'])
 def set_location():
-    global location, truck, bay_to_waypoint, waypoint, ref_bay
+    global location, truck, bay_to_waypoint, waypoint, ref_bay, processing_file
     location = request.get_json()
-    truck = polygon(location, heading, config)
+    if not(processing_file):
+        truck = polygon(location, heading, config)
+        if (len(waypoint) > 0 and len(ref_bay) > 0):
+            bay = truck["bays"][int(ref_bay["bay"])]
+            bay_to_waypoint = {
+                "distance": coordinate_distance(waypoint, {'lat': bay[0], 'lng': bay[1]}, config["epsg"])
+            }
+        broadcast({**heading, **location, **truck, **bay_to_waypoint})
 
-    if (len(waypoint) > 0 and len(ref_bay) > 0):
-        bay = truck["bays"][int(ref_bay["bay"])]
-        bay_to_waypoint = {
-            "distance": coordinate_distance(waypoint, {'lat': bay[0], 'lng': bay[1]}, config["epsg"])
-        }
-    broadcast({**heading, **location, **truck, **bay_to_waypoint})
     response = make_response(jsonify({
         "message": True,
     }), 200)
@@ -175,9 +176,10 @@ def set_waypoint():
 
 @app.route('/api/file', methods=['post'])
 def process_file():
-    global waypoints, config
+    global waypoints, config, processing_file
     message = False
     rows_processed = 0
+    processing_file = True
     file = request.files['file']
     code = config['epsg']
     if file and allowed_file(file.filename):
@@ -196,6 +198,7 @@ def process_file():
         "message": message, "rows": rows_processed
     }), 200)
     response.headers["Content-Type"] = "application/json"
+    processing_file = False
     return response
 
 
