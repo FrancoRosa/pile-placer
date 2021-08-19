@@ -8,7 +8,7 @@ const hosts = [
   '192.168.1.5:9999'
 ]
 
-let host = 'localhost:9999';
+let host = '192.168.1.5:9999';
 
 hosts.forEach(h => {
   console.log('looking for hosts')
@@ -16,12 +16,16 @@ hosts.forEach(h => {
     .then(() => {
       host = h
       console.log('New host:', h)
+      updateEndpoints(h)
     })
     .catch(() => {
       console.log('...', h, 'unreachable')
     })
 });
 
+const updateEndpoints = (host) => {
+
+}
 export const socket = io.connect(`http://${host}`);
 
 export const setLatLng = async (location) => {

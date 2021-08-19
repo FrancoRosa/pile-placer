@@ -1,7 +1,7 @@
 from os import getcwd
 from time import sleep, time
 from math import sin, cos, atan2, sqrt, radians
-from pyproj import Transformer, transformer
+from pyproj import Transformer
 import openpyxl
 
 print(getcwd())
@@ -72,13 +72,13 @@ def color_convert(str):
 
 
 def rows_to_json(rows, epsg_code):
-    try:
-        if epsg_code != '0':
-            transformer = Transformer.from_crs(
-                'epsg:%s' % epsg_code, 'epsg:4326')
-    except:
-        print('... invalid crs code')
-        return
+    # try:
+    #     if epsg_code != '0':
+    #         transformer = Transformer.from_crs(
+    #             'epsg:%s' % epsg_code, 'epsg:4326')
+    # except:
+    #     print('... invalid crs code')
+    #     return
     result = []
     headers = rows[0]
     print("... headers:", headers)
@@ -87,7 +87,7 @@ def rows_to_json(rows, epsg_code):
         for value in values:
             value = value.split(',')
             x, y = float(value[2]), float(value[3])
-            latlng = transformer.transform(x, y)
+            latlng = proj_to_wgs84.transform(x, y)
             result.append({
                 "pile_id": value[0],
                 "lat": latlng[0],
@@ -101,7 +101,7 @@ def rows_to_json(rows, epsg_code):
         for value in values:
             value = value.split(',')
             x, y = float(value[2]), float(value[1])
-            latlng = transformer.transform(x, y)
+            latlng = proj_to_wgs84.transform(x, y)
             result.append({
                 "pile_id": value[0],
                 "lat": latlng[0],
@@ -115,7 +115,7 @@ def rows_to_json(rows, epsg_code):
         for value in values:
             value = value.split(',')
             x, y = float(value[2]), float(value[1])
-            latlng = transformer.transform(x, y)
+            latlng = proj_to_wgs84.transform(x, y)
             result.append({
                 "pile_id": value[0],
                 "lat": latlng[0],
@@ -141,7 +141,7 @@ def rows_to_json(rows, epsg_code):
         for value in values:
             value = value.split(',')
             x, y = float(value[4]), float(value[5])
-            latlng = transformer.transform(x, y)
+            latlng = proj_to_wgs84.transform(x, y)
             result.append({
                 "pile_id": value[2],
                 "lat": latlng[0],
@@ -274,4 +274,7 @@ def create_projs(epsg_code):
     wgs84_to_proj = Transformer.from_crs(
         'epsg:4326', 'epsg:%s' % epsg_code)
     proj_to_wgs84 = Transformer.from_crs(
-        'epsg:%s' % epsg_code, 'epsg:4326',)
+        'epsg:%s' % epsg_code, 'epsg:4326')
+
+
+create_projs('2229')
