@@ -16,7 +16,6 @@ const UserMap = ({ google }) =>{
   const [truck, setTruck] = useState([])
   const [line, setLine] = useState([])
   const [bays, setBays] = useState([])
-  // const { waypoint, setWaypoint } = useContext(WayPointContext)
   const nextPiles = useStoreState(state => state.nextPiles)
   const setNextPiles = useStoreActions(actions => actions.setNextPiles)
 
@@ -87,9 +86,14 @@ const UserMap = ({ google }) =>{
     setRefWaypoint(nearestPiles)
   }
 
-  // useEffect(() => {
-  //   setWaypoint({...waypoint, distance: center.distance})
-  // }, [center])
+  useEffect(() => {
+    if (Object.keys(center).includes('distance')) {
+      let tempPiles = [...nextPiles]
+      tempPiles[0].distance = center.distance[0]
+      tempPiles[1].distance = center.distance[1]
+      setNextPiles(tempPiles)
+    }
+  }, [center])
 
   useEffect(()=>{
     if (autoCenter){
