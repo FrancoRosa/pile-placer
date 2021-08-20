@@ -28,7 +28,6 @@ const NextPile = ({index}) => {
               setTimeout(() => {
                 playColor(waypoint.color.trim());
               }, 1000);
-              
             }}>
             <FontAwesomeIcon icon={faFlag} color={waypoint.color}/>
           </div>

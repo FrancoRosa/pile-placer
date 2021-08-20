@@ -26,37 +26,52 @@ import leftBay from '../assets/audio/other/left_bay.mp3'
 import rightBay from '../assets/audio/other/right_bay.mp3'
 import nextPile from '../assets/audio/other/next_pile.mp3'
 
-import { Howl } from 'howler'
 
-const colorSounds = {black, blue, brown, darkblue, lightblue, lightgreen, orange, pink, purple, red, white, yellow}
-const distanceSounds = [one, two, three, four, five, six, seven, eight, nine, ten]
-const otherSounds = {leftBay, rightBay, nextPile}
+const distanceSounds = [
+  new Audio(one),
+  new Audio(two),
+  new Audio(three),
+  new Audio(four),
+  new Audio(five),
+  new Audio(six),
+  new Audio(seven),
+  new Audio(eight),
+  new Audio(nine),
+  new Audio(ten)
+]
+
+const otherSounds = {
+  leftBay: new Audio(leftBay),
+  rightBay: new Audio(rightBay),
+  nextPile: new Audio(nextPile)
+}
+
+const colorSounds = {
+  black: new Audio(black),
+  blue: new Audio(blue),
+  brown: new Audio(brown),
+  darkblue: new Audio(darkblue),
+  lightblue: new Audio(lightblue),
+  lightgreen: new Audio(lightgreen),
+  orange: new Audio(orange),
+  pink: new Audio(pink),
+  purple: new Audio(purple),
+  red: new Audio(red),
+  white: new Audio(white),
+  yellow: new Audio(yellow)
+}
 
 export const playDistance = distance => {
   const dist = parseInt(distance)
-  console.log('... play distance', dist)
-  if (dist < 10){
-    if (distanceSounds[dist]) {
-      const a = new Audio(distanceSounds[dist])
-      a.play()
-    }
-  }
-}
-
-export const playColor = color => {
-  console.log('playing color:', color, typeof color)
-  if (colorSounds[color]) {
-    console.log('color found')
-    const a = new Howl({
-      src: colorSounds[color]
-    })
-    a.play()
+  if (dist > 0 && dist < 11) {
+    distanceSounds[dist-1].play()
   }
 }
 
 export const playOther = sound => {
-  if (otherSounds[sound]) {
-    const a = new Audio(otherSounds[sound])
-    a.play()
-  }
+  if (otherSounds[sound]) otherSounds[sound].play()
+}
+
+export const playColor = color => {
+  if (colorSounds[color]) colorSounds[color].play()
 }
