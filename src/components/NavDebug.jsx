@@ -3,10 +3,11 @@
 import {Map, Marker, GoogleApiWrapper } from 'google-maps-react';
 import { useState } from 'react';
 import { setHeading, setLatLng } from '../js/api';
+import { useLocalStorage } from '../js/helpers';
 
 const NavDebug = ({google}) => {
   const [course, setCourse] = useState(0)
-  const [markerLatLng, setMarkerLatLng] = useState({lat:0,lng:0})
+  const [markerLatLng, setMarkerLatLng] = useLocalStorage('debugCenter',{lat: 0, lng: 0})
   
   const getMapCordinates = (mapProps, map, clickEvent) => {
     let location = {
@@ -30,7 +31,7 @@ const NavDebug = ({google}) => {
         <Map 
           google={google} zoom={14} 
           onClick={getMapCordinates}
-          initialCenter={{lat: 35.02634950, lng: -118.13624929}}
+          initialCenter={markerLatLng}
         >
           <Marker 
             name={'target'}

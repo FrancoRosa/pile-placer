@@ -1,9 +1,10 @@
+import { useStoreActions, useStoreState } from 'easy-peasy';
 import {Map, Marker, GoogleApiWrapper, Circle, Polygon, Polyline} from 'google-maps-react';
 import { useContext, useEffect, useState } from 'react';
 import { getWaypoints, setRefBay, setRefWaypoint, socket } from '../js/api';
 import { playColor, playOther } from '../js/audio';
 import { sortByColor } from '../js/helpers';
-import { WayPointContext } from '../js/WayPointContext';
+// import { WayPointContext } from '../js/WayPointContext';
 import PileSummary from './PileSummary';
 
 const UserMap = ({ google }) =>{
@@ -14,7 +15,9 @@ const UserMap = ({ google }) =>{
   const [truck, setTruck] = useState([])
   const [line, setLine] = useState([])
   const [bays, setBays] = useState([])
-  const { waypoint, setWaypoint } = useContext(WayPointContext)
+  // const { waypoint, setWaypoint } = useContext(WayPointContext)
+  const nextPiles = useStoreState(state => state.nextPiles)
+  const setNextPiles = useStoreActions(actions => actions.setNextPiles)
 
   useEffect(() => {
     getWaypoints().then(res => {
@@ -54,19 +57,37 @@ const UserMap = ({ google }) =>{
   }, [])
   
 
-  const calculateDistances = (waypoints, center) => {
-    let distances = []
-    let distance
+  const getNearestPiles = (waypoints, bays) => {
+    let distanceBay1
+    let distanceBay2
+    let closestBay1
+    let closestBay2
+    let closestDistanceBay1 = 10000
+    let closestDistanceBay2 = 10000
     waypoints.forEach(point => {
-      distance = (point.lat - center.lat)**2 + (point.lng - center.lng)**2
-      distances.push({id: point, distance})
+      distanceBay1 = (point.lat - bays[0].lat)**2 + (point.lng - bays[0].lng)**2
+      distanceBay2 = (point.lat - bays[1].lat)**2 + (point.lng - bays[1].lng)**2
+      if (distanceBay1 < closestDistanceBay1) {
+        closestDistanceBay1 = distanceBay1
+        closestBay1 = point
+      }
+      if (distanceBay2 < closestDistanceBay2) {
+        closestDistanceBay2 = distanceBay2
+        closestBay2 = point
+      }
     });
-    return distances
+    console.log([closestBay1, closestBay2])
+    return [closestBay1, closestBay2]
   }
 
-  useEffect(() => {
-    setWaypoint({...waypoint, distance: center.distance})
-  }, [center])
+  const getNextPiles = (waypoints, bays) => {
+    
+    setNextPiles(getNearestPiles(waypoints, bays))
+  }
+
+  // useEffect(() => {
+  //   setWaypoint({...waypoint, distance: center.distance})
+  // }, [center])
 
   useEffect(()=>{
     if (autoCenter){
@@ -124,7 +145,7 @@ const UserMap = ({ google }) =>{
               strokeWeight= {2}
               fillColor= {waypoint.color}
               onClick={() => {
-                setWaypoint(waypoint)
+                // setWaypoint(waypoint)
                 setRefWaypoint(waypoint)
                 playColor(waypoint.color)
               }}
@@ -179,6 +200,11 @@ const UserMap = ({ google }) =>{
             className={`button is-outlined is-small ${autoCenter ? 'is-success' : 'is-warning'}`}
             onClick={() => setAutoCenter(!autoCenter)}>
             {autoCenter ? 'Auto center enabled': 'Auto center not enabled'}  
+          </button>
+          <button
+            className={`button is-outlined is-small is-success`}
+            onClick={() => getNextPiles(waypoints,bays)}>
+            Get near piles  
           </button>
         </div>
       </div>
