@@ -8,10 +8,11 @@ const NextPile = ({index}) => {
   const waypoint = nextPiles[index]
 
   return (
-    <div>
+    <div className="column is-one-fifth">
       <p className="title is-5 has-text-centered mt-4"> Next pile: </p>
       
       {waypoint &&
+        
         <>
           <div className="is-flex is-flex-direction-column is-align-content-center mb-4">
             <p>Lat: {waypoint.lat?.toFixed(8)}</p>

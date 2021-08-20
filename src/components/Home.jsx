@@ -14,15 +14,9 @@ const Home = () => {
   return (
     <div className="container">
       <div className="columns">
-        <div className="column">
-          <UserMap />
-        </div>
-        <div className="column is-one-fifth">
-          <NextPile index={0} />
-        </div>
-        <div className="column is-one-fifth">
-          <NextPile index={1} />
-        </div>
+        <NextPile index={0} />
+        <UserMap />
+        <NextPile index={1} />
       </div>
     </div>
   );

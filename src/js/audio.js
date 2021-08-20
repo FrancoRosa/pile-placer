@@ -42,6 +42,7 @@ export const playDistance = distance => {
 }
 
 export const playColor = color => {
+  console.log('playing color:', color)
   if (colorSounds[color]) {
     const a = new Audio(colorSounds[color])
     a.play()

@@ -124,7 +124,7 @@ const UserMap = ({ google }) =>{
   }, [autoCenter])
   
   return (
-    <>
+    <div className="column">
       <div className="container map">
         <Map google={google} zoom={22} 
           initialCenter={center} center={center}
@@ -201,19 +201,19 @@ const UserMap = ({ google }) =>{
         </div>
         <div className="column is-flex is-flex-centered">
           <button
-            className={`button is-outlined is-small ${autoCenter ? 'is-success' : 'is-warning'}`}
+            className={`button is-outlined is-small ml-2 mr-2 ${autoCenter ? 'is-success' : 'is-warning'}`}
             onClick={() => setAutoCenter(!autoCenter)}>
             {autoCenter ? 'Auto center enabled': 'Auto center not enabled'}  
           </button>
           <button
-            className={`button is-outlined is-small is-success`}
+            className={`button is-outlined is-small is-success ml-2 mr-2`}
             onClick={() => getNextPiles(waypoints,bays)}>
-            Get near piles  
+            Get nearest piles  
           </button>
         </div>
       </div>
       <PileSummary colors={colors} /> 
-    </>
+    </div>
   );
 };
 

@@ -9,11 +9,11 @@ const PileSummary = ({colors}) => (
         {Object.entries(colors).reduce((sum,a)=>sum+a[1],0)} piles found
       </p>
     }
-    <div className="columns mt-3">
+    <div className="columns">
       
       {Object.entries(colors).map(color => (
-        <div className="column">
-          <FontAwesomeIcon  icon={faFlag} color={color[0]}/>
+        <div className="column has-text-centered">
+          <FontAwesomeIcon icon={faFlag} color={color[0]}/>
           <p>{color[1]}</p>
         </div>
       ))}
