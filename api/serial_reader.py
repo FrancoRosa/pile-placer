@@ -19,10 +19,10 @@ while True:
   if b'$GNGGA' in line:
     location = get_latlng(line)
     print('... send location:', location)
-    requests.post(url+'/api/location', data=location)
+    requests.post(url+'/api/location', json=location)
     
   if b'$GNVTG' in line:
     heading = get_course(line)
     if heading['heading'] != None:
-      print('... send heading:', heading )
-      requests.post(url+'/api/heading', data=heading)
+      print('... send heading:', heading)
+      requests.post(url+'/api/heading', json=heading)

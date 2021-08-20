@@ -119,7 +119,7 @@ def set_location():
         if (len(waypoint) > 0 and len(ref_bay) > 0):
             bay = truck["bays"][int(ref_bay["bay"])]
             bay_to_waypoint = {
-                "distance": coordinate_distance(waypoint, {'lat': bay[0], 'lng': bay[1]}, config["epsg"])
+                "distance": coordinate_distance(waypoint, {'lat': bay[0], 'lng': bay[1]})
             }
             print(truck)
         broadcast({**heading, **location, **truck, **bay_to_waypoint})

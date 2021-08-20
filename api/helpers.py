@@ -264,8 +264,8 @@ def polygon(center, heading, config):
 
 def coordinate_distance(p1, p2):
     global wgs84_to_proj
-    p1_proj = wgs84_to_proj(p1['lat'], p1['lng'])
-    p2_proj = wgs84_to_proj(p2['lat'], p2['lng'])
+    p1_proj = wgs84_to_proj.transform(p1['lat'], p1['lng'])
+    p2_proj = wgs84_to_proj.transform(p2['lat'], p2['lng'])
     return distance(p1_proj[0], p1_proj[1], p2_proj[0], p2_proj[1])
 
 
