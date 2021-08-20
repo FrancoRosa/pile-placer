@@ -1,3 +1,4 @@
+import { parse } from '@fortawesome/fontawesome-svg-core';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import {Map, Marker, GoogleApiWrapper, Circle, Polygon, Polyline} from 'google-maps-react';
 import { useContext, useEffect, useState } from 'react';
@@ -81,8 +82,9 @@ const UserMap = ({ google }) =>{
   }
 
   const getNextPiles = (waypoints, bays) => {
-    
-    setNextPiles(getNearestPiles(waypoints, bays))
+    const nearestPiles = getNearestPiles(waypoints, bays) 
+    setNextPiles(nearestPiles)
+    setRefWaypoint(nearestPiles)
   }
 
   // useEffect(() => {
@@ -145,8 +147,6 @@ const UserMap = ({ google }) =>{
               strokeWeight= {2}
               fillColor= {waypoint.color}
               onClick={() => {
-                // setWaypoint(waypoint)
-                setRefWaypoint(waypoint)
                 playColor(waypoint.color)
               }}
               onDblclick={() => console.log('Toogle status')}
@@ -193,7 +193,7 @@ const UserMap = ({ google }) =>{
           <p className="heading has-text-centered">Lng: {parseFloat(center.lng).toFixed(8)}</p>
         </div>
         <div className="column is-flex is-flex-centered">
-          <p className="heading has-text-centered">Heading: {center.heading.toFixed(1)}॰</p>
+          <p className="heading has-text-centered">Heading: {parseFloat(center.heading).toFixed(1)}॰</p>
         </div>
         <div className="column is-flex is-flex-centered">
           <button
