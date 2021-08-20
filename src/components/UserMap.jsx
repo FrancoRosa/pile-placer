@@ -53,14 +53,20 @@ const UserMap = ({ google }) =>{
     };
   }, [])
   
+
+  const calculateDistances = (waypoints, center) => {
+    let distances = []
+    let distance
+    waypoints.forEach(point => {
+      distance = (point.lat - center.lat)**2 + (point.lng - center.lng)**2
+      distances.push({id: point, distance})
+    });
+    return distances
+  }
+
   useEffect(() => {
     setWaypoint({...waypoint, distance: center.distance})
   }, [center])
-
-
-  useEffect(() => {
-    console.log(line)
-  }, [line])
 
   useEffect(()=>{
     if (autoCenter){
