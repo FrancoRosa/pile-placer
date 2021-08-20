@@ -26,6 +26,8 @@ import leftBay from '../assets/audio/other/left_bay.mp3'
 import rightBay from '../assets/audio/other/right_bay.mp3'
 import nextPile from '../assets/audio/other/next_pile.mp3'
 
+import { Howl } from 'howler'
+
 const colorSounds = {black, blue, brown, darkblue, lightblue, lightgreen, orange, pink, purple, red, white, yellow}
 const distanceSounds = [one, two, three, four, five, six, seven, eight, nine, ten]
 const otherSounds = {leftBay, rightBay, nextPile}
@@ -42,9 +44,12 @@ export const playDistance = distance => {
 }
 
 export const playColor = color => {
-  console.log('playing color:', color)
+  console.log('playing color:', color, typeof color)
   if (colorSounds[color]) {
-    const a = new Audio(colorSounds[color])
+    console.log('color found')
+    const a = new Howl({
+      src: colorSounds[color]
+    })
     a.play()
   }
 }

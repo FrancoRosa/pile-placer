@@ -3,7 +3,7 @@ import { useStoreActions, useStoreState } from 'easy-peasy';
 import {Map, Marker, GoogleApiWrapper, Circle, Polygon, Polyline} from 'google-maps-react';
 import { useContext, useEffect, useState } from 'react';
 import { getWaypoints, setRefBay, setRefWaypoint, socket } from '../js/api';
-import { playColor, playOther } from '../js/audio';
+// import { playColor } from '../js/audio';
 import { sortByColor } from '../js/helpers';
 // import { WayPointContext } from '../js/WayPointContext';
 import PileSummary from './PileSummary';
@@ -150,9 +150,9 @@ const UserMap = ({ google }) =>{
               strokeOpacity= {0.8}
               strokeWeight= {2}
               fillColor= {waypoint.color}
-              onClick={() => {
-                playColor(waypoint.color)
-              }}
+              // onClick={() => {
+              //   playColor(waypoint.color)
+              // }}
               onDblclick={() => console.log('Toogle status')}
             />
           ))}
@@ -167,7 +167,7 @@ const UserMap = ({ google }) =>{
               fillOpacity= {0.35}
               onClick={() => {
                 setRefBay({bay: i})
-                i == 0 ? playOther('leftBay') : playOther('rightBay')
+                // i == 0 ? playOther('leftBay') : playOther('rightBay')
               }}
             />
           ))}
