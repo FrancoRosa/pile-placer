@@ -1,4 +1,4 @@
-from helpers import is_csv, polygon, cvs_to_rows, rows_to_json, coordinate_distance, xlsx_to_rows, is_csv, create_projs
+from helpers import distance, is_csv, polygon, cvs_to_rows, rows_to_json, coordinate_distance, xlsx_to_rows, is_csv, create_projs
 from flask import Flask, request, jsonify, make_response
 from flask_socketio import SocketIO
 from flask_cors import CORS
@@ -41,7 +41,7 @@ config = {
     'epsg': '2229'
 }
 ref_bay = {}
-waypoint = {}
+waypoint = []
 waypoints = []
 processing_file = False
 
@@ -113,15 +113,18 @@ def get_waypoints():
 def set_location():
     global location, truck, bay_to_waypoint, waypoint, ref_bay, processing_file
     location = request.get_json()
-    print('... processing file', processing_file)
     if not(processing_file):
         truck = polygon(location, heading, config)
-        if (len(waypoint) > 0 and len(ref_bay) > 0):
-            bay = truck["bays"][int(ref_bay["bay"])]
+        if len(waypoint) > 0:
+            bays = truck["bays"]
             bay_to_waypoint = {
-                "distance": coordinate_distance(waypoint, {'lat': bay[0], 'lng': bay[1]})
+                "distance": [
+                    coordinate_distance(
+                        waypoint[0], {'lat': bays[0][0], 'lng': bays[0][1]}),
+                    coordinate_distance(
+                        waypoint[1], {'lat': bays[1][0], 'lng': bays[1][1]})
+                ]
             }
-            print(truck)
         broadcast({**heading, **location, **truck, **bay_to_waypoint})
 
     response = make_response(jsonify({
@@ -159,7 +162,6 @@ def set_config():
 def set_ref_bay():
     global ref_bay
     ref_bay = request.get_json()
-    print('... ', ref_bay)
     response = make_response(jsonify({
         "message": True,
     }), 200)
