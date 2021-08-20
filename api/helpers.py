@@ -186,6 +186,12 @@ def polygon(center, heading, config):
         'd': {
             'x': cenX - anX,
             'y': cenY + anY - tLen},
+        'e': {  # Line origin
+            'x': cenX - anX + tWid/2,
+            'y': cenY + anY},
+        'f': {  # Line end
+            'x': cenX - anX + tWid/2,
+            'y': cenY + anY + 100},
         'bay1': {
             'x': cenX - anX,
             'y': cenY + anY - bay1},
@@ -210,6 +216,14 @@ def polygon(center, heading, config):
         'd': {
             'dist': distance(cenX, cenY, proj_poly['d']['x'], proj_poly['d']['y']),
             'ang': atan2(proj_poly['d']['y'] - cenY, proj_poly['d']['x'] - cenX)
+        },
+        'e': {
+            'dist': distance(cenX, cenY, proj_poly['e']['x'], proj_poly['e']['y']),
+            'ang': atan2(proj_poly['e']['y'] - cenY, proj_poly['e']['x'] - cenX)
+        },
+        'f': {
+            'dist': distance(cenX, cenY, proj_poly['f']['x'], proj_poly['f']['y']),
+            'ang': atan2(proj_poly['f']['y'] - cenY, proj_poly['f']['x'] - cenX)
         },
         'bay1': {
             'dist': distance(cenX, cenY, proj_poly['bay1']['x'], proj_poly['bay1']['y']),
@@ -238,6 +252,14 @@ def polygon(center, heading, config):
             'x': vectors['d']['dist']*cos(vectors['d']['ang'] - rot) + cenX,
             'y': vectors['d']['dist']*sin(vectors['d']['ang'] - rot) + cenY,
         },
+        'e': {
+            'x': vectors['e']['dist']*cos(vectors['e']['ang'] - rot) + cenX,
+            'y': vectors['e']['dist']*sin(vectors['e']['ang'] - rot) + cenY,
+        },
+        'f': {
+            'x': vectors['f']['dist']*cos(vectors['f']['ang'] - rot) + cenX,
+            'y': vectors['f']['dist']*sin(vectors['f']['ang'] - rot) + cenY,
+        },
         'bay1': {
             'x': vectors['bay1']['dist']*cos(vectors['bay1']['ang'] - rot) + cenX,
             'y': vectors['bay1']['dist']*sin(vectors['bay1']['ang'] - rot) + cenY,
@@ -254,6 +276,8 @@ def polygon(center, heading, config):
             proj_to_wgs84.transform(poly['b']['x'], poly['b']['y']),
             proj_to_wgs84.transform(poly['c']['x'], poly['c']['y']),
             proj_to_wgs84.transform(poly['d']['x'], poly['d']['y']),
+            proj_to_wgs84.transform(poly['e']['x'], poly['e']['y']),
+            proj_to_wgs84.transform(poly['f']['x'], poly['f']['y']),
         ],
         'bays': [
             proj_to_wgs84.transform(poly['bay1']['x'], poly['bay1']['y']),

@@ -1,4 +1,4 @@
-import {Map, Marker, GoogleApiWrapper, Circle, Polygon} from 'google-maps-react';
+import {Map, Marker, GoogleApiWrapper, Circle, Polygon, Polyline} from 'google-maps-react';
 import { useContext, useEffect, useState } from 'react';
 import { getWaypoints, setRefBay, setRefWaypoint, socket } from '../js/api';
 import { playColor, playOther } from '../js/audio';
@@ -12,6 +12,7 @@ const UserMap = ({ google }) =>{
   const [waypoints, setWaypoints] = useState([])
   const [colors, setColors] = useState({})
   const [truck, setTruck] = useState([])
+  const [line, setLine] = useState([])
   const [bays, setBays] = useState([])
   const { waypoint, setWaypoint } = useContext(WayPointContext)
 
@@ -26,6 +27,7 @@ const UserMap = ({ google }) =>{
     
     socket.on('message', msg => {
       msg = JSON.parse(msg)
+      console.log(msg)
       setCenter(msg);
       setTruck([
         {lat: msg.truck[0][0], lng: msg.truck[0][1]},
@@ -34,6 +36,12 @@ const UserMap = ({ google }) =>{
         {lat: msg.truck[3][0], lng: msg.truck[3][1]},
         {lat: msg.truck[0][0], lng: msg.truck[0][1]},
       ])
+
+      setLine([
+        {lat: msg.truck[4][0], lng: msg.truck[4][1]},
+        {lat: msg.truck[5][0], lng: msg.truck[5][1]}
+      ])
+      
       setBays([
         {lat: msg.bays[0][0], lng: msg.bays[0][1]},
         {lat: msg.bays[1][0], lng: msg.bays[1][1]},
@@ -49,11 +57,17 @@ const UserMap = ({ google }) =>{
     setWaypoint({...waypoint, distance: center.distance})
   }, [center])
 
+
+  useEffect(() => {
+    console.log(line)
+  }, [line])
+
   useEffect(()=>{
     if (autoCenter){
       socket.off('message')
       socket.on('message', msg => {
         msg = JSON.parse(msg)
+        console.log(msg)
         setCenter(msg);
         setTruck([
           {lat: msg.truck[0][0], lng: msg.truck[0][1]},
@@ -61,6 +75,10 @@ const UserMap = ({ google }) =>{
           {lat: msg.truck[2][0], lng: msg.truck[2][1]},
           {lat: msg.truck[3][0], lng: msg.truck[3][1]},
           {lat: msg.truck[0][0], lng: msg.truck[0][1]},
+        ])
+        setLine([
+          {lat: msg.truck[4][0], lng: msg.truck[4][1]},
+          {lat: msg.truck[5][0], lng: msg.truck[5][1]},
         ])
         setBays([
           {lat: msg.bays[0][0], lng: msg.bays[0][1]},
@@ -124,6 +142,14 @@ const UserMap = ({ google }) =>{
           ))}
           <Polygon 
             paths={truck}
+            strokeColor= {"#FF0000"}
+            strokeOpacity= {0.8}
+            strokeWeight= {2}
+            fillColor= {"#FF0000"}
+            fillOpacity= {0.35}
+          />
+          <Polyline
+            path={line}
             strokeColor= {"#FF0000"}
             strokeOpacity= {0.8}
             strokeWeight= {2}

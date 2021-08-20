@@ -8,7 +8,7 @@ const hosts = [
   '192.168.1.5:9999'
 ]
 
-let host = '192.168.1.5:9999';
+let host = 'localhost:9999';
 
 hosts.forEach(h => {
   console.log('looking for hosts')
