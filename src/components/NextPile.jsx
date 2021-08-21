@@ -7,7 +7,6 @@ import { playColor, playOther } from "../js/audio"
 const NextPile = ({index}) => {
   const nextPiles = useStoreState(state => state.nextPiles)
   const waypoint = nextPiles[index]
-  
   return (
     <div className="column is-one-fifth">
       <p className="title is-5 has-text-centered mt-4"> Next pile: </p>
@@ -16,13 +15,12 @@ const NextPile = ({index}) => {
         
         <>
           <div className="is-flex is-flex-direction-column is-align-content-center mb-4">
-            <p>Lat: {waypoint.lat?.toFixed(8)}</p>
-            <p>Lng: {waypoint.lng?.toFixed(8)}</p>
-            <p>x: {waypoint.x}</p>
-            <p>y: {waypoint.y}</p>
-            <p>Color: {waypoint.color}</p>
+            <p className="heading">Lat: {waypoint.lat?.toFixed(8)}</p>
+            <p className="heading">Lng: {waypoint.lng?.toFixed(8)}</p>
+            <p className="heading">N: {waypoint.x}</p>
+            <p className="heading">E: {waypoint.y}</p>
           </div>
-          <div className="flag-icon color_red" 
+          <div className="flag-icon color_red"
             onClick={() => {
               index == 0 ? playOther('leftBay') : playOther('rightBay')
               setTimeout(() => {
@@ -31,7 +29,11 @@ const NextPile = ({index}) => {
             }}>
             <FontAwesomeIcon icon={faFlag} color={waypoint.color}/>
           </div>
+          <p className="heading has-text-centered">{waypoint.color}</p>
           <p className="title is-3 has-text-centered mt-3 mb-4"> {waypoint.distance?.toFixed(1)} ft </p>
+          <div className="is-flex is-flex-centered">
+            <button className="button is-outlined is-success">Place</button>
+          </div>
         </>
       }
 

@@ -2,7 +2,7 @@ import UserMap from "./UserMap";
 import NextPile from "./NextPile";
 import { useStoreState } from "easy-peasy";
 import { useEffect } from "react";
-import { playDistance } from "../js/audio";
+import { playColor, playDistance } from "../js/audio";
 
 const Home = () => {
   const nextPiles = useStoreState(state => state.nextPiles)

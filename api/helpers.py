@@ -95,6 +95,7 @@ def rows_to_json(rows, epsg_code):
                 "color": color_convert(value[1]),
                 "x": x,
                 "y": y,
+                "placed": False
             })
 
     if 'P,N,E,N,N' in headers:
@@ -109,6 +110,7 @@ def rows_to_json(rows, epsg_code):
                 "color": '',
                 "x": x,
                 "y": y,
+                "placed": False
             })
 
     if 'P,N,E,N,C' in headers:
@@ -123,6 +125,7 @@ def rows_to_json(rows, epsg_code):
                 "color": color_convert(value[4]),
                 "x": x,
                 "y": y,
+                "placed": False
             })
 
     if 'Name,Latitude,Longitude,Special WP,Dominant' in headers:
@@ -135,6 +138,7 @@ def rows_to_json(rows, epsg_code):
                 "color": color_convert(value[4]),
                 "x": 0,
                 "y": 0,
+                "placed": False
             })
 
     if 'Inverter,Rack ID,Pile ID,Pile ID with Color,X,Y' in headers:
@@ -149,6 +153,7 @@ def rows_to_json(rows, epsg_code):
                 "color": color_convert(value[3]),
                 "x": x,
                 "y": y,
+                "placed": False
             })
 
     return result
