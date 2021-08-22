@@ -99,11 +99,10 @@ const Config = () => {
                 <FontAwesomeIcon icon={faSearch} /> 
               </a>
             </div>
-            
-          </div>
-          <div className="is-flex is-justify-content-center is-align-content-center">
-            <button className="button ml-2" onClick={uploadConfig}>Save parameters</button>
-            <p className={`success ml-2 ${feedback == 'Success' ? 'has-text-success' : 'has-text-danger'}`}>{feedback}</p>
+            <div className="column is-flex is-justify-content-center is-align-content-center">
+              <button className="button ml-2" onClick={uploadConfig}>Save</button>
+              <p className={`success ml-2 ${feedback == 'Success' ? 'has-text-success' : 'has-text-danger'}`}>{feedback}</p>
+            </div>
           </div>
           <hr />
           <FileInput />

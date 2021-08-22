@@ -29,8 +29,8 @@ const FileInput = () => {
   }
 
   return (
-    <>
-      <div className="file has-name">
+    <div className="columns">
+      <div className="column file has-name">
         <label className="file-label">
           <input className="file-input" type="file" accept=".csv, .xlsx"/>
           <span className="file-cta">
@@ -46,32 +46,31 @@ const FileInput = () => {
           </span>
         </label>
       </div>
-      <div className="columns">
-        <div className="column mt-4">
-          { path ? 
-            <div className="is-flex is-justify-content-center m-4">
-              <button 
-                className="button is-outlined is-success" 
-                onClick={() => handleFiles(path)}>Upload
-              </button>
-            </div> :
-            ''
-          }
-
-          { fileStatus.message ?
-            <div className="is-flex is-align-content-center m-1 is-flex-direction-column">
-              <p className={fileStatus.message ? 'has-text-success' : 'has-text-fail'}>
-                {fileStatus.message ? 'Success' : 'Fail'}
-              </p>
-              <p>
-                Waypoints found: {fileStatus.rows}
-              </p>
-            </div> : 
-            ''
-          }
-        </div>
+      <div className="column">
+        { path ? 
+          <div className="is-flex is-justify-content-center">
+            <button 
+              className="button is-outlined is-success" 
+              onClick={() => handleFiles(path)}>Upload
+            </button>
+          </div> :
+          ''
+        }
       </div>
-    </>
+      <div className="column">
+        { fileStatus.message ?
+          <div className="is-flex is-align-content-center is-flex-direction-column">
+            <p className={fileStatus.message ? 'has-text-success' : 'has-text-fail'}>
+              {fileStatus.message ? 'Success' : 'Fail'}
+            </p>
+            <p>
+              Waypoints: {fileStatus.rows}
+            </p>
+          </div> : 
+          ''
+        }
+      </div>
+    </div>
   )
 };
 
