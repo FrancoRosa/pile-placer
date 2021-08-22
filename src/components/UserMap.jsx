@@ -147,15 +147,12 @@ const UserMap = ({ google }) =>{
           {waypoints.map(waypoint => (
             <Circle
               center={waypoint}
-              radius={0.5}
+              radius={waypoint.placed ? 0.3 : 0.6}
               strokeColor= {waypoint.color}
               strokeOpacity= {0.8}
-              strokeWeight= {2}
+              strokeWeight= {waypoint.placed ? 0 : 2}
               fillColor= {waypoint.color}
-              // onClick={() => {
-              //   playColor(waypoint.color)
-              // }}
-              onDblclick={() => console.log('Toogle status')}
+              onClick={() => console.log('... toogleWaypoint')}
             />
           ))}
           {bays.map((bay, i) => (
