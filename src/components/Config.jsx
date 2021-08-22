@@ -6,6 +6,7 @@ import { useLocalStorage } from "../js/helpers";
 import epsgCodes from '../assets/epsg_codes.pdf'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileAlt, faSearch } from "@fortawesome/free-solid-svg-icons";
+import layout from '../assets/layout.png'
 
 const Config = () => {
    
@@ -107,8 +108,9 @@ const Config = () => {
           <hr />
           <FileInput />
         </div>
-        <div className="column">
+        <div className="column is-centered has-text-centered">
           <h1 className="title is-4 has-text-centered">Layout</h1>
+          <img src={layout} />
         </div>
       </div>
     </div>
