@@ -1,17 +1,13 @@
-import { parse } from '@fortawesome/fontawesome-svg-core';
 import { useStoreActions, useStoreState } from 'easy-peasy';
-import {Map, Marker, GoogleApiWrapper, Circle, Polygon, Polyline} from 'google-maps-react';
-import { useContext, useEffect, useState } from 'react';
+import { Map, GoogleApiWrapper, Circle, Polygon, Polyline} from 'google-maps-react';
+import { useEffect, useState } from 'react';
 import { getWaypoints, setRefBay, setRefWaypoint, socket } from '../js/api';
-// import { playColor } from '../js/audio';
-import { sortByColor, useLocalStorage } from '../js/helpers';
-// import { WayPointContext } from '../js/WayPointContext';
+import { useLocalStorage } from '../js/helpers';
 import PileSummary from './PileSummary';
 
 const UserMap = ({ google }) =>{
   const [center, setCenter] = useState({ heading: 0, lat: 0, lng: 0 })
   const [autoCenter, setAutoCenter] = useState(true)
-  const [colors, setColors] = useState({})
   const [truck, setTruck] = useState([])
   const [line, setLine] = useState([])
   const [bays, setBays] = useState([])
@@ -26,7 +22,6 @@ const UserMap = ({ google }) =>{
       setWaypoints(res.waypoints)
       if (res.waypoints.length > 0){
         setCenter({...center, ...res.waypoints[0]});
-        setColors(sortByColor(res.waypoints))
       }
     })
     
@@ -213,7 +208,7 @@ const UserMap = ({ google }) =>{
           </button>
         </div>
       </div>
-      <PileSummary colors={colors} /> 
+      <PileSummary /> 
     </div>
   );
 };

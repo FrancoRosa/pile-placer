@@ -37,8 +37,19 @@ export const useLocalStorage = (key, initialValue) => {
 export const sortByColor = waypoints => {
   const byColor = {}
   waypoints.forEach(waypoint => {
-    if (byColor[waypoint.color]) byColor[waypoint.color] += 1
-    else byColor[waypoint.color] = 1 
+    if (byColor[waypoint.color?.trim()]) byColor[waypoint.color?.trim()] += 1
+    else byColor[waypoint.color?.trim()] = 1 
+  });
+  return byColor
+}
+
+export const sortByColorPlaced = waypoints => {
+  const byColor = {}
+  waypoints.forEach(waypoint => {
+    if (waypoint.placed){
+      if (byColor[waypoint.color?.trim()]) byColor[waypoint.color?.trim()] += 1
+      else byColor[waypoint.color?.trim()] = 1 
+    }
   });
   return byColor
 }

@@ -1,24 +1,43 @@
 import { faFlag } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useStoreState } from "easy-peasy";
+import { useEffect, useState } from "react";
+import { sortByColor, sortByColorPlaced } from "../js/helpers";
 
-const PileSummary = ({colors}) => (
-  <>
-    <hr className="m-1"/>
-    {colors &&
-      <p className="heading has-text-centered has-text-link">
-        {Object.entries(colors).reduce((sum,a)=>sum+a[1],0)} piles found
-      </p>
-    }
-    <div className="columns">
-      
-      {Object.entries(colors).map(color => (
-        <div className="column has-text-centered">
-          <FontAwesomeIcon icon={faFlag} color={color[0]}/>
-          <p>{color[1]}</p>
+const PileSummary = () => {
+  const waypoints = useStoreState( state => state.waypoints)
+  const [pileColors, setPileColors] = useState(sortByColor(waypoints))
+  const [pilesPlaced, setPilesPlaced] = useState(sortByColorPlaced(waypoints))
+  
+  useEffect(() => {
+    setPileColors(sortByColor(waypoints))
+    setPilesPlaced(sortByColorPlaced(waypoints))
+  },[waypoints])
+
+  return (
+    <>
+      <hr className="m-1"/>
+      {waypoints &&
+        <p className="heading has-text-centered has-text-link">
+          {waypoints.length} piles found
+        </p>
+      }
+      <div className="columns">
+        <div className="column">
+          <p className="heading has-text-centered has-text-link">
+            Placed: {waypoints.filter(x => x.placed).length}
+          </p>
         </div>
-      ))}
-    </div>
-  </>
-)
+        {Object.keys(pileColors).map((color) => (
+          <div className="column has-text-centered">
+            <FontAwesomeIcon icon={faFlag} color={color} /> 
+            <p>{pilesPlaced[color] ? pilesPlaced[color] : 0} / {pileColors[color]}</p>
+            <p>{(100*(pilesPlaced[color] ? pilesPlaced[color] : 0) / pileColors[color]).toFixed()} %</p>
+          </div>
+        ))}
+      </div>
+    </>
+  )
+}
 
 export default PileSummary;
