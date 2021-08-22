@@ -8,9 +8,9 @@ const NextPile = ({index}) => {
   const nextPiles = useStoreState(state => state.nextPiles)
   const placeWaypoint = useStoreActions(actions => actions.placeWaypoint)
   const clearPile = useStoreActions(actions => actions.clearPile)
-  const waypoint = nextPiles[index]
   const [progressValue, setProgressValue] = useState(0)
   const [progressColor, setProgressColor] = useState('red')
+  const waypoint = nextPiles[index]
 
   const handlePilePlacement = () => {
     placeWaypoint(waypoint.pile_id)

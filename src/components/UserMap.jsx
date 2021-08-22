@@ -75,7 +75,7 @@ const UserMap = ({ google }) =>{
         }
       }
     });
-    console.log([closestBay1, closestBay2])
+    
     return [closestBay1, closestBay2]
   }
 
