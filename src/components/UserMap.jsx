@@ -15,6 +15,8 @@ const UserMap = ({ google }) =>{
   const setNextPiles = useStoreActions(actions => actions.setNextPiles)
   const waypoints = useStoreState(state => state.waypoints)
   const setWaypoints = useStoreActions(actions => actions.setWaypoints)
+  const placeWaypoint = useStoreActions(actions => actions.placeWaypoint)
+  const unplaceWaypoint = useStoreActions(actions => actions.unplaceWaypoint)
   const [initialCenter, setInitialCenter] = useLocalStorage('debugCenter',{lat: 0, lng: 0})
 
   useEffect(() => {
@@ -149,7 +151,7 @@ const UserMap = ({ google }) =>{
               strokeOpacity= {0.8}
               strokeWeight= {waypoint.placed ? 0 : 2}
               fillColor= {waypoint.color}
-              onClick={() => console.log('... toogleWaypoint')}
+              onClick={() => waypoint.placed ? unplaceWaypoint(waypoint.pile_id) : placeWaypoint(waypoint.pile_id)}
             />
           ))}
           {bays.map((bay, i) => (
