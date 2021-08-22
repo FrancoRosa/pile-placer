@@ -4,20 +4,22 @@ import {Map, Marker, GoogleApiWrapper, Circle, Polygon, Polyline} from 'google-m
 import { useContext, useEffect, useState } from 'react';
 import { getWaypoints, setRefBay, setRefWaypoint, socket } from '../js/api';
 // import { playColor } from '../js/audio';
-import { sortByColor } from '../js/helpers';
+import { sortByColor, useLocalStorage } from '../js/helpers';
 // import { WayPointContext } from '../js/WayPointContext';
 import PileSummary from './PileSummary';
 
 const UserMap = ({ google }) =>{
   const [center, setCenter] = useState({ heading: 0, lat: 0, lng: 0 })
   const [autoCenter, setAutoCenter] = useState(true)
-  const [waypoints, setWaypoints] = useState([])
   const [colors, setColors] = useState({})
   const [truck, setTruck] = useState([])
   const [line, setLine] = useState([])
   const [bays, setBays] = useState([])
   const nextPiles = useStoreState(state => state.nextPiles)
   const setNextPiles = useStoreActions(actions => actions.setNextPiles)
+  const waypoints = useStoreState(state => state.waypoints)
+  const setWaypoints = useStoreActions(actions => actions.setWaypoints)
+  const [initialCenter, setInitialCenter] = useLocalStorage('debugCenter',{lat: 0, lng: 0})
 
   useEffect(() => {
     getWaypoints().then(res => {
@@ -127,7 +129,7 @@ const UserMap = ({ google }) =>{
     <div className="column">
       <div className="container map">
         <Map google={google} zoom={22} 
-          initialCenter={center} center={center}
+          initialCenter={initialCenter} center={center}
           mapId="2f571dc2d7296a3a"
           onCenterChanged={(mapProps, map) => {
             map.setHeading(parseInt(center.heading))
