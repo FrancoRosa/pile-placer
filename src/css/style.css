@@ -129,7 +129,7 @@
 }
 
 .color_red {
-  color: red;
+  color: rgba(255, 0, 0, 0.24);
 }
 
 /* maps modifiers */

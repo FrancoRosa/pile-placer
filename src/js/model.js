@@ -5,6 +5,13 @@ export default {
   setNextPiles: action((state, nextPiles) => {
     state.nextPiles = [...nextPiles]
   }),
+
+  clearPile: action((state, index) => {
+    let tempPiles = [...state.nextPiles]
+    tempPiles[index] = {}
+    state.nextPiles = tempPiles 
+  }),
+
   waypoints: [],
   setWaypoints: action((state, waypoints) => {
     state.waypoints = [...waypoints]

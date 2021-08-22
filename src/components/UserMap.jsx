@@ -67,15 +67,17 @@ const UserMap = ({ google }) =>{
     let closestDistanceBay1 = 10000
     let closestDistanceBay2 = 10000
     waypoints.forEach(point => {
-      distanceBay1 = (point.lat - bays[0].lat)**2 + (point.lng - bays[0].lng)**2
-      distanceBay2 = (point.lat - bays[1].lat)**2 + (point.lng - bays[1].lng)**2
-      if (distanceBay1 < closestDistanceBay1) {
-        closestDistanceBay1 = distanceBay1
-        closestBay1 = point
-      }
-      if (distanceBay2 < closestDistanceBay2) {
-        closestDistanceBay2 = distanceBay2
-        closestBay2 = point
+      if (!point.placed) {
+        distanceBay1 = (point.lat - bays[0].lat)**2 + (point.lng - bays[0].lng)**2
+        distanceBay2 = (point.lat - bays[1].lat)**2 + (point.lng - bays[1].lng)**2
+        if (distanceBay1 < closestDistanceBay1) {
+          closestDistanceBay1 = distanceBay1
+          closestBay1 = point
+        }
+        if (distanceBay2 < closestDistanceBay2) {
+          closestDistanceBay2 = distanceBay2
+          closestBay2 = point
+        }
       }
     });
     console.log([closestBay1, closestBay2])
