@@ -19,7 +19,7 @@ const PileSummary = () => {
       <div className="columns">
         <div className="column">
           <p className="heading has-text-centered has-text-link title is-5">
-            Piles: {waypoints.length}
+            Total: {waypoints.length}
           </p>
           <p className="heading has-text-centered has-text-link title is-5">
             Placed: {waypoints.filter(x => x.placed).length}
