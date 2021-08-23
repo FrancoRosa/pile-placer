@@ -38,6 +38,7 @@ const NextPile = ({index}) => {
           <>
           <p className="title is-5 has-text-centered mt-4"> Next pile: </p>
             <div className="is-flex is-flex-direction-column is-align-content-center mb-4">
+              <p className="heading">Id: {waypoint.pile_id}</p>
               <p className="heading">Lat: {waypoint.lat?.toFixed(8)}</p>
               <p className="heading">Lng: {waypoint.lng?.toFixed(8)}</p>
               <p className="heading">N: {waypoint.x}</p>

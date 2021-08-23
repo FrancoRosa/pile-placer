@@ -16,15 +16,12 @@ const PileSummary = () => {
 
   return (
     <>
-      <hr className="m-1"/>
-      {waypoints &&
-        <p className="heading has-text-centered has-text-link">
-          {waypoints.length} piles found
-        </p>
-      }
       <div className="columns">
         <div className="column">
-          <p className="heading has-text-centered has-text-link">
+          <p className="heading has-text-centered has-text-link title is-5">
+            Piles: {waypoints.length}
+          </p>
+          <p className="heading has-text-centered has-text-link title is-5">
             Placed: {waypoints.filter(x => x.placed).length}
           </p>
         </div>

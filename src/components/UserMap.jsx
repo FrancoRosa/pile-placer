@@ -125,7 +125,7 @@ const UserMap = ({ google }) =>{
   }, [autoCenter])
   
   return (
-    <div className="column">
+    <div className="column m-0 p-0">
       <div className="container map">
         <Map google={google} zoom={22} 
           initialCenter={initialCenter} center={center}

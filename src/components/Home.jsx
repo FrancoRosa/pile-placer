@@ -16,7 +16,7 @@ const Home = () => {
 
   return (
     <div className="container">
-      <div className="columns">
+      <div className="columns p-0 m-0">
         <NextPile index={0} />
         <UserMap />
         <NextPile index={1} />

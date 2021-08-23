@@ -8,7 +8,7 @@ const Tab = ({ name, icon }) => {
 
   return (
     <li className={ active ? "is-active" : ""}>
-      <Link to={`/${name.toLowerCase()}`} className="mr-4 ml-4 mt-2" >
+      <Link to={`/${name.toLowerCase()}`} className="mr-4 ml-4" >
         <span className="icon is-small">
           <FontAwesomeIcon icon={icon} />
         </span>
