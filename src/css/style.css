@@ -15,6 +15,10 @@
   flex-direction: column;
 }
 
+.is-flex-space-around {
+  justify-content: space-around;
+}
+
 .full-width {
   width: 100vw;
 }

@@ -17,18 +17,18 @@ const PileSummary = () => {
   return (
     <>
       <div className="columns">
-        <div className="column">
-          <p className="heading has-text-centered has-text-link title is-5">
-            Total: {waypoints.length}
+        <div className="column is-flex is-flex-direction-column is-flex-centered">
+          <p className="heading has-text-centered has-text-link title is-5 m-0 p-0">
+            Placed
           </p>
-          <p className="heading has-text-centered has-text-link title is-5">
-            Placed: {waypoints.filter(x => x.placed).length}
+          <p className="heading has-text-centered has-text-success title is-3 m-0 p-0">
+           {waypoints.filter(x => x.placed).length} / {waypoints.length}
           </p>
         </div>
         {Object.keys(pileColors).map((color) => (
           <div className="column has-text-centered">
-            <FontAwesomeIcon icon={faFlag} color={color} /> 
             <p>{pilesPlaced[color] ? pilesPlaced[color] : 0} / {pileColors[color]}</p>
+            <FontAwesomeIcon icon={faFlag} color={color} style={{fontSize: '2.5em'}}/>
             <p>{(100*(pilesPlaced[color] ? pilesPlaced[color] : 0) / pileColors[color]).toFixed()} %</p>
           </div>
         ))}

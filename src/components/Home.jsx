@@ -18,7 +18,9 @@ const Home = () => {
     <div className="container">
       <div className="columns p-0 m-0">
         <NextPile index={0} />
-        <UserMap />
+        <div className="column p-0 m-0">
+          <UserMap />
+        </div>
         <NextPile index={1} />
       </div>
     </div>

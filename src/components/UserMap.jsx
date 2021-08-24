@@ -27,7 +27,7 @@ const UserMap = ({ google }) =>{
       }
     })
     
-    socket.on('message', msg => {
+    socket().on('message', msg => {
       msg = JSON.parse(msg)
       console.log(msg)
       setCenter(msg);
@@ -51,7 +51,7 @@ const UserMap = ({ google }) =>{
     });
 
     return () => {
-      socket.off('message');
+      socket().off('message');
     };
   }, [])
   
@@ -98,8 +98,8 @@ const UserMap = ({ google }) =>{
 
   useEffect(()=>{
     if (autoCenter){
-      socket.off('message')
-      socket.on('message', msg => {
+      socket().off('message')
+      socket().on('message', msg => {
         msg = JSON.parse(msg)
         console.log(msg)
         setCenter(msg);
@@ -120,12 +120,12 @@ const UserMap = ({ google }) =>{
         ])
       });
     } else {
-      socket.off('message');
+      socket().off('message');
     }
   }, [autoCenter])
   
   return (
-    <div className="column m-0 p-0">
+    <>
       <div className="container map">
         <Map google={google} zoom={22} 
           initialCenter={initialCenter} center={center}
@@ -143,6 +143,14 @@ const UserMap = ({ google }) =>{
           onDblclick={() => console.log('doubleClick')}
           disableDoubleClickZoom
         >
+          <Circle
+            center={center}
+            radius={0.1}
+            strokeColor='white'
+            strokeOpacity= {0.8}
+            strokeWeight={2}
+            fillColor='white'
+          />
           {waypoints.map(waypoint => (
             <Circle
               center={waypoint}
@@ -211,7 +219,7 @@ const UserMap = ({ google }) =>{
         </div>
       </div>
       <PileSummary /> 
-    </div>
+    </>
   );
 };
 

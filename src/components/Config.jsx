@@ -109,7 +109,6 @@ const Config = () => {
           <FileInput />
         </div>
         <div className="column is-centered has-text-centered">
-          <h1 className="title is-4 has-text-centered">Layout</h1>
           <img src={layout} />
         </div>
       </div>

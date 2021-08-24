@@ -1,12 +1,14 @@
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { uploadFile } from '../js/api';
 
 const FileInput = () => {
   const [path, setPath] = useState('');
   const [name, setName] = useState('Nothing selected yet');
   const [fileStatus, setFileStatus] = useState({})
+  const history = useHistory()
 
   useEffect(()=>{
     const handleFiles = e => {
@@ -24,6 +26,9 @@ const FileInput = () => {
     uploadFile(file)
       .then(res => {
         setFileStatus(res)
+        setTimeout(() => {
+          history.push('/map')
+        }, 1000);
       })
       .catch(() => setFileStatus({ message: false }))
   }
