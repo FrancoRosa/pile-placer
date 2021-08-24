@@ -58,7 +58,7 @@ Pilecode|N|E
 
 ### Colors
 
-The software is able to show colors if they are shown or the table or they are part of the pile name, it also uses the following color codes:
+The software is able to show colors if they are provided in the table or they are part of the pile name, it uses the following color codes bellow. 
 
 ```Python
 color_codes = {
