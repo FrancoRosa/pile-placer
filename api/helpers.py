@@ -67,6 +67,9 @@ def color_convert(str):
     if '-' in str:
         code = str.split('-')[-1]
         str = color_codes.get(code, '')
+    if len(str.split('.')) == 4:
+        code = str.split('.')[-1]
+        str = color_codes.get(code)
 
     return str.lower()
 
@@ -151,6 +154,21 @@ def rows_to_json(rows, epsg_code):
                 "lat": latlng[0],
                 "lng": latlng[1],
                 "color": color_convert(value[3]),
+                "x": x,
+                "y": y,
+                "placed": False
+            })
+
+    if 'Pilecode,N,E' in headers:
+        for value in values:
+            value = value.split(',')
+            x, y = float(value[1]), float(value[2])
+            latlng = proj_to_wgs84.transform(x, y)
+            result.append({
+                "pile_id": value[0],
+                "lat": latlng[0],
+                "lng": latlng[1],
+                "color": color_convert(value[0]),
                 "x": x,
                 "y": y,
                 "placed": False
