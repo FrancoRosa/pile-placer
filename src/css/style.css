@@ -119,6 +119,22 @@
   padding: 1em;
 }
 
+.f-0 {
+  font-size: 0;
+}
+.f-1 {
+  font-size: 0.25em;
+}
+.f-2 {
+  font-size: 0.5em;
+}
+.f-3 {
+  font-size: 0.75em;
+}
+.f-4 {
+  font-size: 1em;
+}
+
 /* bulma modifiers */
 
 .file {

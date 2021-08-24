@@ -11,7 +11,7 @@ const store = createStore(model)
 
 const App = () => {
   return (
-    <div className="container">
+    <div className="container is-fullwidth">
       <Tabs />
       <StoreProvider store={store}>
         <Switch>

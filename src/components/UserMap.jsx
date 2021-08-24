@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { getWaypoints, setRefBay, setRefWaypoint, socket } from '../js/api';
 import { useLocalStorage } from '../js/helpers';
 import PileSummary from './PileSummary';
+import { playColor, playOther } from "../js/audio"
 
 const UserMap = ({ google }) =>{
   const [center, setCenter] = useState({ heading: 0, lat: 0, lng: 0 })
@@ -27,7 +28,7 @@ const UserMap = ({ google }) =>{
       }
     })
     
-    socket().on('message', msg => {
+    socket.on('message', msg => {
       msg = JSON.parse(msg)
       console.log(msg)
       setCenter(msg);
@@ -51,7 +52,7 @@ const UserMap = ({ google }) =>{
     });
 
     return () => {
-      socket().off('message');
+      socket.off('message');
     };
   }, [])
   
@@ -85,6 +86,17 @@ const UserMap = ({ google }) =>{
     const nearestPiles = getNearestPiles(waypoints, bays) 
     setNextPiles(nearestPiles)
     setRefWaypoint(nearestPiles)
+    console.log('... getting colors')
+    try {
+      let leftColor = waypoints.filter(w => w.pile_id == nearestPiles[0].pile_id)[0].color.trim()
+      let rightColor = waypoints.filter(w => w.pile_id == nearestPiles[1].pile_id)[0].color.trim()
+      playOther('leftBay')
+      setTimeout(() => playColor(leftColor), 1000);
+      setTimeout(() => playOther('rightBay'), 2000);
+      setTimeout(() => playColor(rightColor), 3000);
+    } catch {
+      console.log('error finfing colors')
+    }
   }
 
   useEffect(() => {
@@ -98,8 +110,8 @@ const UserMap = ({ google }) =>{
 
   useEffect(()=>{
     if (autoCenter){
-      socket().off('message')
-      socket().on('message', msg => {
+      socket.off('message')
+      socket.on('message', msg => {
         msg = JSON.parse(msg)
         console.log(msg)
         setCenter(msg);
@@ -120,7 +132,7 @@ const UserMap = ({ google }) =>{
         ])
       });
     } else {
-      socket().off('message');
+      socket.off('message');
     }
   }, [autoCenter])
   
@@ -146,10 +158,10 @@ const UserMap = ({ google }) =>{
           <Circle
             center={center}
             radius={0.1}
-            strokeColor='white'
+            strokeColor='black'
             strokeOpacity= {0.8}
             strokeWeight={2}
-            fillColor='white'
+            fillColor='black'
           />
           {waypoints.map(waypoint => (
             <Circle
@@ -196,28 +208,29 @@ const UserMap = ({ google }) =>{
         </Map>
       </div>
       <div className="columns mt-3 has-text-link ">
-        <div className="column is-flex is-flex-centered">
-          <p className="heading has-text-centered">Lat: {parseFloat(center.lat).toFixed(8)}</p>
+        <div className="column is-flex is-flex-centered m-0 p-0">
+          <p className="heading has-text-centered m-0 p-0 f-3">Lat: {parseFloat(center.lat).toFixed(7)}</p>
         </div>
-        <div className="column is-flex is-flex-centered">
-          <p className="heading has-text-centered">Lng: {parseFloat(center.lng).toFixed(8)}</p>
+        <div className="column is-flex is-flex-centered m-0 p-0">
+          <p className="heading has-text-centered m-0 p-0 f-3">Lng: {parseFloat(center.lng).toFixed(7)}</p>
         </div>
-        <div className="column is-flex is-flex-centered">
-          <p className="heading has-text-centered">Heading: {parseFloat(center.heading).toFixed(1)}॰</p>
+        <div className="column is-flex is-flex-centered m-0 p-0">
+          <p className="heading has-text-centered m-0 p-0 f-3">Hdg: {parseFloat(center.heading).toFixed(1)}॰</p>
         </div>
-        <div className="column is-flex is-flex-centered">
+        <div className="column is-flex is-flex-centered m-0 p-0">
           <button
-            className={`button is-outlined is-small ml-2 mr-2 ${autoCenter ? 'is-success' : 'is-warning'}`}
+            className={`button is-outlined ml-2 mr-2 ${autoCenter ? 'is-success' : 'is-warning'}`}
             onClick={() => setAutoCenter(!autoCenter)}>
             {autoCenter ? 'Auto center enabled': 'Auto center not enabled'}  
           </button>
           <button
-            className={`button is-outlined is-small is-success ml-2 mr-2`}
+            className={`button is-outlined is-success ml-2 mr-2`}
             onClick={() => getNextPiles(waypoints,bays)}>
             Get nearest piles  
           </button>
         </div>
       </div>
+      <hr className="m-1"/>
       <PileSummary /> 
     </>
   );

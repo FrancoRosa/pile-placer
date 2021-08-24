@@ -18,31 +18,30 @@ const NextPile = ({index}) => {
   }
 
   useEffect(()=>{
-    if (waypoint.distance > 20) {
+    if (waypoint.distance > 25) {
       setProgressColor('is-danger')
       setProgressValue(1)
     }
-    if (waypoint.distance < 10) {
+    if (waypoint.distance < 15) {
       setProgressColor('is-warning')
       setProgressValue(2)
     }
-    if (waypoint.distance < 3) {
+    if (waypoint.distance < 6) {
       setProgressColor('is-success')
       setProgressValue(3)
     }
   },[waypoint.distance])
 
   return (
-    <div className="column is-one-fifth">
+    <div className="column">
         {waypoint.pile_id &&
           <>
-          <p className="title is-5 has-text-centered mt-4"> Next pile: </p>
-            <div className="is-flex is-flex-direction-column is-align-content-center mb-4">
-              <p className="heading">Id: {waypoint.pile_id}</p>
-              <p className="heading">Lat: {waypoint.lat?.toFixed(8)}</p>
-              <p className="heading">Lng: {waypoint.lng?.toFixed(8)}</p>
-              <p className="heading">N: {waypoint.x}</p>
-              <p className="heading">E: {waypoint.y}</p>
+            <div className="is-flex has-text-centered is-flex-direction-column is-align-content-center mb-4">
+              <p className="heading title is-5">Id: {waypoint.pile_id}</p>
+              <p className="heading f-4">Lat {waypoint.lat?.toFixed(8)}</p>
+              <p className="heading f-4">Lng {waypoint.lng?.toFixed(8)}</p>
+              <p className="heading f-4">N {waypoint.x}</p>
+              <p className="heading f-4">E {waypoint.y}</p>
             </div>
             <div className="flag-icon color_red"
               onClick={() => {
