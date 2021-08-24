@@ -2,6 +2,7 @@ import UserMap from "./UserMap";
 import NextPile from "./NextPile";
 import { useStoreState } from "easy-peasy";
 import { useEffect } from "react";
+import PileSummary from "./PileSummary";
 // import { playColor, playDistance } from "../js/audio";
 
 const Home = () => {
@@ -23,6 +24,7 @@ const Home = () => {
         </div>
         <NextPile index={1} />
       </div>
+      <PileSummary /> 
     </div>
   );
 };

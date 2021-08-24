@@ -231,7 +231,6 @@ const UserMap = ({ google }) =>{
         </div>
       </div>
       <hr className="m-1"/>
-      <PileSummary /> 
     </>
   );
 };
