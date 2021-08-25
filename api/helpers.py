@@ -69,11 +69,12 @@ def color_convert(str):
         str = color_codes.get(code, '')
     if len(str.split('.')) == 4:
         code = str.split('.')[-1]
-        str = color_codes.get(code)
+        str = color_codes.get(code, '')
     try:
         return str.lower()
     except:
         return ''
+
 
 def rows_to_json(rows, epsg_code):
     # try:
