@@ -1,11 +1,13 @@
-import { faFlag } from "@fortawesome/free-solid-svg-icons";
+import { faFlag, faFlagCheckered } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useStoreState } from "easy-peasy";
+import { useStoreActions, useStoreState } from "easy-peasy";
 import { useEffect, useState } from "react";
 import { sortByColor, sortByColorPlaced } from "../js/helpers";
 
 const PileSummary = () => {
   const waypoints = useStoreState( state => state.waypoints)
+  const selectedColor = useStoreState( state => state.selectedColor)
+  const setSelectedColor = useStoreActions( actions => actions.setSelectedColor)
   const [pileColors, setPileColors] = useState(sortByColor(waypoints))
   const [pilesPlaced, setPilesPlaced] = useState(sortByColorPlaced(waypoints))
   
@@ -16,22 +18,36 @@ const PileSummary = () => {
 
   return (
     <>
+      <hr className="m-0 p-0 mb-4"/>
       <div className="columns">
         <div className="column is-flex is-flex-direction-column is-flex-centered">
-          <p className="heading has-text-centered has-text-link title is-5 m-0 p-0">
+          <FontAwesomeIcon
+            onClick={() => setSelectedColor('')} 
+            icon={faFlagCheckered} className="is-size-3" color={selectedColor}/>
+          <p className="heading has-text-centered has-text-link is-size-5 m-0 p-0">
             Placed
           </p>
-          <p className="heading has-text-centered has-text-success title is-3 m-0 p-0">
+          <p className="heading has-text-centered has-text-success is-size-5 m-0 p-0">
            {waypoints.filter(x => x.placed).length} / {waypoints.length}
           </p>
         </div>
-        {Object.keys(pileColors).map((color) => (
-          <div className="column has-text-centered">
-            <p>{pilesPlaced[color] ? pilesPlaced[color] : 0} / {pileColors[color]}</p>
-            <FontAwesomeIcon icon={faFlag} color={color} style={{fontSize: '2.5em'}}/>
-            <p>{(100*(pilesPlaced[color] ? pilesPlaced[color] : 0) / pileColors[color]).toFixed()} %</p>
+        <div className="column is-four-fifths">
+          <div className="columns">
+          {Object.keys(pileColors).map((color) => (
+            <div className="column has-text-centered m-0 p-0" aria-label={color}>
+              <p className="is-size-7 m-0 p-0">{pilesPlaced[color] ? pilesPlaced[color] : 0} / {pileColors[color]}</p>
+              <FontAwesomeIcon
+                icon={faFlag} onClick={() => setSelectedColor(color)}
+                color={color} className="is-size-3"/>
+              <p>{(100*(pilesPlaced[color] ? pilesPlaced[color] : 0) / pileColors[color]).toFixed()} %</p>
+            </div>
+          ))}
           </div>
-        ))}
+          <hr className="m-0 p-0"/>
+          <p className="has-text-centered" style={{color: selectedColor}}>
+            {selectedColor == '' ? 'No layer selected' : selectedColor}
+          </p>
+        </div>
       </div>
     </>
   )

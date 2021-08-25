@@ -19,6 +19,7 @@ const UserMap = ({ google }) =>{
   const placeWaypoint = useStoreActions(actions => actions.placeWaypoint)
   const unplaceWaypoint = useStoreActions(actions => actions.unplaceWaypoint)
   const [initialCenter, setInitialCenter] = useLocalStorage('debugCenter',{lat: 0, lng: 0})
+  const selectedColor = useStoreState(state => state.selectedColor)
 
   useEffect(() => {
     getWaypoints().then(res => {
@@ -65,7 +66,7 @@ const UserMap = ({ google }) =>{
     let closestDistanceBay1 = 10000
     let closestDistanceBay2 = 10000
     waypoints.forEach(point => {
-      if (!point.placed) {
+      if (!point.placed && (selectedColor == point.color || selectedColor == '')) {
         distanceBay1 = (point.lat - bays[0].lat)**2 + (point.lng - bays[0].lng)**2
         distanceBay2 = (point.lat - bays[1].lat)**2 + (point.lng - bays[1].lng)**2
         if (distanceBay1 < closestDistanceBay1) {
@@ -167,11 +168,12 @@ const UserMap = ({ google }) =>{
             <Circle
               center={waypoint}
               radius={waypoint.placed ? 0.3 : 0.6}
-              strokeColor= {waypoint.color}
+              strokeColor= {selectedColor == '' ? waypoint.color : (selectedColor == waypoint.color ? waypoint.color : 'transparent')}
               strokeOpacity= {0.8}
               strokeWeight= {waypoint.placed ? 0 : 2}
-              fillColor= {waypoint.color}
+              fillColor= {selectedColor == '' ? waypoint.color : (selectedColor == waypoint.color ? waypoint.color : 'transparent')}
               onClick={() => waypoint.placed ? unplaceWaypoint(waypoint.pile_id) : placeWaypoint(waypoint.pile_id)}
+              
             />
           ))}
           {bays.map((bay, i) => (
@@ -230,7 +232,6 @@ const UserMap = ({ google }) =>{
           </button>
         </div>
       </div>
-      <hr className="m-1"/>
     </>
   );
 };

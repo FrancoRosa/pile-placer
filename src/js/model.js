@@ -26,4 +26,7 @@ export default {
       return waypoint.pile_id == id ? {...waypoint, placed: false} : waypoint
     })
   }),
+
+  selectedColor: '',
+  setSelectedColor: action((state, color) => { state.selectedColor = color})
 }
