@@ -65,6 +65,7 @@ const UserMap = ({ google }) =>{
     let closestBay2
     let closestDistanceBay1 = 10000
     let closestDistanceBay2 = 10000
+
     waypoints.forEach(point => {
       if (!point.placed && (selectedColor == point.color || selectedColor == '')) {
         distanceBay1 = (point.lat - bays[0].lat)**2 + (point.lng - bays[0].lng)**2
@@ -78,16 +79,17 @@ const UserMap = ({ google }) =>{
           closestBay2 = point
         }
       }
-      // The code below avoids repeating the same waypoint as next pile 
-      if (closestBay1 == closestBay2) {
-        if (closestDistanceBay1 < closestDistanceBay2) {
-          closestBay2 = {lat: 0, lng:0}
-        } else {
-          closestBay1 = {lat: 0, lng:0}
-        }
-      }
     });
     
+    // The code below avoids repeating the same waypoint as next pile 
+    if (closestBay1 == closestBay2) {
+      if (closestDistanceBay1 < closestDistanceBay2) {
+        closestBay2 = {lat: 0, lng: 0}
+      } else {
+        closestBay1 = {lat: 0, lng: 0}
+      }
+    }
+
     return [closestBay1, closestBay2]
   }
 
@@ -177,13 +179,13 @@ const UserMap = ({ google }) =>{
           {waypoints.map(waypoint => (
             <Circle
               center={waypoint}
-              radius={waypoint.placed ? 0.3 : 0.6}
-              strokeColor= {selectedColor == '' ? waypoint.color : (selectedColor == waypoint.color ? waypoint.color : 'transparent')}
-              strokeOpacity= {0.8}
-              strokeWeight= {waypoint.placed ? 0 : 2}
-              fillColor= {selectedColor == '' ? waypoint.color : (selectedColor == waypoint.color ? waypoint.color : 'transparent')}
+              radius={waypoint.placed ? 0.2 : (waypoint.pile_id == nextPiles[0].pile_id || waypoint.pile_id == nextPiles[1].pile_id ) ? 0.7 : 0.5}
+              strokeColor={selectedColor == '' ? waypoint.color : (selectedColor == waypoint.color ? waypoint.color : 'transparent')}
+              strokeOpacity={(waypoint.pile_id == nextPiles[0].pile_id || waypoint.pile_id == nextPiles[1].pile_id ) ? 1 : 0.5}
+              strokeWeight={waypoint.placed ? 0 : 2}
+              fillColor={selectedColor == '' ? waypoint.color : (selectedColor == waypoint.color ? waypoint.color : 'transparent')}
+              fillOpacity={(waypoint.pile_id == nextPiles[0].pile_id || waypoint.pile_id == nextPiles[1].pile_id ) ? 1 : 0.5}
               onClick={() => waypoint.placed ? unplaceWaypoint(waypoint.pile_id) : placeWaypoint(waypoint.pile_id)}
-              
             />
           ))}
           {bays.map((bay, i) => (
