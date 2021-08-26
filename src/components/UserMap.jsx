@@ -99,15 +99,21 @@ const UserMap = ({ google }) =>{
       setNextPiles(nearestPiles)
       setRefWaypoint(nearestPiles)
       console.log('... getting colors')
+      let timeOffset = 0
       try {
         let leftColor = waypoints.filter(w => w.pile_id == nearestPiles[0].pile_id)[0].color.trim()
-        let rightColor = waypoints.filter(w => w.pile_id == nearestPiles[1].pile_id)[0].color.trim()
         playOther('leftBay')
         setTimeout(() => playColor(leftColor), 1000);
-        setTimeout(() => playOther('rightBay'), 2000);
-        setTimeout(() => playColor(rightColor), 3000);
+        timeOffset = 2000
       } catch {
-        console.log('error finfing colors')
+        console.log('error left color')
+      }
+      try{  
+        let rightColor = waypoints.filter(w => w.pile_id == nearestPiles[1].pile_id)[0].color.trim()
+        setTimeout(() => playOther('rightBay'), 0 + timeOffset);
+        setTimeout(() => playColor(rightColor), 1000 + timeOffset);
+      } catch {
+        console.log('error right color')
       }
     }
   }
@@ -169,7 +175,7 @@ const UserMap = ({ google }) =>{
           disableDoubleClickZoom
         >
           <Circle
-            center={center}
+            center={{lat: parseFloat(center.lat), lng: parseFloat(center.lng)}}
             radius={0.1}
             strokeColor='black'
             strokeOpacity= {0.8}
