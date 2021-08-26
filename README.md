@@ -7,6 +7,7 @@
   - [Requirements](#requirements)
     - [File formats supported](#file-formats-supported)
     - [Colors](#colors)
+    - [Todo](#todo)
 
 ## Project description
 
@@ -75,3 +76,13 @@ color_codes = {
     'YEL': 'yellow',
 }
 ```
+
+### Todo
+- Look for nearest piles.
+- Lag on receiving points.
+- Audio commands on ipad.
+- Avoid repeating bays onn the field.
+- Add cross point
+- Show speed
+- Show accuracy
+- Change bay geometry

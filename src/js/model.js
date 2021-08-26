@@ -1,7 +1,10 @@
 import { action } from 'easy-peasy'
 
 export default {
-  nextPiles: [{},{}],
+  nextPiles: [
+    {distance: null, pile_id: null},
+    {distance: null, pile_id: null},
+  ],
   setNextPiles: action((state, nextPiles) => {
     state.nextPiles = [...nextPiles]
   }),

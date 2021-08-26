@@ -78,25 +78,35 @@ const UserMap = ({ google }) =>{
           closestBay2 = point
         }
       }
+      // The code below avoids repeating the same waypoint as next pile 
+      if (closestBay1 == closestBay2) {
+        if (closestDistanceBay1 < closestDistanceBay2) {
+          closestBay2 = {lat: 0, lng:0}
+        } else {
+          closestBay1 = {lat: 0, lng:0}
+        }
+      }
     });
     
     return [closestBay1, closestBay2]
   }
 
   const getNextPiles = (waypoints, bays) => {
-    const nearestPiles = getNearestPiles(waypoints, bays) 
-    setNextPiles(nearestPiles)
-    setRefWaypoint(nearestPiles)
-    console.log('... getting colors')
-    try {
-      let leftColor = waypoints.filter(w => w.pile_id == nearestPiles[0].pile_id)[0].color.trim()
-      let rightColor = waypoints.filter(w => w.pile_id == nearestPiles[1].pile_id)[0].color.trim()
-      playOther('leftBay')
-      setTimeout(() => playColor(leftColor), 1000);
-      setTimeout(() => playOther('rightBay'), 2000);
-      setTimeout(() => playColor(rightColor), 3000);
-    } catch {
-      console.log('error finfing colors')
+    if (waypoints.length > 0) {
+      const nearestPiles = getNearestPiles(waypoints, bays)
+      setNextPiles(nearestPiles)
+      setRefWaypoint(nearestPiles)
+      console.log('... getting colors')
+      try {
+        let leftColor = waypoints.filter(w => w.pile_id == nearestPiles[0].pile_id)[0].color.trim()
+        let rightColor = waypoints.filter(w => w.pile_id == nearestPiles[1].pile_id)[0].color.trim()
+        playOther('leftBay')
+        setTimeout(() => playColor(leftColor), 1000);
+        setTimeout(() => playOther('rightBay'), 2000);
+        setTimeout(() => playColor(rightColor), 3000);
+      } catch {
+        console.log('error finfing colors')
+      }
     }
   }
 
