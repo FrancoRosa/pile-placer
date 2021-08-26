@@ -198,115 +198,39 @@ def polygon(center, heading, config):
     bay2 = float(config['bay2'])
     rot = radians(float(heading['heading']))
 
-    proj_poly = {
-        'a': {
-            'x': cenX - anX,
-            'y': cenY + anY},
-        'b': {
-            'x': cenX - (anX - tWid),
-            'y': cenY + anY},
-        'c': {
-            'x': cenX - (anX - tWid),
-            'y': cenY + anY - tLen},
-        'd': {
-            'x': cenX - anX,
-            'y': cenY + anY - tLen},
-        'e': {  # Line origin
-            'x': cenX - anX + tWid/2,
-            'y': cenY + anY},
-        'f': {  # Line end
-            'x': cenX - anX + tWid/2,
-            'y': cenY + anY + 100},
-        'bay1': {
-            'x': cenX - anX,
-            'y': cenY + anY - bay1},
-        'bay2': {
-            'x': cenX - anX + tWid,
-            'y': cenY + anY - bay2},
-    }
-
-    vectors = {
-        'a': {
-            'dist': distance(cenX, cenY, proj_poly['a']['x'], proj_poly['a']['y']),
-            'ang': atan2(proj_poly['a']['y'] - cenY, proj_poly['a']['x'] - cenX)
-        },
-        'b': {
-            'dist': distance(cenX, cenY, proj_poly['b']['x'], proj_poly['b']['y']),
-            'ang': atan2(proj_poly['b']['y'] - cenY, proj_poly['b']['x'] - cenX)
-        },
-        'c': {
-            'dist': distance(cenX, cenY, proj_poly['c']['x'], proj_poly['c']['y']),
-            'ang': atan2(proj_poly['c']['y'] - cenY, proj_poly['c']['x'] - cenX)
-        },
-        'd': {
-            'dist': distance(cenX, cenY, proj_poly['d']['x'], proj_poly['d']['y']),
-            'ang': atan2(proj_poly['d']['y'] - cenY, proj_poly['d']['x'] - cenX)
-        },
-        'e': {
-            'dist': distance(cenX, cenY, proj_poly['e']['x'], proj_poly['e']['y']),
-            'ang': atan2(proj_poly['e']['y'] - cenY, proj_poly['e']['x'] - cenX)
-        },
-        'f': {
-            'dist': distance(cenX, cenY, proj_poly['f']['x'], proj_poly['f']['y']),
-            'ang': atan2(proj_poly['f']['y'] - cenY, proj_poly['f']['x'] - cenX)
-        },
-        'bay1': {
-            'dist': distance(cenX, cenY, proj_poly['bay1']['x'], proj_poly['bay1']['y']),
-            'ang': atan2(proj_poly['bay1']['y'] - cenY, proj_poly['bay1']['x'] - cenX)
-        },
-        'bay2': {
-            'dist': distance(cenX, cenY, proj_poly['bay2']['x'], proj_poly['bay2']['y']),
-            'ang': atan2(proj_poly['bay2']['y'] - cenY, proj_poly['bay2']['x'] - cenX)
-        },
-    }
-
-    poly = {
-        'a': {
-            'x': vectors['a']['dist']*cos(vectors['a']['ang'] - rot) + cenX,
-            'y': vectors['a']['dist']*sin(vectors['a']['ang'] - rot) + cenY,
-        },
-        'b': {
-            'x': vectors['b']['dist']*cos(vectors['b']['ang'] - rot) + cenX,
-            'y': vectors['b']['dist']*sin(vectors['b']['ang'] - rot) + cenY,
-        },
-        'c': {
-            'x': vectors['c']['dist']*cos(vectors['c']['ang'] - rot) + cenX,
-            'y': vectors['c']['dist']*sin(vectors['c']['ang'] - rot) + cenY,
-        },
-        'd': {
-            'x': vectors['d']['dist']*cos(vectors['d']['ang'] - rot) + cenX,
-            'y': vectors['d']['dist']*sin(vectors['d']['ang'] - rot) + cenY,
-        },
-        'e': {
-            'x': vectors['e']['dist']*cos(vectors['e']['ang'] - rot) + cenX,
-            'y': vectors['e']['dist']*sin(vectors['e']['ang'] - rot) + cenY,
-        },
-        'f': {
-            'x': vectors['f']['dist']*cos(vectors['f']['ang'] - rot) + cenX,
-            'y': vectors['f']['dist']*sin(vectors['f']['ang'] - rot) + cenY,
-        },
-        'bay1': {
-            'x': vectors['bay1']['dist']*cos(vectors['bay1']['ang'] - rot) + cenX,
-            'y': vectors['bay1']['dist']*sin(vectors['bay1']['ang'] - rot) + cenY,
-        },
-        'bay2': {
-            'x': vectors['bay2']['dist']*cos(vectors['bay2']['ang'] - rot) + cenX,
-            'y': vectors['bay2']['dist']*sin(vectors['bay2']['ang'] - rot) + cenY,
-        },
-    }
+    def rotate_point(x, y, rot):
+        # example:  x = cenX - anX,  y = cenY + anY,
+        # vectors
+        dist = distance(cenX, cenY, x, y)
+        ang = atan2(y - cenY, x - cenX)
+        # Cartesian coordinates
+        newX = dist*cos(ang - rot) + cenX
+        newY = dist*sin(ang - rot) + cenY
+        return proj_to_wgs84.transform(newX, newY)
 
     return {
         'truck': [
-            proj_to_wgs84.transform(poly['a']['x'], poly['a']['y']),
-            proj_to_wgs84.transform(poly['b']['x'], poly['b']['y']),
-            proj_to_wgs84.transform(poly['c']['x'], poly['c']['y']),
-            proj_to_wgs84.transform(poly['d']['x'], poly['d']['y']),
-            proj_to_wgs84.transform(poly['e']['x'], poly['e']['y']),
-            proj_to_wgs84.transform(poly['f']['x'], poly['f']['y']),
+            # truck edges
+            rotate_point(cenX - anX, cenY + anY, rot),
+            rotate_point(cenX - (anX - tWid), cenY + anY, rot),
+            rotate_point(cenX - (anX - tWid), cenY + anY - tLen, rot),
+            rotate_point(cenX - anX, cenY + anY - tLen, rot),
+            # line in front of truck
+            rotate_point(cenX - anX + tWid/2, cenY + anY, rot),
+            rotate_point(cenX - anX + tWid/2, cenY + anY + 100, rot),
+            # Rectangle representing bundle
+            rotate_point(cenX - anX - 1, cenY + anY - bay1 - 6, rot),
+            rotate_point(cenX - anX + tWid + 1, cenY + anY - bay2 - 6, rot),
+            rotate_point(cenX - anX - 1, cenY + anY - bay1 + 6, rot),
+            rotate_point(cenX - anX - 1, cenY + anY - bay1 + 6, rot),
+            # line crossing bays
+            rotate_point(cenX - anX - 3, cenY + anY - bay1, rot),
+            rotate_point(cenX - anX + tWid + 3, cenY + anY - bay2, rot),
         ],
         'bays': [
-            proj_to_wgs84.transform(poly['bay1']['x'], poly['bay1']['y']),
-            proj_to_wgs84.transform(poly['bay2']['x'], poly['bay2']['y']),
+            # bay points
+            rotate_point(cenX - anX - 2, cenY + anY - bay1, rot),
+            rotate_point(cenX - anX + tWid + 2, cenY + anY - bay2, rot),
         ]
     }
 
