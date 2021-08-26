@@ -152,7 +152,7 @@ const UserMap = ({ google }) =>{
   return (
     <>
       <div className="container map">
-        <Map google={google} zoom={22} 
+        <Map google={google} zoom={22} maxZoom={23}
           initialCenter={initialCenter} center={center}
           mapId="2f571dc2d7296a3a"
           onCenterChanged={(mapProps, map) => {
@@ -179,7 +179,7 @@ const UserMap = ({ google }) =>{
           {waypoints.map(waypoint => (
             <Circle
               center={waypoint}
-              radius={waypoint.placed ? 0.2 : (waypoint.pile_id == nextPiles[0].pile_id || waypoint.pile_id == nextPiles[1].pile_id ) ? 0.7 : 0.5}
+              radius={waypoint.placed ? 0.3 : (waypoint.pile_id == nextPiles[0].pile_id || waypoint.pile_id == nextPiles[1].pile_id ) ? 0.7 : 0.5}
               strokeColor={selectedColor == '' ? waypoint.color : (selectedColor == waypoint.color ? waypoint.color : 'transparent')}
               strokeOpacity={(waypoint.pile_id == nextPiles[0].pile_id || waypoint.pile_id == nextPiles[1].pile_id ) ? 1 : 0.5}
               strokeWeight={waypoint.placed ? 0 : 2}
