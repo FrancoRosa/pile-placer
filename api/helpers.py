@@ -211,26 +211,31 @@ def polygon(center, heading, config):
     return {
         'truck': [
             # truck edges
-            rotate_point(cenX - anX, cenY + anY, rot),
-            rotate_point(cenX - (anX - tWid), cenY + anY, rot),
-            rotate_point(cenX - (anX - tWid), cenY + anY - tLen, rot),
-            rotate_point(cenX - anX, cenY + anY - tLen, rot),
+            rotate_point(cenX - anX, cenY + anY, rot),                  # 0
+            rotate_point(cenX - (anX - tWid), cenY + anY, rot),         # 1
+            rotate_point(cenX - (anX - tWid), cenY + anY - tLen, rot),  # 2
+            rotate_point(cenX - anX, cenY + anY - tLen, rot),           # 3
             # line in front of truck
-            rotate_point(cenX - anX + tWid/2, cenY + anY, rot),
-            rotate_point(cenX - anX + tWid/2, cenY + anY + 100, rot),
+            rotate_point(cenX - anX + tWid/2, cenY + anY, rot),          # 4
+            rotate_point(cenX - anX + tWid/2, cenY + anY + 100, rot),    # 5
             # Rectangle representing bundle
-            rotate_point(cenX - anX - 1, cenY + anY - bay1 - 6, rot),
-            rotate_point(cenX - anX + tWid + 1, cenY + anY - bay2 - 6, rot),
-            rotate_point(cenX - anX - 1, cenY + anY - bay1 + 6, rot),
-            rotate_point(cenX - anX - 1, cenY + anY - bay1 + 6, rot),
+            rotate_point(cenX - anX - 1, cenY + anY - \
+                         bay1 - 6, rot),            # 5
+            rotate_point(cenX - anX + tWid + 1, cenY + \
+                         anY - bay2 - 6, rot),     # 5
+            # 5
+            rotate_point(cenX - anX + tWid + 1, cenY + \
+                         anY - bay2 + 6, rot),     # 5
+            rotate_point(cenX - anX - 1, cenY + anY - \
+                         bay1 + 6, rot),
             # line crossing bays
-            rotate_point(cenX - anX - 3, cenY + anY - bay1, rot),
-            rotate_point(cenX - anX + tWid + 3, cenY + anY - bay2, rot),
+            rotate_point(cenX - anX - 6, cenY + anY - bay1, rot),         # 10
+            rotate_point(cenX - anX + tWid + 6, cenY + anY - bay2, rot),  # 11
         ],
         'bays': [
             # bay points
-            rotate_point(cenX - anX - 2, cenY + anY - bay1, rot),
-            rotate_point(cenX - anX + tWid + 2, cenY + anY - bay2, rot),
+            rotate_point(cenX - anX - 3, cenY + anY - bay1, rot),
+            rotate_point(cenX - anX + tWid + 3, cenY + anY - bay2, rot),
         ]
     }
 

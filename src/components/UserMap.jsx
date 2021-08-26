@@ -7,10 +7,14 @@ import PileSummary from './PileSummary';
 import { playColor, playOther } from "../js/audio"
 
 const UserMap = ({ google }) =>{
-  const [center, setCenter] = useState({ heading: 0, lat: 0, lng: 0 })
+  // const [center, setCenter] = useState({ heading: 0, lat: 0, lng: 0 })
+  const center = useStoreState(state => state.center)
+  const setCenter = useStoreActions(actions => actions.setCenter)
   const [autoCenter, setAutoCenter] = useState(true)
   const [truck, setTruck] = useState([])
-  const [line, setLine] = useState([])
+  const [truckBundle, setTruckBundle] = useState([])
+  const [verticalLine, setVerticalLine] = useState([])
+  const [horizontalLine, setHorizontalLine] = useState([])
   const [bays, setBays] = useState([])
   const nextPiles = useStoreState(state => state.nextPiles)
   const setNextPiles = useStoreActions(actions => actions.setNextPiles)
@@ -41,9 +45,22 @@ const UserMap = ({ google }) =>{
         {lat: msg.truck[0][0], lng: msg.truck[0][1]},
       ])
 
-      setLine([
+      setVerticalLine([
         {lat: msg.truck[4][0], lng: msg.truck[4][1]},
         {lat: msg.truck[5][0], lng: msg.truck[5][1]}
+      ])
+
+      setTruckBundle([
+        {lat: msg.truck[6][0], lng: msg.truck[6][1]},
+        {lat: msg.truck[7][0], lng: msg.truck[7][1]},
+        {lat: msg.truck[8][0], lng: msg.truck[8][1]},
+        {lat: msg.truck[9][0], lng: msg.truck[9][1]},
+        {lat: msg.truck[6][0], lng: msg.truck[6][1]},
+      ])
+
+      setHorizontalLine([
+        {lat: msg.truck[10][0], lng: msg.truck[10][1]},
+        {lat: msg.truck[11][0], lng: msg.truck[11][1]}
       ])
       
       setBays([
@@ -141,13 +158,24 @@ const UserMap = ({ google }) =>{
           {lat: msg.truck[3][0], lng: msg.truck[3][1]},
           {lat: msg.truck[0][0], lng: msg.truck[0][1]},
         ])
-        setLine([
+        setVerticalLine([
           {lat: msg.truck[4][0], lng: msg.truck[4][1]},
           {lat: msg.truck[5][0], lng: msg.truck[5][1]},
         ])
         setBays([
           {lat: msg.bays[0][0], lng: msg.bays[0][1]},
           {lat: msg.bays[1][0], lng: msg.bays[1][1]},
+        ])
+        setHorizontalLine([
+          {lat: msg.truck[10][0], lng: msg.truck[10][1]},
+          {lat: msg.truck[11][0], lng: msg.truck[11][1]}
+        ])
+        setTruckBundle([
+          {lat: msg.truck[6][0], lng: msg.truck[6][1]},
+          {lat: msg.truck[7][0], lng: msg.truck[7][1]},
+          {lat: msg.truck[8][0], lng: msg.truck[8][1]},
+          {lat: msg.truck[9][0], lng: msg.truck[9][1]},
+          {lat: msg.truck[6][0], lng: msg.truck[6][1]},
         ])
       });
     } else {
@@ -217,8 +245,24 @@ const UserMap = ({ google }) =>{
             fillColor= {"#FF0000"}
             fillOpacity= {0.35}
           />
+          <Polygon 
+            paths={truckBundle}
+            strokeColor= {"#FF0000"}
+            strokeOpacity= {0.8}
+            strokeWeight= {2}
+            fillColor= {"#FF0000"}
+            fillOpacity= {0.35}
+          />
           <Polyline
-            path={line}
+            path={verticalLine}
+            strokeColor= {"#FF0000"}
+            strokeOpacity= {0.8}
+            strokeWeight= {2}
+            fillColor= {"#FF0000"}
+            fillOpacity= {0.35}
+          />
+          <Polyline
+            path={horizontalLine}
             strokeColor= {"#FF0000"}
             strokeOpacity= {0.8}
             strokeWeight= {2}

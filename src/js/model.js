@@ -31,5 +31,9 @@ export default {
   }),
 
   selectedColor: '',
-  setSelectedColor: action((state, color) => { state.selectedColor = color})
+  setSelectedColor: action((state, color) => { state.selectedColor = color}),
+
+  center: { heading: 0, lat: 0, lng: 0 },
+  setCenter: action((state, center) => { state.center = center}),
+
 }

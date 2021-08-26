@@ -1,4 +1,4 @@
-import { faFlag, faFlagCheckered } from "@fortawesome/free-solid-svg-icons";
+import { faFlag, faFlagCheckered, faLocationArrow } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStoreActions, useStoreState } from "easy-peasy";
 import { useEffect, useState } from "react";
@@ -6,6 +6,7 @@ import { sortByColor, sortByColorPlaced } from "../js/helpers";
 
 const PileSummary = () => {
   const waypoints = useStoreState( state => state.waypoints)
+  const center = useStoreState( state => state.center)
   const selectedColor = useStoreState( state => state.selectedColor)
   const setSelectedColor = useStoreActions( actions => actions.setSelectedColor)
   const [pileColors, setPileColors] = useState(sortByColor(waypoints))
@@ -47,6 +48,12 @@ const PileSummary = () => {
           <p className="has-text-centered" style={{color: selectedColor}}>
             {selectedColor == '' ? 'No layer selected' : selectedColor}
           </p>
+        </div>
+        <div className="column">
+          <FontAwesomeIcon 
+            icon={faLocationArrow}
+            transform={{rotate: center.heading - 45}} 
+            className="has-text-white is-size-1 ml-4 mt-2" />
         </div>
       </div>
     </>
