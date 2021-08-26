@@ -49,11 +49,12 @@ const PileSummary = () => {
             {selectedColor == '' ? 'No layer selected' : selectedColor}
           </p>
         </div>
-        <div className="column">
+        <div className="column is-centered has-text-centered">
           <FontAwesomeIcon 
             icon={faLocationArrow}
             transform={{rotate: center.heading - 45}} 
-            className="has-text-white is-size-1 ml-4 mt-2" />
+            className="has-text-white is-size-1" />
+          <p className="is-size-4">{center.heading}</p>
         </div>
       </div>
     </>
