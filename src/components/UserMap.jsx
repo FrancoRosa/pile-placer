@@ -3,11 +3,9 @@ import { Map, GoogleApiWrapper, Circle, Polygon, Polyline} from 'google-maps-rea
 import { useEffect, useState } from 'react';
 import { getWaypoints, setRefBay, setRefWaypoint, socket } from '../js/api';
 import { useLocalStorage } from '../js/helpers';
-import PileSummary from './PileSummary';
 import { playColor, playOther } from "../js/audio"
 
 const UserMap = ({ google }) =>{
-  // const [center, setCenter] = useState({ heading: 0, lat: 0, lng: 0 })
   const center = useStoreState(state => state.center)
   const setCenter = useStoreActions(actions => actions.setCenter)
   const [autoCenter, setAutoCenter] = useState(true)
@@ -25,6 +23,47 @@ const UserMap = ({ google }) =>{
   const [initialCenter, setInitialCenter] = useLocalStorage('debugCenter',{lat: 0, lng: 0})
   const selectedColor = useStoreState(state => state.selectedColor)
 
+  
+  const socketListener = () => {
+    socket.on('message', msg => {
+      msg = JSON.parse(msg)
+      console.log(msg)
+      
+      setCenter(msg);
+      
+      setTruck([
+        {lat: msg.truck[0][0], lng: msg.truck[0][1]},
+        {lat: msg.truck[1][0], lng: msg.truck[1][1]},
+        {lat: msg.truck[2][0], lng: msg.truck[2][1]},
+        {lat: msg.truck[3][0], lng: msg.truck[3][1]},
+        {lat: msg.truck[0][0], lng: msg.truck[0][1]},
+      ])
+      
+      setBays([
+        {lat: msg.bays[0][0], lng: msg.bays[0][1]},
+        {lat: msg.bays[1][0], lng: msg.bays[1][1]},
+      ])
+
+      setVerticalLine([
+        {lat: msg.truck[4][0], lng: msg.truck[4][1]},
+        {lat: msg.truck[5][0], lng: msg.truck[5][1]},
+      ])
+      
+      setHorizontalLine([
+        {lat: msg.truck[10][0], lng: msg.truck[10][1]},
+        {lat: msg.truck[11][0], lng: msg.truck[11][1]}
+      ])
+      
+      setTruckBundle([
+        {lat: msg.truck[6][0], lng: msg.truck[6][1]},
+        {lat: msg.truck[7][0], lng: msg.truck[7][1]},
+        {lat: msg.truck[8][0], lng: msg.truck[8][1]},
+        {lat: msg.truck[9][0], lng: msg.truck[9][1]},
+        {lat: msg.truck[6][0], lng: msg.truck[6][1]},
+      ])
+    });
+  }
+  
   useEffect(() => {
     getWaypoints().then(res => {
       setWaypoints(res.waypoints)
@@ -33,41 +72,7 @@ const UserMap = ({ google }) =>{
       }
     })
     
-    socket.on('message', msg => {
-      msg = JSON.parse(msg)
-      console.log(msg)
-      setCenter(msg);
-      setTruck([
-        {lat: msg.truck[0][0], lng: msg.truck[0][1]},
-        {lat: msg.truck[1][0], lng: msg.truck[1][1]},
-        {lat: msg.truck[2][0], lng: msg.truck[2][1]},
-        {lat: msg.truck[3][0], lng: msg.truck[3][1]},
-        {lat: msg.truck[0][0], lng: msg.truck[0][1]},
-      ])
-
-      setVerticalLine([
-        {lat: msg.truck[4][0], lng: msg.truck[4][1]},
-        {lat: msg.truck[5][0], lng: msg.truck[5][1]}
-      ])
-
-      setTruckBundle([
-        {lat: msg.truck[6][0], lng: msg.truck[6][1]},
-        {lat: msg.truck[7][0], lng: msg.truck[7][1]},
-        {lat: msg.truck[8][0], lng: msg.truck[8][1]},
-        {lat: msg.truck[9][0], lng: msg.truck[9][1]},
-        {lat: msg.truck[6][0], lng: msg.truck[6][1]},
-      ])
-
-      setHorizontalLine([
-        {lat: msg.truck[10][0], lng: msg.truck[10][1]},
-        {lat: msg.truck[11][0], lng: msg.truck[11][1]}
-      ])
-      
-      setBays([
-        {lat: msg.bays[0][0], lng: msg.bays[0][1]},
-        {lat: msg.bays[1][0], lng: msg.bays[1][1]},
-      ])
-    });
+    socketListener()
 
     return () => {
       socket.off('message');
@@ -147,37 +152,7 @@ const UserMap = ({ google }) =>{
   useEffect(()=>{
     if (autoCenter){
       socket.off('message')
-      socket.on('message', msg => {
-        msg = JSON.parse(msg)
-        console.log(msg)
-        setCenter(msg);
-        setTruck([
-          {lat: msg.truck[0][0], lng: msg.truck[0][1]},
-          {lat: msg.truck[1][0], lng: msg.truck[1][1]},
-          {lat: msg.truck[2][0], lng: msg.truck[2][1]},
-          {lat: msg.truck[3][0], lng: msg.truck[3][1]},
-          {lat: msg.truck[0][0], lng: msg.truck[0][1]},
-        ])
-        setVerticalLine([
-          {lat: msg.truck[4][0], lng: msg.truck[4][1]},
-          {lat: msg.truck[5][0], lng: msg.truck[5][1]},
-        ])
-        setBays([
-          {lat: msg.bays[0][0], lng: msg.bays[0][1]},
-          {lat: msg.bays[1][0], lng: msg.bays[1][1]},
-        ])
-        setHorizontalLine([
-          {lat: msg.truck[10][0], lng: msg.truck[10][1]},
-          {lat: msg.truck[11][0], lng: msg.truck[11][1]}
-        ])
-        setTruckBundle([
-          {lat: msg.truck[6][0], lng: msg.truck[6][1]},
-          {lat: msg.truck[7][0], lng: msg.truck[7][1]},
-          {lat: msg.truck[8][0], lng: msg.truck[8][1]},
-          {lat: msg.truck[9][0], lng: msg.truck[9][1]},
-          {lat: msg.truck[6][0], lng: msg.truck[6][1]},
-        ])
-      });
+      socketListener()
     } else {
       socket.off('message');
     }
