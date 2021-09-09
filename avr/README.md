@@ -41,6 +41,13 @@ export PATH=$PATH:/usr/local/bin
 * Upload `arduino-cli upload --port /dev/ttyUSB0 --fqbn arduino:avr:nano laserpointer`*
 * For the old boot loader use `arduino:avr:nano:cpu=atmega328old`
 
+### Library management:
+
+* Update library index `arduino-cli lib update-index`
+* Search for a library `arduino-cli lib search arduinojson`
+* Install the library by its name, for example "ArduinoJson" `arduino-cli lib install "ArduinoJson"`
+* Check if the library is installed `arduino-cli lib list"`
+
 ## References:
 
 * https://siytek.com/arduino-cli-raspberry-pi/
