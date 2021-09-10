@@ -85,13 +85,15 @@ def set_location():
         truck = polygon(location, heading, config)
         if len(waypoint) > 0:
             bays = truck["bays"]
+            bay1dist = coordinate_distance(
+                waypoint[0], {'lat': bays[0][0], 'lng': bays[0][1]})
+            bay2dist = coordinate_distance(
+                waypoint[1], {'lat': bays[1][0], 'lng': bays[1][1]})
+
             bay_to_waypoint = {
-                "distance": [
-                    coordinate_distance(
-                        waypoint[0], {'lat': bays[0][0], 'lng': bays[0][1]}),
-                    coordinate_distance(
-                        waypoint[1], {'lat': bays[1][0], 'lng': bays[1][1]})
-                ]
+                "distance": [bay1dist["abs"], bay2dist["abs"]],
+                "distX": [bay1dist["x"], bay2dist["x"]],
+                "distY": [bay1dist["y"], bay2dist["y"]],
             }
         broadcast({**heading, **location, **truck, **bay_to_waypoint})
 
