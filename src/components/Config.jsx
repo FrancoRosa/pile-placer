@@ -13,6 +13,7 @@ const Config = () => {
   const [localconfig, setLocalConfig] = useLocalStorage('config', {})
   const [truckLen, setTruckLen] =  useState(localconfig.truckLen)
   const [truckWid, setTruckWid] =  useState(localconfig.truckWid)
+  const [truckHei, setTruckHei] =  useState(localconfig.truckHei)
   const [antennaX, setAntennaX] =  useState(localconfig.antennaX)
   const [antennaY, setAntennaY] =  useState(localconfig.antennaY)
   const [bay1, setBay1] =  useState(localconfig.bay1)
@@ -22,12 +23,12 @@ const Config = () => {
 
   const uploadConfig = () => {
     setLocalConfig({
-      truckLen, truckWid,
+      truckLen, truckWid, truckHei,
       antennaX, antennaY,
       bay1, bay2, epsg
     })
     setConfig({
-      truckLen, truckWid,
+      truckLen, truckWid, truckHei,
       antennaX, antennaY,
       bay1, bay2, epsg
     })
@@ -43,27 +44,33 @@ const Config = () => {
             <NumberInput 
               label="Truck length"
               value={truckLen}
-              placeholder="Truck with trailer in ft"
+              placeholder="E.g: 5"
               changeHandler={setTruckLen}
             />
             <NumberInput 
               label="Truck width"
               value={truckWid}
-              placeholder="Trailer width in ft"
+              placeholder="E.g: 5"
               changeHandler={setTruckWid}
+            />
+            <NumberInput 
+              label="Truck height"
+              value={truckHei}
+              placeholder="E.g: 5"
+              changeHandler={setTruckHei}
             />
           </div>
           <div className="columns">
             <NumberInput 
               label="Antenna from left"
               value={antennaX}
-              placeholder="Antenna location in ft"
+              placeholder="E.g: 5"
               changeHandler={setAntennaX}
             />
             <NumberInput 
               label="Antenna from truck head"
               value={antennaY}
-              placeholder="Antenna location in ft"
+              placeholder="E.g: 5"
               changeHandler={setAntennaY}
             />
           </div>
@@ -71,13 +78,13 @@ const Config = () => {
             <NumberInput 
               label="Bay 1 from truck head"
               value={bay1}
-              placeholder="Bay 1 location in ft"
+              placeholder="E.g: 5"
               changeHandler={setBay1}
             />
             <NumberInput 
               label="Bay 2 from truck head"
               value={bay2}
-              placeholder="Bay 2 location in ft"
+              placeholder="E.g: 5"
               changeHandler={setBay2}
             />
           </div>
@@ -85,7 +92,7 @@ const Config = () => {
             <NumberInput 
               label="EPSG code"
               value={epsg}
-              placeholder="Projected coordinate reference"
+              placeholder="E.g: 6588"
               changeHandler={setEpsg}
             />
             <div className="column is-flex-direction-column is-flex is-flex-centered">

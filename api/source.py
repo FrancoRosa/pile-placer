@@ -29,6 +29,7 @@ truck = {"truck": [], "bays": []}
 config = {
     'truckLen': 0,
     'truckWid': 0,
+    'truckHei': 0,
     'antennaX': 0,
     'antennaY': 0,
     'bay1': 0,
