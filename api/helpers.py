@@ -1,8 +1,11 @@
 from os import getcwd
+from json import dumps
 from time import sleep, time
-from math import sin, cos, atan2, sqrt, radians
+from math import degrees, sin, cos, atan2, sqrt, radians
 from pyproj import Transformer
+from serial_servo import servoSerial
 import openpyxl
+
 
 print(getcwd())
 
@@ -220,17 +223,19 @@ def polygon(center, heading, config):
             rotate_point(cenX - anX + tWid/2, cenY + anY + 100, rot),    # 5
             # Rectangle representing bundle
             rotate_point(cenX - anX - 1, cenY + anY - \
-                         bay1 - 6, rot),            # 5
+                         bay1 - 6, rot),           # 6
             rotate_point(cenX - anX + tWid + 1, cenY + \
-                         anY - bay2 - 6, rot),     # 5
-            # 5
+                         anY - bay2 - 6, rot),     # 7
             rotate_point(cenX - anX + tWid + 1, cenY + \
-                         anY - bay2 + 6, rot),     # 5
+                         anY - bay2 + 6, rot),     # 8
             rotate_point(cenX - anX - 1, cenY + anY - \
-                         bay1 + 6, rot),
+                         bay1 + 6, rot),           # 9
             # line crossing bays
             rotate_point(cenX - anX - 6, cenY + anY - bay1, rot),         # 10
             rotate_point(cenX - anX + tWid + 6, cenY + anY - bay2, rot),  # 11
+            # Laser on the edges of the truck (left & right)
+            rotate_point(cenX - anX, cenY, rot),           # 12
+            rotate_point(cenX - (anX - tWid), cenY, rot),  # 13
         ],
         'bays': [
             # bay points
@@ -246,8 +251,8 @@ def coordinate_distance(p1, p2):
     p2_proj = wgs84_to_proj.transform(p2['lat'], p2['lng'])
     distances = {
         "abs": distance(p1_proj[0], p1_proj[1], p2_proj[0], p2_proj[1]),
-        "x": abs(p1_proj[0] - p2_proj[0]),
-        "y": abs(p1_proj[1] - p2_proj[1])
+        "x": p1_proj[0] - p2_proj[0],
+        "y": p1_proj[1] - p2_proj[1]
     }
     return distances
 
@@ -258,6 +263,49 @@ def create_projs(epsg_code):
         'epsg:4326', 'epsg:%s' % epsg_code)
     proj_to_wgs84 = Transformer.from_crs(
         'epsg:%s' % epsg_code, 'epsg:4326')
+
+
+def servoCommand(angles):
+    def baseAngle(angle):
+        if angle > 0:
+            return angle-90
+        if angle < 0:
+            return 90 + 180-angle
+
+    def topAngle(angle):
+        return 90 - angle
+
+    command = {
+        "turrets": [
+            {
+                "base": baseAngle(angles["base1"]),
+                "top": topAngle(angles["top1"]),
+                "laser": 0,
+            },
+            {
+                "base": baseAngle(angles["base2"]),
+                "top": topAngle(angles["top2"]),
+                "laser": 0,
+            }
+        ]
+    }
+
+    serialCommand = dumps(command) + '\n'
+    return serialCommand.encode('utf-8')
+
+
+def moveLasers(height, laser1, laser2):
+    angles = {
+        "base1": degrees(atan2(laser1["y"], laser1["x"])),
+        "top1": degrees(atan2(float(height), laser1["abs"])),
+        "base2": degrees(atan2(laser2["y"], laser2["x"])),
+        "top2": degrees(atan2(float(height), laser2["abs"])),
+    }
+    print('==========')
+    print("base:", angles["base1"])
+    print("top:", angles["top1"])
+    command = servoCommand(angles)
+    servoSerial.write(command)
 
 
 create_projs('2229')
