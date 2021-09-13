@@ -28,13 +28,23 @@
 #include <Servo.h>
 #include <ArduinoJson.h>
 
-#define led 13
-#define s1base 9
-#define s1top 10
-#define s2base 5
-#define s2top 6
-#define s1laser 7
-#define s2laser 11
+// Arduino Nano
+// #define led 13
+// #define s1base 9
+// #define s1top 10
+// #define s2base 5
+// #define s2top 6
+// #define s1laser 7
+// #define s2laser 11
+
+// Arbotix
+#define led 0
+#define s1base 3
+#define s1top 4
+#define s2base 12
+#define s2top 13
+#define s1laser 5
+#define s2laser 14
 
 #define jsonBufferSize 200
 char jsonBuffer[jsonBufferSize];
