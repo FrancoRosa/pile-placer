@@ -270,10 +270,10 @@ def servoCommand(angles):
         if angle > 0:
             return angle-90
         if angle < 0:
-            return 90 + 180-angle
+            return 90 + 180+angle
 
     def topAngle(angle):
-        return 90 - angle
+        return angle
 
     command = {
         "turrets": [
@@ -289,8 +289,8 @@ def servoCommand(angles):
             }
         ]
     }
-    print("command base:", command["turrets"]["base"])
-    print("command top:", command["turrets"]["base"])
+    print("command base:", command["turrets"][0]["base"])
+    print("command top:", command["turrets"][0]["top"])
     serialCommand = dumps(command) + '\n'
     return serialCommand.encode('utf-8')
 
