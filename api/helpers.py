@@ -289,7 +289,8 @@ def servoCommand(angles):
             }
         ]
     }
-
+    print("command base:", command["turrets"]["base"])
+    print("command top:", command["turrets"]["base"])
     serialCommand = dumps(command) + '\n'
     return serialCommand.encode('utf-8')
 

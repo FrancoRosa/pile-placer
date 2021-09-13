@@ -10,6 +10,7 @@ const UserMap = ({ google }) =>{
   const setCenter = useStoreActions(actions => actions.setCenter)
   const [autoCenter, setAutoCenter] = useState(true)
   const [truck, setTruck] = useState([])
+  const [lasers, setLasers] = useState([])
   const [truckBundle, setTruckBundle] = useState([])
   const [verticalLine, setVerticalLine] = useState([])
   const [horizontalLine, setHorizontalLine] = useState([])
@@ -60,6 +61,11 @@ const UserMap = ({ google }) =>{
         {lat: msg.truck[8][0], lng: msg.truck[8][1]},
         {lat: msg.truck[9][0], lng: msg.truck[9][1]},
         {lat: msg.truck[6][0], lng: msg.truck[6][1]},
+      ])
+
+      setLasers([
+        {lat: msg.truck[12][0], lng: msg.truck[12][1]},
+        {lat: msg.truck[13][0], lng: msg.truck[13][1]}
       ])
     });
   }
@@ -185,6 +191,18 @@ const UserMap = ({ google }) =>{
             strokeWeight={2}
             fillColor='black'
           />
+
+          {lasers.map(laser => (
+            <Circle
+              center={{lat: laser.lat, lng: laser.lng}}
+              radius={0.1}
+              strokeColor='green'
+              strokeOpacity= {0.8}
+              strokeWeight={2}
+              fillColor='green'
+            />
+          ))}
+
           {waypoints.map(waypoint => (
             <Circle
               center={waypoint}

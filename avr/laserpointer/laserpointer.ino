@@ -21,6 +21,8 @@
 
   Serialized version:
   {turrets:[{base:45,top:90,laser:false},{base:135,top:180,laser:true}]} 
+  {turrets:[{base:45,top:90,laser:false},{base:135,top:180,laser:true}]} 
+  {turrets:[{base:0,top:0,laser:false},{base:0,top:0,laser:0}]} 
 */
 
 #include <Servo.h>
