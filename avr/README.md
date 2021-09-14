@@ -48,6 +48,20 @@ export PATH=$PATH:/usr/local/bin
 * Install the library by its name, for example "ArduinoJson" `arduino-cli lib install "ArduinoJson"`
 * Check if the library is installed `arduino-cli lib list"`
 
+### Install aditional boards:
+
+* Create a configuration file `touch arduino-cli.yaml`
+* Add the following code
+
+```code
+board_manager:
+  additional_urls:
+    - https://dvarrel.github.io/dynamixel/package_arbotix_index.json
+```
+* Update index `arduino-cli core update-index`
+* Search for board  `arduino-cli core search arbotix`
+* Install board `arduino-cli core install arbotix:avr`
+
 ## References:
 
 * https://siytek.com/arduino-cli-raspberry-pi/
