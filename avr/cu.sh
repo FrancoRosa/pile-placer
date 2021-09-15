@@ -8,8 +8,8 @@
 
 #  Arbotix commands
  echo '... compile'
- arduino-cli compile --fqbn arbotix:avr:arbotix laserpointer
+ arduino-cli compile --fqbn arbotix:avr:arbotix dynapointer
  echo '... upload'
- arduino-cli upload --port /dev/ttyUSB0 --fqbn arbotix:avr:arbotix laserpointer
+ arduino-cli upload --port /dev/ttyUSB0 --fqbn arbotix:avr:arbotix dynapointer
  echo '... done'
  
