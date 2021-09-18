@@ -1,53 +1,123 @@
-/*    Copyright 2018 Noury Bouraqadi (https://noury.tech)
- *  
- *    This program is free software: you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation, either version 3 of the License, or
- *    (at your option) any later version.
- *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
- *
- *    You should have received a copy of the GNU General Public License
- *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
- */
 #include "ax12.h" //ax12 library allows to send DYNAMIXEL commands
+#include <ArduinoJson.h>
+
+#define jsonBufferSize 200
+#define base1Id 1
+#define top1Id 2
+#define base2Id 3
+#define top2Id 4
+
+volatile int base1 = 90;
+volatile int top1 = 90;
+volatile int laser1 = 0;
+volatile int base2 = 90;
+volatile int top2 = 90;
+volatile int laser2 = 0;
+
+char jsonBuffer[jsonBufferSize];
+int json_i = 0;
+
+StaticJsonDocument<jsonBufferSize> doc;
+
+volatile bool flagProcessed = false;
+volatile bool flagRead = false;
+
+int angle2adc(int angle){
+  return angle*1023/360;
+}
+
+int adc2angle(int adc){
+  return adc*360/1023;
+}
+
+void getJson(char c)
+{
+  jsonBuffer[json_i] = c;
+  json_i++;
+  if (json_i > jsonBufferSize)
+    json_i = 0;
+  if ((json_i >= 2) && ((c == '\n') || (c == '\r')))
+  {
+    jsonBuffer[json_i] = '\0';
+    if (memcmp(jsonBuffer, "read",4)==0) {
+      flagRead = true;
+    } else {
+      getValues();
+    }
+    clearBuffer();
+  }
+}
+
+void clearBuffer()
+{
+  json_i = 0;
+  for (int i = 0; i < jsonBufferSize; i++)
+    jsonBuffer[i] = 0;
+}
+
+void getValues()
+{
+  DeserializationError error = deserializeJson(doc, jsonBuffer);
+
+  if (error)
+  {
+    Serial.print("deserializeJson() failed: ");
+    Serial.println(error.f_str());
+    return;
+  }
+  else
+  {
+    base1 = doc["turrets"][0]["base"];
+    top1 = doc["turrets"][0]["top"];
+    laser1 = doc["turrets"][0]["laser"];
+    base2 = doc["turrets"][1]["base"];
+    top2 = doc["turrets"][1]["top"];
+    laser2 = doc["turrets"][1]["laser"];
+    flagProcessed = true;
+  }
+}
+
+
+void updateActuators()
+{
+  dxlSetGoalPosition(base1Id,angle2adc(base1));
+  dxlSetGoalPosition(top1Id,angle2adc(top1));
+  dxlSetGoalPosition(base2Id,angle2adc(base2));
+  dxlSetGoalPosition(top2Id,angle2adc(top2));
+}
 
 void setup(){
-  Serial.println("");   
   Serial.begin(9600);
-  Serial.println("");
-  delay(1000);   
-  Serial.println("#### Serial Communication Established.");
-  delay(1000);   
+  while (!Serial)
+    continue;
+  Serial.println("... start");
+  updateActuators();
 }
 
 
-int getServoPosition(int servoID){
-  int position;
-  for(int i = 0; i < 10; i++){ 
-      position = dxlGetPosition(servoID); if(position > -1){
-      return position;
-    }
-  }
-  Serial.print("... Failed reading position of servo ");
-  Serial.println(servoID);
-  return -1;
-}
-
-
-void loop() {
-  
-  for(int i = 0; i < 252; i++) { 
-    delay(1000);   
-    Serial.print("... Reading id:");
-    Serial.println(i);
-    Serial.print("... position:");
-    Serial.println(getServoPosition(i));
+void delayS(int s) {
+  while (s>0) {
+    delay(1000);
+    s--;
   }
 }
 
-
+void loop()
+{
+  if (Serial.available())
+    getJson(Serial.read());
+  if (flagProcessed)
+  {
+    updateActuators();
+    Serial.println("... ok");
+    flagProcessed = false;
+  }
+  if (flagRead) {
+    Serial.print("... readings: ");
+    Serial.print(dxlGetPosition(adc2angle(base1Id)));Serial.print(" ");
+    Serial.print(dxlGetPosition(adc2angle(top1Id)));Serial.print(" ");
+    Serial.print(dxlGetPosition(adc2angle(base2Id)));Serial.print(" ");
+    Serial.print(dxlGetPosition(adc2angle(top2Id)));Serial.println("");
+    flagRead = false;
+  }
+}
