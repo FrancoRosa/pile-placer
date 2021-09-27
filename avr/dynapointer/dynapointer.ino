@@ -22,13 +22,6 @@ StaticJsonDocument<jsonBufferSize> doc;
 volatile bool flagProcessed = false;
 volatile bool flagRead = false;
 
-int angle2adc(int angle){
-  return angle*1023/360;
-}
-
-int adc2angle(int adc){
-  return adc*360/1023;
-}
 
 void getJson(char c)
 {
@@ -80,10 +73,10 @@ void getValues()
 
 void updateActuators()
 {
-  dxlSetGoalPosition(base1Id,angle2adc(base1));
-  dxlSetGoalPosition(top1Id,angle2adc(top1));
-  dxlSetGoalPosition(base2Id,angle2adc(base2));
-  dxlSetGoalPosition(top2Id,angle2adc(top2));
+  dxlSetGoalPosition(base1Id,base1);
+  dxlSetGoalPosition(top1Id,top1);
+  dxlSetGoalPosition(base2Id,base2);
+  dxlSetGoalPosition(top2Id,top2);
 }
 
 void setup(){
@@ -114,10 +107,10 @@ void loop()
   }
   if (flagRead) {
     Serial.print("... readings: ");
-    Serial.print(dxlGetPosition(adc2angle(base1Id)));Serial.print(" ");
-    Serial.print(dxlGetPosition(adc2angle(top1Id)));Serial.print(" ");
-    Serial.print(dxlGetPosition(adc2angle(base2Id)));Serial.print(" ");
-    Serial.print(dxlGetPosition(adc2angle(top2Id)));Serial.println("");
+    Serial.print(dxlGetPosition(base1Id));Serial.print(" ");
+    Serial.print(dxlGetPosition(top1Id));Serial.print(" ");
+    Serial.print(dxlGetPosition(base2Id));Serial.print(" ");
+    Serial.print(dxlGetPosition(top2Id));Serial.println("");
     flagRead = false;
   }
 }
