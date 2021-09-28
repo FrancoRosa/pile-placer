@@ -1,5 +1,6 @@
 from samplebase import SampleBase
 from rgbmatrix import graphics
+from colormap import colors
 import time
 
 
@@ -14,21 +15,17 @@ class RunText(SampleBase):
         font.LoadFont("fonts/7x13.bdf")
         fontBig = graphics.Font()
         fontBig.LoadFont("fonts/10x20.bdf")
-        textColor1 = graphics.Color(0, 255, 0)
-        textColor2 = graphics.Color(0, 0, 255)
-        textColor3 = graphics.Color(255, 0, 0)
-        textColor4 = graphics.Color(100, 100, 0)
         pos = offscreen_canvas.width
         my_text = self.args.text
 
         while True:
             offscreen_canvas.Clear()
-            graphics.DrawText(offscreen_canvas, font, 50, 15, textColor1, "Hello ")
-            graphics.DrawText(offscreen_canvas, font, 35, 25, textColor2, "Mortenson")
-            graphics.DrawText(offscreen_canvas, fontBig, 0, 15, textColor3, "<<")
-            graphics.DrawText(offscreen_canvas, fontBig, 0, 29, textColor3, "<<")
-            graphics.DrawText(offscreen_canvas, fontBig, 108, 15, textColor4, ">>")
-            graphics.DrawText(offscreen_canvas, fontBig, 108, 29, textColor4, ">>")
+            graphics.DrawText(offscreen_canvas, font, 50, 15, colors['white'], "Hello ")
+            graphics.DrawText(offscreen_canvas, font, 35, 25, colors['lightblue'], "Mortenson")
+            graphics.DrawText(offscreen_canvas, fontBig, 0, 15, colors['red'], "<<")
+            graphics.DrawText(offscreen_canvas, fontBig, 0, 29, colors['red'], "<<")
+            graphics.DrawText(offscreen_canvas, fontBig, 108, 15, colors['yellow'], ">>")
+            graphics.DrawText(offscreen_canvas, fontBig, 108, 29, colors['yellow'], ">>")
 
 
             time.sleep(0.05)
