@@ -9,7 +9,9 @@ from threading import Thread
 
 app = Flask(__name__)
 CORS(app)
+
 PORT = 9998
+FONTS = '/home/pi/pile-placer/rgb/fonts/'
 piles = [
     {
         'distance': 1,
@@ -37,9 +39,9 @@ class RunText(SampleBase):
         font = graphics.Font()
         font_big = graphics.Font()
         font_small = graphics.Font()
-        font.LoadFont("fonts/7x13.bdf")
-        font_big.LoadFont("fonts/10x20.bdf")
-        font_small.LoadFont("fonts/4x6.bdf")
+        font.LoadFont(FONTS+"7x13.bdf")
+        font_big.LoadFont(FONTS+"10x20.bdf")
+        font_small.LoadFont(FONTS+"4x6.bdf")
 
         def left_block(color, text, distance):
             if color in colors.keys():
