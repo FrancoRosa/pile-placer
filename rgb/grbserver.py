@@ -21,6 +21,10 @@ piles = [
     }
 ]
 
+timer_counter = 30
+timer_limit = 30
+display_values = False
+
 
 class RunText(SampleBase):
     def __init__(self, *args, **kwargs):
@@ -49,11 +53,7 @@ class RunText(SampleBase):
                 graphics.DrawText(offscreen_canvas, font_big,
                                   1, 35, colors['brown'], "\u2588\u2588\u2588\u2588\u2588\u2588")
 
-            graphics.DrawText(offscreen_canvas, font_small,
-                              1, 30, colors[rgb_color], text)
-            graphics.DrawText(offscreen_canvas, font_big, 2,
-                              18, colors[rgb_color], "\u2691")
-            if distance < 99:
+            if distance < 100:
                 graphics.DrawText(offscreen_canvas, font_big, 20,
                                   15, colors[rgb_color], str(distance)+'ft')
             else:
@@ -61,6 +61,12 @@ class RunText(SampleBase):
                                   15, colors[rgb_color], 'too far')
             graphics.DrawText(offscreen_canvas, font_small,
                               13, 30, colors[rgb_color], color)
+
+            graphics.DrawText(offscreen_canvas, font_big, 2,
+                              18, colors[rgb_color], "\u2691")
+
+            graphics.DrawText(offscreen_canvas, font_small,
+                              1, 30, colors[rgb_color], text)
 
         def right_block(color, text, distance):
             if color in colors.keys():
@@ -78,7 +84,7 @@ class RunText(SampleBase):
                               116, 30, colors[rgb_color], text)
             graphics.DrawText(offscreen_canvas, font_big, 115,
                               18, colors[rgb_color], "\u2691")
-            if distance < 99:
+            if distance < 100:
                 graphics.DrawText(offscreen_canvas, font_big, 70,
                                   15, colors[rgb_color], str(distance)+'ft')
             else:
@@ -87,27 +93,67 @@ class RunText(SampleBase):
             graphics.DrawText(offscreen_canvas, font_small,
                               66, 30, colors[rgb_color], color)
 
+            graphics.DrawText(offscreen_canvas, font_big, 115,
+                              18, colors[rgb_color], "\u2691")
+
+            graphics.DrawText(offscreen_canvas, font_small,
+                              116, 30, colors[rgb_color], text)
+
         speed = 0.25
 
         while True:
+            if display_values:
+                offscreen_canvas = self.matrix.SwapOnVSync(offscreen_canvas)
+                offscreen_canvas.Clear()
+                left_block(piles[0]['color'], ' <<', piles[0]['distance'])
+                right_block(piles[1]['color'], ' >>', piles[1]['distance'])
+                sleep(speed)
 
-            offscreen_canvas = self.matrix.SwapOnVSync(offscreen_canvas)
-            offscreen_canvas.Clear()
-            left_block(piles[0]['color'], ' <<', piles[0]['distance'])
-            right_block(piles[1]['color'], ' >>', piles[1]['distance'])
-            sleep(speed)
+                offscreen_canvas = self.matrix.SwapOnVSync(offscreen_canvas)
+                offscreen_canvas.Clear()
+                left_block(piles[0]['color'], '< <', piles[0]['distance'])
+                right_block(piles[1]['color'], '> >', piles[1]['distance'])
+                sleep(speed)
 
-            offscreen_canvas = self.matrix.SwapOnVSync(offscreen_canvas)
-            offscreen_canvas.Clear()
-            left_block(piles[0]['color'], '< <', piles[0]['distance'])
-            right_block(piles[1]['color'], '> >', piles[1]['distance'])
-            sleep(speed)
+                offscreen_canvas = self.matrix.SwapOnVSync(offscreen_canvas)
+                offscreen_canvas.Clear()
+                left_block(piles[0]['color'], '<< ', piles[0]['distance'])
+                right_block(piles[1]['color'], '>> ', piles[1]['distance'])
+                sleep(speed)
+            else:
+                offscreen_canvas = self.matrix.SwapOnVSync(offscreen_canvas)
+                offscreen_canvas.Clear()
+                graphics.DrawText(offscreen_canvas, font_small,
+                                  1, 30, colors['white'], ' <<')
+                graphics.DrawText(offscreen_canvas, font_small,
+                                  116, 30, colors['white'], ' >>')
+                sleep(speed)
+                offscreen_canvas = self.matrix.SwapOnVSync(offscreen_canvas)
+                offscreen_canvas.Clear()
+                graphics.DrawText(offscreen_canvas, font_small,
+                                  1, 30, colors['white'], '< <')
+                graphics.DrawText(offscreen_canvas, font_small,
+                                  116, 30, colors['white'], '> >')
+                sleep(speed)
+                offscreen_canvas = self.matrix.SwapOnVSync(offscreen_canvas)
+                offscreen_canvas.Clear()
+                graphics.DrawText(offscreen_canvas, font_small,
+                                  1, 30, colors['white'], '<< ')
+                graphics.DrawText(offscreen_canvas, font_small,
+                                  116, 30, colors['white'], '>> ')
+                sleep(speed)
 
-            offscreen_canvas = self.matrix.SwapOnVSync(offscreen_canvas)
-            offscreen_canvas.Clear()
-            left_block(piles[0]['color'], '<< ', piles[0]['distance'])
-            right_block(piles[1]['color'], '>> ', piles[1]['distance'])
-            sleep(speed)
+
+def timer():
+    global display_values, timer_counter
+    while True:
+        if timer_counter >= timer_limit:
+            display_values = False
+        else:
+            timer_counter = timer_counter + 1
+            display_values = True
+
+        sleep(1)
 
 
 @app.route('/')
@@ -117,10 +163,11 @@ def index():
 
 @app.route('/api/rgb', methods=['post'])
 def set_rgb():
-    global piles
+    global piles, timer_counter
     message = False
     data = request.get_json()
     if 'piles' in data:
+        timer_counter = 0
         piles = data['piles']
         message = True
 
@@ -136,6 +183,8 @@ def server():
 
 
 Thread(target=server, args=[]).start()
+Thread(target=timer, args=[]).start()
+
 
 if __name__ == "__main__":
     run_text = RunText()
