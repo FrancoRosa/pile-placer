@@ -66,7 +66,7 @@ class RunText(SampleBase):
 
                 if distance < 100:
                     graphics.DrawText(offscreen_canvas, font_big, 20,
-                                      15, colors[rgb_color], str(distance)+'ft')
+                                      15, colors[rgb_color], str(distance)+'Ft')
                 else:
                     graphics.DrawText(offscreen_canvas, font, 13,
                                       15, colors[rgb_color], 'too far')
@@ -96,7 +96,7 @@ class RunText(SampleBase):
                                   18, colors[rgb_color], "\u2691")
                 if distance < 100:
                     graphics.DrawText(offscreen_canvas, font_big, 70,
-                                      15, colors[rgb_color], str(distance)+'ft')
+                                      15, colors[rgb_color], str(distance)+'Ft')
                 else:
                     graphics.DrawText(offscreen_canvas, font, 65,
                                       15, colors[rgb_color], 'too far')
