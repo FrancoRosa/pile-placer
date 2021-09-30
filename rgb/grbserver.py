@@ -49,23 +49,24 @@ class RunText(SampleBase):
             else:
                 rgb_color = 'white'
 
-            if color == 'black':
-                graphics.DrawText(offscreen_canvas, font_big,
-                                  1, 17, colors['brown'], "\u2588\u2588\u2588\u2588\u2588\u2588")
-                graphics.DrawText(offscreen_canvas, font_big,
-                                  1, 35, colors['brown'], "\u2588\u2588\u2588\u2588\u2588\u2588")
+            if distance != -1:
+                if color == 'black':
+                    graphics.DrawText(offscreen_canvas, font_big,
+                                      1, 17, colors['brown'], "\u2588\u2588\u2588\u2588\u2588\u2588")
+                    graphics.DrawText(offscreen_canvas, font_big,
+                                      1, 35, colors['brown'], "\u2588\u2588\u2588\u2588\u2588\u2588")
 
-            if distance < 100:
-                graphics.DrawText(offscreen_canvas, font_big, 20,
-                                  15, colors[rgb_color], str(distance)+'ft')
-            else:
-                graphics.DrawText(offscreen_canvas, font, 13,
-                                  15, colors[rgb_color], 'too far')
-            graphics.DrawText(offscreen_canvas, font_small,
-                              13, 30, colors[rgb_color], color)
+                if distance < 100:
+                    graphics.DrawText(offscreen_canvas, font_big, 20,
+                                      15, colors[rgb_color], str(distance)+'ft')
+                else:
+                    graphics.DrawText(offscreen_canvas, font, 13,
+                                      15, colors[rgb_color], 'too far')
+                graphics.DrawText(offscreen_canvas, font_small,
+                                  13, 30, colors[rgb_color], color)
 
-            graphics.DrawText(offscreen_canvas, font_big, 2,
-                              18, colors[rgb_color], "\u2691")
+                graphics.DrawText(offscreen_canvas, font_big, 2,
+                                  18, colors[rgb_color], "\u2691")
 
             graphics.DrawText(offscreen_canvas, font_small,
                               1, 30, colors[rgb_color], text)
@@ -76,27 +77,28 @@ class RunText(SampleBase):
             else:
                 rgb_color = 'white'
 
-            if color == 'black':
-                graphics.DrawText(offscreen_canvas, font_big,
-                                  65, 17, colors['brown'], "\u2588\u2588\u2588\u2588\u2588\u2588")
-                graphics.DrawText(offscreen_canvas, font_big,
-                                  65, 35, colors['brown'], "\u2588\u2588\u2588\u2588\u2588\u2588")
+            if distance != -1:
+                if color == 'black':
+                    graphics.DrawText(offscreen_canvas, font_big,
+                                      65, 17, colors['brown'], "\u2588\u2588\u2588\u2588\u2588\u2588")
+                    graphics.DrawText(offscreen_canvas, font_big,
+                                      65, 35, colors['brown'], "\u2588\u2588\u2588\u2588\u2588\u2588")
 
-            graphics.DrawText(offscreen_canvas, font_small,
-                              116, 30, colors[rgb_color], text)
-            graphics.DrawText(offscreen_canvas, font_big, 115,
-                              18, colors[rgb_color], "\u2691")
-            if distance < 100:
-                graphics.DrawText(offscreen_canvas, font_big, 70,
-                                  15, colors[rgb_color], str(distance)+'ft')
-            else:
-                graphics.DrawText(offscreen_canvas, font, 65,
-                                  15, colors[rgb_color], 'too far')
-            graphics.DrawText(offscreen_canvas, font_small,
-                              66, 30, colors[rgb_color], color)
+                graphics.DrawText(offscreen_canvas, font_small,
+                                  116, 30, colors[rgb_color], text)
+                graphics.DrawText(offscreen_canvas, font_big, 115,
+                                  18, colors[rgb_color], "\u2691")
+                if distance < 100:
+                    graphics.DrawText(offscreen_canvas, font_big, 70,
+                                      15, colors[rgb_color], str(distance)+'ft')
+                else:
+                    graphics.DrawText(offscreen_canvas, font, 65,
+                                      15, colors[rgb_color], 'too far')
+                graphics.DrawText(offscreen_canvas, font_small,
+                                  66, 30, colors[rgb_color], color)
 
-            graphics.DrawText(offscreen_canvas, font_big, 115,
-                              18, colors[rgb_color], "\u2691")
+                graphics.DrawText(offscreen_canvas, font_big, 115,
+                                  18, colors[rgb_color], "\u2691")
 
             graphics.DrawText(offscreen_canvas, font_small,
                               116, 30, colors[rgb_color], text)
