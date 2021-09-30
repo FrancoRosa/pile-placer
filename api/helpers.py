@@ -1,9 +1,10 @@
 from os import getcwd
 from json import dumps
-from time import sleep, time
+from time import process_time_ns, sleep, time
 from math import degrees, sin, cos, atan2, sqrt, radians
 from pyproj import Transformer
 from serial_servo import servoSerial
+from requests import post
 import openpyxl
 
 
@@ -307,6 +308,27 @@ def moveLasers(height, laser1, laser2):
     print("top:", angles["top1"])
     command = servoCommand(angles)
     servoSerial.write(command)
+
+
+def rgb(waypoint, bay_to_waypoint):
+    rgb_url = 'http://localhost:9998/api/rgb'
+    rgb_piles = [
+        {
+            'distance': 1,
+            'color': 'black'
+        },
+        {
+            'distance': 2,
+            'color': 'black'
+        }
+    ]
+    rgb_piles[0]['distance'] = bay_to_waypoint['distance'][0] if 'color' in waypoint[0].keys() else -1
+    rgb_piles[1]['distance'] = bay_to_waypoint['distance'][1] if 'color' in waypoint[1].keys() else -1
+    rgb_piles[0]['color'] = waypoint[0]['color'].strip(
+    ) if 'color' in waypoint[0].keys() else -1
+    rgb_piles[1]['color'] = waypoint[1]['color'].strip(
+    ) if 'color' in waypoint[1].keys() else -1
+    post(rgb_url, json={'piles': rgb_piles})
 
 
 create_projs('2229')
