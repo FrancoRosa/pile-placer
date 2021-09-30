@@ -160,7 +160,7 @@ def timer():
 
 @app.route('/')
 def index():
-    return "... source server running on port %s" % PORT
+    return "... rgb server running on port %s" % PORT
 
 
 @app.route('/api/rgb', methods=['post'])
