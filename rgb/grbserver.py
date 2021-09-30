@@ -15,17 +15,25 @@ FONTS = '/home/pi/pile-placer/rgb/fonts/'
 piles = [
     {
         'distance': 1,
-        'color': 'black'
+        'color': 'red'
     },
     {
-        'distance': 2,
-        'color': 'black'
+        'distance': 20,
+        'color': 'green'
     }
 ]
 
-timer_counter = 30
+timer_counter = 0
 timer_limit = 30
-display_values = False
+display_values = True
+
+
+def get_color_by_distance(distance):
+    if distance >= 25:
+        return 'red'
+    if distance <= 6:
+        return 'green'
+    return 'orange'
 
 
 class RunText(SampleBase):
@@ -41,7 +49,7 @@ class RunText(SampleBase):
         font_small = graphics.Font()
         font.LoadFont(FONTS+"7x13.bdf")
         font_big.LoadFont(FONTS+"10x20.bdf")
-        font_small.LoadFont(FONTS+"4x6.bdf")
+        font_small.LoadFont(FONTS+"5x8.bdf")
 
         def left_block(color, text, distance):
             if color in colors.keys():
@@ -52,9 +60,9 @@ class RunText(SampleBase):
             if distance != -1:
                 if color == 'black':
                     graphics.DrawText(offscreen_canvas, font_big,
-                                      1, 17, colors['brown'], "\u2588\u2588\u2588\u2588\u2588\u2588")
+                                      1, 17, colors['brown'], "\u2588\u2588\u2588\u2588\u2588\u2588\u2588")
                     graphics.DrawText(offscreen_canvas, font_big,
-                                      1, 35, colors['brown'], "\u2588\u2588\u2588\u2588\u2588\u2588")
+                                      1, 35, colors['brown'], "\u2588\u2588\u2588\u2588\u2588\u2588\u2588")
 
                 if distance < 100:
                     graphics.DrawText(offscreen_canvas, font_big, 20,
@@ -63,13 +71,13 @@ class RunText(SampleBase):
                     graphics.DrawText(offscreen_canvas, font, 13,
                                       15, colors[rgb_color], 'too far')
                 graphics.DrawText(offscreen_canvas, font_small,
-                                  13, 30, colors[rgb_color], color)
+                                  30, 30, colors[rgb_color], color.upper()[:8])
 
                 graphics.DrawText(offscreen_canvas, font_big, 2,
                                   18, colors[rgb_color], "\u2691")
 
-            graphics.DrawText(offscreen_canvas, font_small,
-                              1, 30, colors[rgb_color], text)
+            graphics.DrawText(offscreen_canvas, font,
+                              1, 30, colors[get_color_by_distance(distance)], text)
 
         def right_block(color, text, distance):
             if color in colors.keys():
@@ -80,12 +88,10 @@ class RunText(SampleBase):
             if distance != -1:
                 if color == 'black':
                     graphics.DrawText(offscreen_canvas, font_big,
-                                      65, 17, colors['brown'], "\u2588\u2588\u2588\u2588\u2588\u2588")
+                                      65, 17, colors['brown'], "\u2588\u2588\u2588\u2588\u2588\u2588\u2588")
                     graphics.DrawText(offscreen_canvas, font_big,
-                                      65, 35, colors['brown'], "\u2588\u2588\u2588\u2588\u2588\u2588")
+                                      65, 35, colors['brown'], "\u2588\u2588\u2588\u2588\u2588\u2588\u2588")
 
-                graphics.DrawText(offscreen_canvas, font_small,
-                                  116, 30, colors[rgb_color], text)
                 graphics.DrawText(offscreen_canvas, font_big, 115,
                                   18, colors[rgb_color], "\u2691")
                 if distance < 100:
@@ -95,13 +101,13 @@ class RunText(SampleBase):
                     graphics.DrawText(offscreen_canvas, font, 65,
                                       15, colors[rgb_color], 'too far')
                 graphics.DrawText(offscreen_canvas, font_small,
-                                  66, 30, colors[rgb_color], color)
+                                  66, 30, colors[rgb_color], color.upper()[:8])
 
                 graphics.DrawText(offscreen_canvas, font_big, 115,
                                   18, colors[rgb_color], "\u2691")
 
-            graphics.DrawText(offscreen_canvas, font_small,
-                              116, 30, colors[rgb_color], text)
+            graphics.DrawText(offscreen_canvas, font,
+                              100, 30, colors[get_color_by_distance(distance)], text)
 
         speed = 0.25
 
@@ -109,20 +115,26 @@ class RunText(SampleBase):
             if display_values:
                 offscreen_canvas = self.matrix.SwapOnVSync(offscreen_canvas)
                 offscreen_canvas.Clear()
-                left_block(piles[0]['color'], ' <<', piles[0]['distance'])
-                right_block(piles[1]['color'], ' >>', piles[1]['distance'])
+                left_block(piles[0]['color'], ' <<<', piles[0]['distance'])
+                right_block(piles[1]['color'], '>>> ', piles[1]['distance'])
                 sleep(speed)
 
                 offscreen_canvas = self.matrix.SwapOnVSync(offscreen_canvas)
                 offscreen_canvas.Clear()
-                left_block(piles[0]['color'], '< <', piles[0]['distance'])
-                right_block(piles[1]['color'], '> >', piles[1]['distance'])
+                left_block(piles[0]['color'], '< <<', piles[0]['distance'])
+                right_block(piles[1]['color'], '>> >', piles[1]['distance'])
                 sleep(speed)
 
                 offscreen_canvas = self.matrix.SwapOnVSync(offscreen_canvas)
                 offscreen_canvas.Clear()
-                left_block(piles[0]['color'], '<< ', piles[0]['distance'])
-                right_block(piles[1]['color'], '>> ', piles[1]['distance'])
+                left_block(piles[0]['color'], '<< <', piles[0]['distance'])
+                right_block(piles[1]['color'], '> >>', piles[1]['distance'])
+                sleep(speed)
+
+                offscreen_canvas = self.matrix.SwapOnVSync(offscreen_canvas)
+                offscreen_canvas.Clear()
+                left_block(piles[0]['color'], '<<< ', piles[0]['distance'])
+                right_block(piles[1]['color'], ' >>>', piles[1]['distance'])
                 sleep(speed)
             else:
                 offscreen_canvas = self.matrix.SwapOnVSync(offscreen_canvas)
@@ -130,21 +142,21 @@ class RunText(SampleBase):
                 graphics.DrawText(offscreen_canvas, font_small,
                                   1, 30, colors['white'], ' <<')
                 graphics.DrawText(offscreen_canvas, font_small,
-                                  116, 30, colors['white'], ' >>')
+                                  110, 30, colors['white'], '>> ')
                 sleep(speed)
                 offscreen_canvas = self.matrix.SwapOnVSync(offscreen_canvas)
                 offscreen_canvas.Clear()
                 graphics.DrawText(offscreen_canvas, font_small,
                                   1, 30, colors['white'], '< <')
                 graphics.DrawText(offscreen_canvas, font_small,
-                                  116, 30, colors['white'], '> >')
+                                  110, 30, colors['white'], '> >')
                 sleep(speed)
                 offscreen_canvas = self.matrix.SwapOnVSync(offscreen_canvas)
                 offscreen_canvas.Clear()
                 graphics.DrawText(offscreen_canvas, font_small,
                                   1, 30, colors['white'], '<< ')
                 graphics.DrawText(offscreen_canvas, font_small,
-                                  116, 30, colors['white'], '>> ')
+                                  110, 30, colors['white'], ' >>')
                 sleep(speed)
 
 
