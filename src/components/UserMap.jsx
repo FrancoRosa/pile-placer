@@ -218,23 +218,25 @@ const UserMap = ({ google }) => {
           <StaticMap mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN} />
           <ScatterplotLayer
             lineWidthMaxPixels={3}
-            getRadius={1}
+            getRadius={(d) => (d.placed ? 0.5 : 1)}
             data={waypoints}
             getPosition={(d) => [d.lng, d.lat]}
             getColor={(d) => colors[d.color.trim()]}
             filled={true}
             stroked={true}
             pickable={true}
-            opacity={0.5}
+            opacity={0.8}
           />
           <ScatterplotLayer
             lineWidthMaxPixels={2}
             getRadius={0.3}
             data={[
+              // gps center
               {
                 coordinates: [parseFloat(center.lng), parseFloat(center.lat)],
                 color: colors.black,
               },
+              // laser positions
               {
                 coordinates: [center.truck[12][1], center.truck[12][0]],
                 color: colors.green,
@@ -242,6 +244,15 @@ const UserMap = ({ google }) => {
               {
                 coordinates: [center.truck[13][1], center.truck[13][0]],
                 color: colors.green,
+              },
+              // Bays positions
+              {
+                coordinates: [bays[0].lng, bays[0].lat],
+                color: colors.red,
+              },
+              {
+                coordinates: [bays[1].lng, bays[0].lat],
+                color: colors.red,
               },
             ]}
             getPosition={(d) => d.coordinates}
