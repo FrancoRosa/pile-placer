@@ -4,7 +4,7 @@ import { LineLayer, ScatterplotLayer } from "@deck.gl/layers";
 import { StaticMap } from "react-map-gl";
 import { useEffect, useState } from "react";
 import { getWaypoints, setRefBay, setRefWaypoint, socket } from "../js/api";
-import { useLocalStorage } from "../js/helpers";
+import { useLocalStorage, colors } from "../js/helpers";
 import { playColor, playOther } from "../js/audio";
 import mapboxgl from "mapbox-gl";
 
@@ -16,9 +16,18 @@ mapboxgl.workerClass =
 const MAPBOX_ACCESS_TOKEN =
   "pk.eyJ1Ijoia20xMTVmcmFuY28iLCJhIjoiY2t0eXQ3cHBhMGI3aTMxcG14dnN0OHJveSJ9.LWxkBiVPF9UfGWMI4sWakQ";
 
+const INITIAL_VIEW_STATE = {
+  longitude: -122.123801,
+  latitude: 37.893394,
+  zoom: 19,
+  pitch: 0,
+  bearing: 0,
+};
+
 const UserMap = ({ google }) => {
   const center = useStoreState((state) => state.center);
   const setCenter = useStoreActions((actions) => actions.setCenter);
+  const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
   const [autoCenter, setAutoCenter] = useState(true);
   const [truck, setTruck] = useState([]);
   const [lasers, setLasers] = useState([]);
@@ -45,6 +54,12 @@ const UserMap = ({ google }) => {
 
       setCenter(msg);
       console.log("center:", msg);
+      setViewState({
+        ...viewState,
+        longitude: parseFloat(msg.lng),
+        latitude: parseFloat(msg.lat),
+        bearing: msg.heading,
+      });
 
       setTruck([
         { lat: msg.truck[0][0], lng: msg.truck[0][1] },
@@ -168,14 +183,6 @@ const UserMap = ({ google }) => {
     }
   };
 
-  const INITIAL_VIEW_STATE = {
-    longitude: -122.123801,
-    latitude: 37.893394,
-    zoom: 10,
-    pitch: 0,
-    bearing: 0,
-  };
-
   useEffect(() => {
     if (Object.keys(center).includes("distance")) {
       let tempPiles = [...nextPiles];
@@ -197,12 +204,36 @@ const UserMap = ({ google }) => {
   return (
     <>
       <div className="container map">
-        <DeckGL
-          initialViewState={INITIAL_VIEW_STATE}
-          controller={true}
-          layers={[]}
-        >
+        <DeckGL initialViewState={viewState} controller={true}>
           <StaticMap mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN} />
+          <ScatterplotLayer
+            lineWidthMinPixels={1}
+            getRadius={1}
+            data={[
+              {
+                coordinates: [parseFloat(center.lng), parseFloat(center.lat)],
+                color: colors.black,
+              },
+              {
+                coordinates: [
+                  parseFloat(center.truck[12][1]),
+                  parseFloat(center.truck[12][0]),
+                ],
+                color: colors.green,
+              },
+              {
+                coordinates: [
+                  parseFloat(center.truck[13][1]),
+                  parseFloat(center.truck[13][0]),
+                ],
+                color: colors.green,
+              },
+            ]}
+            getPosition={(d) => d.coordinates}
+            getColor={(d) => d.color}
+            filled={false}
+            stroked={true}
+          />
         </DeckGL>
         {/* <Map google={google} zoom={22} maxZoom={23}
           initialCenter={initialCenter} center={center}
