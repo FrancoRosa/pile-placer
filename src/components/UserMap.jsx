@@ -49,52 +49,51 @@ const UserMap = ({ google }) => {
 
   const socketListener = () => {
     socket.on("message", (msg) => {
-      msg = JSON.parse(msg);
-      console.log(msg);
+      const parsedMsg = JSON.parse(msg);
+      console.log(parsedMsg);
 
-      setCenter(msg);
-      console.log("center:", msg);
+      setCenter(parsedMsg);
       setViewState({
         ...viewState,
-        longitude: parseFloat(msg.lng),
-        latitude: parseFloat(msg.lat),
-        bearing: msg.heading,
+        longitude: parseFloat(parsedMsg.lng),
+        latitude: parseFloat(parsedMsg.lat),
+        bearing: parseFloat(parsedMsg.heading),
       });
 
       setTruck([
-        { lat: msg.truck[0][0], lng: msg.truck[0][1] },
-        { lat: msg.truck[1][0], lng: msg.truck[1][1] },
-        { lat: msg.truck[2][0], lng: msg.truck[2][1] },
-        { lat: msg.truck[3][0], lng: msg.truck[3][1] },
-        { lat: msg.truck[0][0], lng: msg.truck[0][1] },
+        { lat: parsedMsg.truck[0][0], lng: parsedMsg.truck[0][1] },
+        { lat: parsedMsg.truck[1][0], lng: parsedMsg.truck[1][1] },
+        { lat: parsedMsg.truck[2][0], lng: parsedMsg.truck[2][1] },
+        { lat: parsedMsg.truck[3][0], lng: parsedMsg.truck[3][1] },
+        { lat: parsedMsg.truck[0][0], lng: parsedMsg.truck[0][1] },
       ]);
 
       setBays([
-        { lat: msg.bays[0][0], lng: msg.bays[0][1] },
-        { lat: msg.bays[1][0], lng: msg.bays[1][1] },
+        { lat: parsedMsg.bays[0][0], lng: parsedMsg.bays[0][1] },
+        { lat: parsedMsg.bays[1][0], lng: parsedMsg.bays[1][1] },
       ]);
 
       setVerticalLine([
-        { lat: msg.truck[4][0], lng: msg.truck[4][1] },
-        { lat: msg.truck[5][0], lng: msg.truck[5][1] },
+        { lat: parsedMsg.truck[4][0], lng: parsedMsg.truck[4][1] },
+        { lat: parsedMsg.truck[5][0], lng: parsedMsg.truck[5][1] },
       ]);
 
       setHorizontalLine([
-        { lat: msg.truck[10][0], lng: msg.truck[10][1] },
-        { lat: msg.truck[11][0], lng: msg.truck[11][1] },
+        { lat: parsedMsg.truck[10][0], lng: parsedMsg.truck[10][1] },
+        { lat: parsedMsg.truck[11][0], lng: parsedMsg.truck[11][1] },
       ]);
 
       setTruckBundle([
-        { lat: msg.truck[6][0], lng: msg.truck[6][1] },
-        { lat: msg.truck[7][0], lng: msg.truck[7][1] },
-        { lat: msg.truck[8][0], lng: msg.truck[8][1] },
-        { lat: msg.truck[9][0], lng: msg.truck[9][1] },
-        { lat: msg.truck[6][0], lng: msg.truck[6][1] },
+        { lat: parsedMsg.truck[6][0], lng: parsedMsg.truck[6][1] },
+        { lat: parsedMsg.truck[7][0], lng: parsedMsg.truck[7][1] },
+        { lat: parsedMsg.truck[8][0], lng: parsedMsg.truck[8][1] },
+        { lat: parsedMsg.truck[9][0], lng: parsedMsg.truck[9][1] },
+        { lat: parsedMsg.truck[6][0], lng: parsedMsg.truck[6][1] },
       ]);
 
       setLasers([
-        { lat: msg.truck[12][0], lng: msg.truck[12][1] },
-        { lat: msg.truck[13][0], lng: msg.truck[13][1] },
+        { lat: parsedMsg.truck[12][0], lng: parsedMsg.truck[12][1] },
+        { lat: parsedMsg.truck[13][0], lng: parsedMsg.truck[13][1] },
       ]);
     });
   };
@@ -209,8 +208,25 @@ const UserMap = ({ google }) => {
   return (
     <>
       <div className="container map">
-        <DeckGL initialViewState={viewState} controller={true}>
+        <DeckGL
+          initialViewState={viewState}
+          controller={true}
+          getTooltip={({ object }) =>
+            object && `${object.pile_id} \n ${object.color}`
+          }
+        >
           <StaticMap mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN} />
+          <ScatterplotLayer
+            lineWidthMaxPixels={3}
+            getRadius={1}
+            data={waypoints}
+            getPosition={(d) => [d.lng, d.lat]}
+            getColor={(d) => colors[d.color.trim()]}
+            filled={true}
+            stroked={true}
+            pickable={true}
+            opacity={0.5}
+          />
           <ScatterplotLayer
             lineWidthMaxPixels={2}
             getRadius={0.3}
@@ -220,31 +236,16 @@ const UserMap = ({ google }) => {
                 color: colors.black,
               },
               {
-                coordinates: [
-                  parseFloat(center.truck[12][1]),
-                  parseFloat(center.truck[12][0]),
-                ],
+                coordinates: [center.truck[12][1], center.truck[12][0]],
                 color: colors.green,
               },
               {
-                coordinates: [
-                  parseFloat(center.truck[13][1]),
-                  parseFloat(center.truck[13][0]),
-                ],
+                coordinates: [center.truck[13][1], center.truck[13][0]],
                 color: colors.green,
               },
             ]}
             getPosition={(d) => d.coordinates}
             getColor={(d) => d.color}
-            filled={false}
-            stroked={true}
-          />
-          <ScatterplotLayer
-            lineWidthMaxPixels={2}
-            getRadius={0.3}
-            data={waypoints}
-            getPosition={(d) => [d.lng, d.lat]}
-            getColor={(d) => colors[d.color.trim()]}
             filled={false}
             stroked={true}
           />
