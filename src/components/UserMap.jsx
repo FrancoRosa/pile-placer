@@ -19,7 +19,7 @@ const MAPBOX_ACCESS_TOKEN =
 const INITIAL_VIEW_STATE = {
   longitude: -122.123801,
   latitude: 37.893394,
-  zoom: 19,
+  zoom: 20,
   pitch: 0,
   bearing: 0,
 };
@@ -104,6 +104,11 @@ const UserMap = ({ google }) => {
       setWaypoints(res.waypoints);
       if (res.waypoints.length > 0) {
         setCenter({ ...center, ...res.waypoints[0] });
+        setViewState({
+          ...viewState,
+          latitude: res.waypoints[0].lat,
+          longitude: res.waypoints[0].lng,
+        });
       }
     });
 
@@ -207,8 +212,8 @@ const UserMap = ({ google }) => {
         <DeckGL initialViewState={viewState} controller={true}>
           <StaticMap mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN} />
           <ScatterplotLayer
-            lineWidthMinPixels={1}
-            getRadius={1}
+            lineWidthMaxPixels={2}
+            getRadius={0.3}
             data={[
               {
                 coordinates: [parseFloat(center.lng), parseFloat(center.lat)],
@@ -231,6 +236,15 @@ const UserMap = ({ google }) => {
             ]}
             getPosition={(d) => d.coordinates}
             getColor={(d) => d.color}
+            filled={false}
+            stroked={true}
+          />
+          <ScatterplotLayer
+            lineWidthMaxPixels={2}
+            getRadius={0.3}
+            data={waypoints}
+            getPosition={(d) => [d.lng, d.lat]}
+            getColor={(d) => colors[d.color.trim()]}
             filled={false}
             stroked={true}
           />
