@@ -1,12 +1,18 @@
 import { useStoreActions, useStoreState } from "easy-peasy";
 import DeckGL from "@deck.gl/react";
-import { PolygonLayer, LineLayer, ScatterplotLayer } from "@deck.gl/layers";
+import {
+  BitmapLayer,
+  PolygonLayer,
+  LineLayer,
+  ScatterplotLayer,
+} from "@deck.gl/layers";
 import { StaticMap } from "react-map-gl";
 import { useEffect, useState } from "react";
 import { getWaypoints, setRefBay, setRefWaypoint, socket } from "../js/api";
-import { useLocalStorage, colors } from "../js/helpers";
+import { useLocalStorage, colors, colorsFill } from "../js/helpers";
 import { playColor, playOther } from "../js/audio";
 import mapboxgl from "mapbox-gl";
+import marooka from "../assets/marooka-top.bmp";
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass =
@@ -19,7 +25,8 @@ const MAPBOX_ACCESS_TOKEN =
 const INITIAL_VIEW_STATE = {
   longitude: -122.123801,
   latitude: 37.893394,
-  zoom: 20,
+  zoom: 22,
+  maxZoom: 22,
   pitch: 60,
   bearing: 0,
 };
@@ -29,7 +36,12 @@ const UserMap = ({ google }) => {
   const setCenter = useStoreActions((actions) => actions.setCenter);
   const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
   const [autoCenter, setAutoCenter] = useState(true);
-  const [truck, setTruck] = useState([]);
+  const [truck, setTruck] = useState([
+    { lat: 0, lng: 0 },
+    { lat: 0, lng: 0 },
+    { lat: 0, lng: 0 },
+    { lat: 0, lng: 0 },
+  ]);
   const [lasers, setLasers] = useState([]);
   const [truckBundle, setTruckBundle] = useState([]);
   const [verticalLine, setVerticalLine] = useState([]);
@@ -103,7 +115,9 @@ const UserMap = ({ google }) => {
 
   useEffect(() => {
     getWaypoints().then((res) => {
-      setWaypoints(res.waypoints);
+      setWaypoints(
+        res.waypoints.map((waypoint) => ({ ...waypoint, selected: true }))
+      );
       if (res.waypoints.length > 0) {
         setCenter({ ...center, ...res.waypoints[0] });
         setViewState({
@@ -208,6 +222,15 @@ const UserMap = ({ google }) => {
     }
   }, [autoCenter]);
 
+  useEffect(() => {
+    setWaypoints(
+      waypoints.map((waypoint) => ({
+        ...waypoint,
+        selected: waypoint.color == selectedColor || selectedColor == "",
+      }))
+    );
+  }, [selectedColor]);
+
   return (
     <>
       <div className="container map">
@@ -223,19 +246,26 @@ const UserMap = ({ google }) => {
           <ScatterplotLayer
             lineWidthMaxPixels={3}
             lineWidthMinPixels={1}
-            getRadius={(d) => (d.placed ? 0.5 : 1)}
+            getRadius={(d) => (d.selected ? (d.placed ? 0.3 : 1) : 0.01)}
             data={waypoints}
             getPosition={(d) => [d.lng, d.lat]}
             getColor={(d) => colors[d.color]}
-            getFillColor={(d) =>
-              selectedColor == "" || selectedColor == d.color
-                ? colors[d.color]
-                : [0, 0, 0, 0]
-            }
+            getFillColor={(d) => colorsFill[d.color]}
+            getLineColor={(d) => colors[d.color]}
             filled={true}
             stroked={true}
             pickable={true}
             opacity={0.8}
+          />
+
+          <BitmapLayer
+            bounds={[
+              [truck[3].lng, truck[3].lat],
+              [truck[0].lng, truck[0].lat],
+              [truck[1].lng, truck[1].lat],
+              [truck[2].lng, truck[2].lat],
+            ]}
+            image={marooka}
           />
 
           <ScatterplotLayer
@@ -263,7 +293,7 @@ const UserMap = ({ google }) => {
                 color: colors.red,
               },
               {
-                coordinates: [bays[1].lng, bays[0].lat],
+                coordinates: [bays[1].lng, bays[1].lat],
                 color: colors.red,
               },
             ]}
@@ -271,18 +301,6 @@ const UserMap = ({ google }) => {
             getColor={(d) => d.color}
             filled={false}
             stroked={true}
-          />
-          <PolygonLayer
-            pickable={true}
-            stroked={true}
-            filled={true}
-            wireframe={true}
-            lineWidthMinPixels={1}
-            getPolygon={(d) => d.contour}
-            getElevation={(d) => d.population / d.area / 10}
-            getFillColor={(d) => [d.population / d.area / 60, 140, 0]}
-            getLineColor={[80, 80, 80]}
-            getLineWidth={1}
           />
         </DeckGL>
         {/* <Map google={google} zoom={22} maxZoom={23}

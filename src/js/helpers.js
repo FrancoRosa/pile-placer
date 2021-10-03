@@ -68,3 +68,18 @@ export const colors = {
   white: [255, 255, 255],
   yellow: [255, 255, 0],
 };
+
+export const colorsFill = {
+  black: [0, 0, 0, 128],
+  brown: [165, 42, 42, 128],
+  darkblue: [0, 0, 139, 128],
+  green: [0, 255, 0, 128],
+  lightblue: [135, 206, 235, 128],
+  lightgreen: [144, 238, 144, 128],
+  orange: [255, 165, 0, 128],
+  pink: [255, 105, 180, 128],
+  purple: [128, 0, 128, 128],
+  red: [255, 0, 0, 128],
+  white: [255, 255, 255, 128],
+  yellow: [255, 255, 0, 128],
+};
