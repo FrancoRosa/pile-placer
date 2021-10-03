@@ -31,7 +31,7 @@ const INITIAL_VIEW_STATE = {
   bearing: 0,
 };
 
-const UserMap = ({ google }) => {
+const UserMap = () => {
   const center = useStoreState((state) => state.center);
   const setCenter = useStoreActions((actions) => actions.setCenter);
   const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
@@ -288,30 +288,36 @@ const UserMap = ({ google }) => {
               {
                 coordinates: [parseFloat(center.lng), parseFloat(center.lat)],
                 color: colors.black,
+                height: 1,
               },
               // laser positions
               {
                 coordinates: [center.truck[12][1], center.truck[12][0]],
                 color: colors.green,
+                height: 1,
               },
               {
                 coordinates: [center.truck[13][1], center.truck[13][0]],
                 color: colors.green,
+                height: 1,
               },
               // Bays positions
               {
                 coordinates: [bays[0].lng, bays[0].lat],
                 color: colors.red,
+                height: 0,
               },
               {
                 coordinates: [bays[1].lng, bays[1].lat],
                 color: colors.red,
+                height: 0,
               },
             ]}
             getPosition={(d) => d.coordinates}
             getColor={(d) => d.color}
+            getElevation={(d) => d.height}
             filled={false}
-            stroked={true}
+            stroked
           />
 
           <PolygonLayer
@@ -338,102 +344,6 @@ const UserMap = ({ google }) => {
             getLineWidth={0.1}
           />
         </DeckGL>
-        {/* <Map google={google} zoom={22} maxZoom={23}
-          initialCenter={initialCenter} center={center}
-          mapId="2f571dc2d7296a3a"
-          onCenterChanged={(mapProps, map) => {
-            map.setHeading(parseInt(center.heading))
-          }}
-          onClick={(mapProps, map, clickEvent) => {
-            setCenter({
-              ...center,
-              lat: clickEvent.latLng.lat().toFixed(5),
-              lng: clickEvent.latLng.lng().toFixed(5)
-            })
-          }}
-          onDblclick={() => console.log('doubleClick')}
-          disableDoubleClickZoom
-        >
-          <Circle
-            center={{lat: parseFloat(center.lat), lng: parseFloat(center.lng)}}
-            radius={0.1}
-            strokeColor='black'
-            strokeOpacity= {0.8}
-            strokeWeight={2}
-            fillColor='black'
-          />
-
-          {lasers.map(laser => (
-            <Circle
-              center={{lat: laser.lat, lng: laser.lng}}
-              radius={0.1}
-              strokeColor='green'
-              strokeOpacity= {0.8}
-              strokeWeight={2}
-              fillColor='green'
-            />
-          ))}
-
-          {waypoints.map(waypoint => (
-            <Circle
-              center={waypoint}
-              radius={waypoint.placed ? 0.3 : (waypoint.pile_id == nextPiles[0].pile_id || waypoint.pile_id == nextPiles[1].pile_id ) ? 0.7 : 0.5}
-              strokeColor={selectedColor == '' ? waypoint.color : (selectedColor == waypoint.color ? waypoint.color : 'transparent')}
-              strokeOpacity={(waypoint.pile_id == nextPiles[0].pile_id || waypoint.pile_id == nextPiles[1].pile_id ) ? 1 : 0.5}
-              strokeWeight={waypoint.placed ? 0 : 2}
-              fillColor={selectedColor == '' ? waypoint.color : (selectedColor == waypoint.color ? waypoint.color : 'transparent')}
-              fillOpacity={(waypoint.pile_id == nextPiles[0].pile_id || waypoint.pile_id == nextPiles[1].pile_id ) ? 1 : 0.5}
-              onClick={() => waypoint.placed ? unplaceWaypoint(waypoint.pile_id) : placeWaypoint(waypoint.pile_id)}
-            />
-          ))}
-          {bays.map((bay, i) => (
-            <Circle
-              center={bay}
-              radius={0.5}
-              strokeColor= {"#FF0000"}
-              strokeOpacity= {0.8}
-              strokeWeight= {2}
-              fillColor= {"#FF0000"}
-              fillOpacity= {0.35}
-              onClick={() => {
-                setRefBay({bay: i})
-                // i == 0 ? playOther('leftBay') : playOther('rightBay')
-              }}
-            />
-          ))}
-          <Polygon 
-            paths={truck}
-            strokeColor= {"#FF0000"}
-            strokeOpacity= {0.8}
-            strokeWeight= {2}
-            fillColor= {"#FF0000"}
-            fillOpacity= {0.35}
-          />
-          <Polygon 
-            paths={truckBundle}
-            strokeColor= {"#FF0000"}
-            strokeOpacity= {0.8}
-            strokeWeight= {2}
-            fillColor= {"#FF0000"}
-            fillOpacity= {0.35}
-          />
-          <Polyline
-            path={verticalLine}
-            strokeColor= {"#FF0000"}
-            strokeOpacity= {0.8}
-            strokeWeight= {2}
-            fillColor= {"#FF0000"}
-            fillOpacity= {0.35}
-          />
-          <Polyline
-            path={horizontalLine}
-            strokeColor= {"#FF0000"}
-            strokeOpacity= {0.8}
-            strokeWeight= {2}
-            fillColor= {"#FF0000"}
-            fillOpacity= {0.35}
-          />
-        </Map> */}
       </div>
       <div className="columns mt-3 has-text-link ">
         <div className="column is-flex is-flex-centered m-0 p-0">
