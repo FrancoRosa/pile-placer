@@ -25,8 +25,8 @@ const MAPBOX_ACCESS_TOKEN =
 const INITIAL_VIEW_STATE = {
   longitude: -122.123801,
   latitude: 37.893394,
-  zoom: 22,
-  maxZoom: 22,
+  zoom: 21,
+  maxZoom: 21,
   pitch: 60,
   bearing: 0,
 };
@@ -231,6 +231,13 @@ const UserMap = ({ google }) => {
     );
   }, [selectedColor]);
 
+  const handlePileClick = (d) => {
+    const pile_id = d.object.pile_id;
+    const placed = d.object.placed;
+    if (placed) unplaceWaypoint(pile_id);
+    else placeWaypoint(pile_id);
+  };
+
   return (
     <>
       <div className="container map">
@@ -238,7 +245,10 @@ const UserMap = ({ google }) => {
           initialViewState={viewState}
           controller={true}
           getTooltip={({ object }) =>
-            object && `${object.pile_id} \n ${object.color}`
+            object &&
+            `Code: ${object.pile_id}\nColor: ${object.color}\n${
+              object.placed ? "Placed" : "Not Placed"
+            }`
           }
         >
           <StaticMap mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN} />
@@ -256,14 +266,15 @@ const UserMap = ({ google }) => {
             stroked={true}
             pickable={true}
             opacity={0.8}
+            onClick={handlePileClick}
           />
 
           <BitmapLayer
             bounds={[
-              [truck[3].lng, truck[3].lat],
-              [truck[0].lng, truck[0].lat],
-              [truck[1].lng, truck[1].lat],
-              [truck[2].lng, truck[2].lat],
+              [truck[3].lng, truck[3].lat, 1.1],
+              [truck[0].lng, truck[0].lat, 1.1],
+              [truck[1].lng, truck[1].lat, 1.1],
+              [truck[2].lng, truck[2].lat, 1.1],
             ]}
             image={marooka}
           />
@@ -301,6 +312,30 @@ const UserMap = ({ google }) => {
             getColor={(d) => d.color}
             filled={false}
             stroked={true}
+          />
+
+          <PolygonLayer
+            data={[
+              {
+                contour: [
+                  [truck[0].lng, truck[0].lat],
+                  [truck[1].lng, truck[1].lat],
+                  [truck[2].lng, truck[2].lat],
+                  [truck[3].lng, truck[3].lat],
+                ],
+              },
+            ]}
+            pickable
+            stroked
+            filled
+            wireframe
+            extruded
+            lineWidthMinPixels={1}
+            getPolygon={(d) => d.contour}
+            getElevation={1}
+            getFillColor={colorsFill.lightgreen}
+            getLineColor={colors.lightgreen}
+            getLineWidth={0.1}
           />
         </DeckGL>
         {/* <Map google={google} zoom={22} maxZoom={23}
