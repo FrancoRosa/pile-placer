@@ -3,7 +3,7 @@ from json import dumps
 from time import process_time_ns, sleep, time
 from math import degrees, sin, cos, atan2, sqrt, radians
 from pyproj import Transformer
-from serial_servo import servoSerial
+# from serial_servo import servoSerial
 from requests import post
 import openpyxl
 
