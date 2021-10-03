@@ -1,6 +1,6 @@
 import { useStoreActions, useStoreState } from "easy-peasy";
 import DeckGL from "@deck.gl/react";
-import { LineLayer, ScatterplotLayer } from "@deck.gl/layers";
+import { PolygonLayer, LineLayer, ScatterplotLayer } from "@deck.gl/layers";
 import { StaticMap } from "react-map-gl";
 import { useEffect, useState } from "react";
 import { getWaypoints, setRefBay, setRefWaypoint, socket } from "../js/api";
@@ -20,7 +20,7 @@ const INITIAL_VIEW_STATE = {
   longitude: -122.123801,
   latitude: 37.893394,
   zoom: 20,
-  pitch: 0,
+  pitch: 60,
   bearing: 0,
 };
 
@@ -34,7 +34,10 @@ const UserMap = ({ google }) => {
   const [truckBundle, setTruckBundle] = useState([]);
   const [verticalLine, setVerticalLine] = useState([]);
   const [horizontalLine, setHorizontalLine] = useState([]);
-  const [bays, setBays] = useState([]);
+  const [bays, setBays] = useState([
+    { lat: 0, lng: 0 },
+    { lat: 0, lng: 0 },
+  ]);
   const nextPiles = useStoreState((state) => state.nextPiles);
   const setNextPiles = useStoreActions((actions) => actions.setNextPiles);
   const waypoints = useStoreState((state) => state.waypoints);
@@ -216,19 +219,28 @@ const UserMap = ({ google }) => {
           }
         >
           <StaticMap mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN} />
+
           <ScatterplotLayer
             lineWidthMaxPixels={3}
+            lineWidthMinPixels={1}
             getRadius={(d) => (d.placed ? 0.5 : 1)}
             data={waypoints}
             getPosition={(d) => [d.lng, d.lat]}
-            getColor={(d) => colors[d.color.trim()]}
+            getColor={(d) => colors[d.color]}
+            getFillColor={(d) =>
+              selectedColor == "" || selectedColor == d.color
+                ? colors[d.color]
+                : [0, 0, 0, 0]
+            }
             filled={true}
             stroked={true}
             pickable={true}
             opacity={0.8}
           />
+
           <ScatterplotLayer
             lineWidthMaxPixels={2}
+            lineWidthMinPixels={1}
             getRadius={0.3}
             data={[
               // gps center
@@ -259,6 +271,18 @@ const UserMap = ({ google }) => {
             getColor={(d) => d.color}
             filled={false}
             stroked={true}
+          />
+          <PolygonLayer
+            pickable={true}
+            stroked={true}
+            filled={true}
+            wireframe={true}
+            lineWidthMinPixels={1}
+            getPolygon={(d) => d.contour}
+            getElevation={(d) => d.population / d.area / 10}
+            getFillColor={(d) => [d.population / d.area / 60, 140, 0]}
+            getLineColor={[80, 80, 80]}
+            getLineWidth={1}
           />
         </DeckGL>
         {/* <Map google={google} zoom={22} maxZoom={23}
@@ -386,6 +410,7 @@ const UserMap = ({ google }) => {
           <button
             className={`button is-outlined is-success ml-2 mr-2`}
             onClick={() => getNextPiles(waypoints, bays)}
+            disabled={bays[0].lat == bays[1].lat && bays[0].lng == bays[1].lng}
           >
             Get nearest piles
           </button>
