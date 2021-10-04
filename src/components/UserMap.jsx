@@ -1,14 +1,9 @@
 import { useStoreActions, useStoreState } from "easy-peasy";
 import DeckGL from "@deck.gl/react";
-import {
-  BitmapLayer,
-  PolygonLayer,
-  LineLayer,
-  ScatterplotLayer,
-} from "@deck.gl/layers";
+import { BitmapLayer, PolygonLayer, ScatterplotLayer } from "@deck.gl/layers";
 import { StaticMap } from "react-map-gl";
 import { useEffect, useState } from "react";
-import { getWaypoints, setRefBay, setRefWaypoint, socket } from "../js/api";
+import { getWaypoints, setRefWaypoint, socket } from "../js/api";
 import { useLocalStorage, colors, colorsFill } from "../js/helpers";
 import { playColor, playOther } from "../js/audio";
 import mapboxgl from "mapbox-gl";
@@ -255,7 +250,7 @@ const UserMap = () => {
 
           <ScatterplotLayer
             lineWidthMaxPixels={3}
-            lineWidthMinPixels={1}
+            lineWidthMinPixels={2}
             getRadius={(d) => (d.selected ? (d.placed ? 0.3 : 1) : 0.01)}
             data={waypoints}
             getPosition={(d) => [d.lng, d.lat]}
@@ -271,10 +266,10 @@ const UserMap = () => {
 
           <BitmapLayer
             bounds={[
-              [truck[3].lng, truck[3].lat, 1.1],
-              [truck[0].lng, truck[0].lat, 1.1],
-              [truck[1].lng, truck[1].lat, 1.1],
-              [truck[2].lng, truck[2].lat, 1.1],
+              [truck[3].lng, truck[3].lat, 0],
+              [truck[0].lng, truck[0].lat, 0],
+              [truck[1].lng, truck[1].lat, 0],
+              [truck[2].lng, truck[2].lat, 0],
             ]}
             image={marooka}
           />
@@ -288,18 +283,18 @@ const UserMap = () => {
               {
                 coordinates: [parseFloat(center.lng), parseFloat(center.lat)],
                 color: colors.black,
-                height: 1,
+                height: 10,
               },
               // laser positions
               {
                 coordinates: [center.truck[12][1], center.truck[12][0]],
                 color: colors.green,
-                height: 1,
+                height: 10,
               },
               {
                 coordinates: [center.truck[13][1], center.truck[13][0]],
                 color: colors.green,
-                height: 1,
+                height: 10,
               },
               // Bays positions
               {
@@ -315,7 +310,6 @@ const UserMap = () => {
             ]}
             getPosition={(d) => d.coordinates}
             getColor={(d) => d.color}
-            getElevation={(d) => d.height}
             filled={false}
             stroked
           />
@@ -331,17 +325,16 @@ const UserMap = () => {
                 ],
               },
             ]}
-            pickable
             stroked
             filled
             wireframe
             extruded
             lineWidthMinPixels={1}
             getPolygon={(d) => d.contour}
-            getElevation={1}
             getFillColor={colorsFill.lightgreen}
             getLineColor={colors.lightgreen}
             getLineWidth={0.1}
+            getElevation={0.5}
           />
         </DeckGL>
       </div>

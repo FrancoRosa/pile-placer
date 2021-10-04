@@ -56,6 +56,7 @@ export const sortByColorPlaced = (waypoints) => {
 
 export const colors = {
   black: [0, 0, 0],
+  blue: [0, 0, 255],
   brown: [165, 42, 42],
   darkblue: [0, 0, 139],
   green: [0, 255, 0],
@@ -71,6 +72,7 @@ export const colors = {
 
 export const colorsFill = {
   black: [0, 0, 0, 128],
+  blue: [0, 0, 255, 128],
   brown: [165, 42, 42, 128],
   darkblue: [0, 0, 139, 128],
   green: [0, 255, 0, 128],
