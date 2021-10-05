@@ -106,6 +106,8 @@ const Config = () => {
               placeholder="E.g: 6588"
               changeHandler={setEpsg}
             />
+          </div>
+          <div className="columns">
             <div className="column is-flex-direction-column is-flex is-flex-centered">
               <p className="heading has-text-link">EPSG Reference</p>
               <a
@@ -142,10 +144,10 @@ const Config = () => {
           <hr />
           <FileInput />
         </div>
-        <div className="column is-centered has-text-centered is-flex is-flex-wrapped">
+        <div className="column is-centered has-text-centered">
           <img src={layout} />
         </div>
-        <div className="column is-centered has-text-centered mt-4">
+        <div className="column is-one-third is-centered has-text-centered mt-4">
           <img src={marookaSide} />
           <img src={marookaSize} />
         </div>
