@@ -7,11 +7,11 @@
 #define base2Id 3
 #define top2Id 4
 
-volatile int base1 = 90;
-volatile int top1 = 90;
+volatile int base1 = 255;
+volatile int top1 = 255;
 volatile int laser1 = 0;
-volatile int base2 = 90;
-volatile int top2 = 90;
+volatile int base2 = 255;
+volatile int top2 = 255;
 volatile int laser2 = 0;
 
 char jsonBuffer[jsonBufferSize];
@@ -22,7 +22,6 @@ StaticJsonDocument<jsonBufferSize> doc;
 volatile bool flagProcessed = false;
 volatile bool flagRead = false;
 
-
 void getJson(char c)
 {
   jsonBuffer[json_i] = c;
@@ -32,9 +31,12 @@ void getJson(char c)
   if ((json_i >= 2) && ((c == '\n') || (c == '\r')))
   {
     jsonBuffer[json_i] = '\0';
-    if (memcmp(jsonBuffer, "read",4)==0) {
+    if (memcmp(jsonBuffer, "read", 4) == 0)
+    {
       flagRead = true;
-    } else {
+    }
+    else
+    {
       getValues();
     }
     clearBuffer();
@@ -70,16 +72,16 @@ void getValues()
   }
 }
 
-
 void updateActuators()
 {
-  dxlSetGoalPosition(base1Id,base1);
-  dxlSetGoalPosition(top1Id,top1);
-  dxlSetGoalPosition(base2Id,base2);
-  dxlSetGoalPosition(top2Id,top2);
+  dxlSetGoalPosition(base1Id, base1);
+  dxlSetGoalPosition(top1Id, top1);
+  dxlSetGoalPosition(base2Id, base2);
+  dxlSetGoalPosition(top2Id, top2);
 }
 
-void setup(){
+void setup()
+{
   Serial.begin(9600);
   while (!Serial)
     continue;
@@ -87,9 +89,10 @@ void setup(){
   updateActuators();
 }
 
-
-void delayS(int s) {
-  while (s>0) {
+void delayS(int s)
+{
+  while (s > 0)
+  {
     delay(1000);
     s--;
   }
@@ -105,12 +108,17 @@ void loop()
     Serial.println("... ok");
     flagProcessed = false;
   }
-  if (flagRead) {
+  if (flagRead)
+  {
     Serial.print("... readings: ");
-    Serial.print(dxlGetPosition(base1Id));Serial.print(" ");
-    Serial.print(dxlGetPosition(top1Id));Serial.print(" ");
-    Serial.print(dxlGetPosition(base2Id));Serial.print(" ");
-    Serial.print(dxlGetPosition(top2Id));Serial.println("");
+    Serial.print(dxlGetPosition(base1Id));
+    Serial.print(" ");
+    Serial.print(dxlGetPosition(top1Id));
+    Serial.print(" ");
+    Serial.print(dxlGetPosition(base2Id));
+    Serial.print(" ");
+    Serial.print(dxlGetPosition(top2Id));
+    Serial.println("");
     flagRead = false;
   }
 }
