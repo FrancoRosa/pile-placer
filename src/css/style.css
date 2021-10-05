@@ -11,6 +11,10 @@
   align-items: center;
 }
 
+.is-flex-wrapped {
+  flex-wrap: wrap;
+}
+
 .is-flex-direction-column {
   flex-direction: column;
 }

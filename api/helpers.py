@@ -3,7 +3,7 @@ from json import dumps
 from time import process_time_ns, sleep, time
 from math import degrees, sin, cos, atan2, sqrt, radians
 from pyproj import Transformer
-from serial_servo import servoSerial
+# from serial_servo import servoSerial
 from requests import post
 import openpyxl
 
@@ -330,7 +330,7 @@ def rgb(waypoint, bay_to_waypoint):
     ) if 'color' in waypoint[0].keys() else -1
     rgb_piles[1]['color'] = waypoint[1]['color'].strip(
     ) if 'color' in waypoint[1].keys() else -1
-    post(rgb_url, json={'piles': rgb_piles})
+    post(rgb_url, json={'piles': rgb_piles}, timeout=0.25)
 
 
 create_projs('2229')

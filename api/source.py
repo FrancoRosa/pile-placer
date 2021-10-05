@@ -1,5 +1,5 @@
 from helpers import polygon, cvs_to_rows, rgb, rows_to_json, coordinate_distance
-from helpers import xlsx_to_rows, is_csv, create_projs, moveLasers
+from helpers import xlsx_to_rows, is_csv, create_projs
 from flask import Flask, request, jsonify, make_response
 from flask_socketio import SocketIO
 from flask_cors import CORS
@@ -102,7 +102,7 @@ def set_location():
             laser2dist = coordinate_distance(
                 waypoint[1], {'lat': lasers[1][0], 'lng': lasers[1][1]})
             rgb(waypoint, bay_to_waypoint)
-            moveLasers(config["truckHei"], laser1dist, laser2dist)
+            # moveLasers(config["truckHei"], laser1dist, laser2dist)
         broadcast({**heading, **location, **truck, **bay_to_waypoint})
 
     response = make_response(jsonify({
