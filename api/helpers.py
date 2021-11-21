@@ -269,12 +269,12 @@ def create_projs(epsg_code):
 def servoCommand(angles):
     def baseAngle(angle):
         if angle > 0:
-            return angle-90
+            return angle - 90
         if angle <= 0:
-            return angle-270
+            return angle + 270
 
     def topAngle(angle):
-        return -angle+180
+        return 180-angle
 
     command = {
         "turrets": [
@@ -292,7 +292,10 @@ def servoCommand(angles):
     }
     print("command base:", command["turrets"][0]["base"])
     print("command top:", command["turrets"][0]["top"])
-    command = f'{int(baseAngle(angles["base1"])):03},{int(topAngle(angles["top1"])):03},001\n'
+    if command["turrets"][0]["base"] > 0 and command["turrets"][0]["top"] > 0:
+        command = f'{int(baseAngle(angles["base1"])):03},{int(topAngle(angles["top1"])):03},001\n'
+    else:
+        command = '080,080,001\n'
     print("servo command:", command)
     serialCommand = command
     return serialCommand.encode('utf-8')
