@@ -65,6 +65,7 @@ volatile int top2 = 90;
 volatile int laser2 = 0;
 
 volatile bool flagProcessed = false;
+volatile bool flagRead = false;
 
 void getJson(char c)
 {
@@ -75,7 +76,14 @@ void getJson(char c)
   if ((json_i >= 2) && ((c == '\n') || (c == '\r')))
   {
     jsonBuffer[json_i] = '\0';
-    getValues();
+    if (memcmp(jsonBuffer, "read", 4) == 0)
+    {
+      flagRead = true;
+    }
+    else
+    {
+      getValues();
+    }
     clearBuffer();
   }
 }
@@ -145,5 +153,18 @@ void loop()
     updateActuators();
     Serial.println("... ok");
     flagProcessed = false;
+  }
+  if (flagRead)
+  {
+    Serial.print("... readings: ");
+    Serial.print(base1);
+    Serial.print(" ");
+    Serial.print(top1);
+    Serial.print(" ");
+    Serial.print(base2);
+    Serial.print(" ");
+    Serial.print(top2);
+    Serial.println("");
+    flagRead = false;
   }
 }

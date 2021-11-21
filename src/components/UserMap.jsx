@@ -1,5 +1,6 @@
 import { useStoreActions, useStoreState } from "easy-peasy";
 import DeckGL from "@deck.gl/react";
+import { MapView } from "@deck.gl/core";
 import { BitmapLayer, PolygonLayer, ScatterplotLayer } from "@deck.gl/layers";
 import { StaticMap } from "react-map-gl";
 import { useEffect, useState } from "react";
@@ -247,7 +248,14 @@ const UserMap = () => {
           }
         >
           <StaticMap mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN} />
-
+          <MapView
+            x={"80%"}
+            y={"80%"}
+            height={"15%"}
+            width={"15%"}
+            clear={true}
+            controller
+          />
           <ScatterplotLayer
             lineWidthMaxPixels={3}
             lineWidthMinPixels={2}
