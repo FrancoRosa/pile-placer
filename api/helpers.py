@@ -316,7 +316,8 @@ def moveLasers(height, laser1, laser2):
 
 
 def rgb(waypoint, bay_to_waypoint):
-    rgb_url = 'http://localhost:9998/api/rgb'
+    rgb_port = serial.Serial('/dev/ttyS0')
+
     rgb_piles = [
         {
             'distance': 1,
@@ -335,11 +336,7 @@ def rgb(waypoint, bay_to_waypoint):
     ) if 'color' in waypoint[0].keys() else -1
     rgb_piles[1]['color'] = waypoint[1]['color'].strip(
     ) if 'color' in waypoint[1].keys() else -1
-    try:
-        post(rgb_url, json={'piles': rgb_piles}, timeout=0.25)
-    except:
-        print('! error on GRB post')
-        pass
+    rgb_port.write(rgb_piles)
 
 
 create_projs('2229')
