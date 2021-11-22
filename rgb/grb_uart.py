@@ -3,6 +3,7 @@ from rgbmatrix import graphics
 from colormap import colors
 from time import sleep
 from threading import Thread
+from json import load
 import serial
 
 rgb_port = serial.Serial('/dev/ttyS0')
@@ -169,8 +170,11 @@ def timer():
 
 
 def uart():
-    p = rgb_port.readline()
-    print(p)
+    global piles
+    while True:
+        p = rgb_port.readline().decode()
+        print(p)
+        piles = load(p)
 
 
 Thread(target=uart, args=[]).start()
