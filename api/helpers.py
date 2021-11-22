@@ -338,7 +338,8 @@ def rgb(waypoint, bay_to_waypoint):
     ) if 'color' in waypoint[0].keys() else -1
     rgb_piles[1]['color'] = waypoint[1]['color'].strip(
     ) if 'color' in waypoint[1].keys() else -1
-    rgb_port.write(rgb_piles)
+    command = "%s\n", dumps(rgb_piles)
+    rgb_port.write(command.encode())
 
 
 create_projs('2229')
