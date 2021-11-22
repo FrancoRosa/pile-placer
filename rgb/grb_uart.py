@@ -172,9 +172,12 @@ def timer():
 def uart():
     global piles
     while True:
-        p = rgb_port.readline().decode()
-        print(p)
-        piles = loads(p)
+        try:
+            p = rgb_port.readline().decode()
+            print(p)
+            piles = loads(p)
+        except:
+            print("... error in string")
 
 
 Thread(target=uart, args=[]).start()
