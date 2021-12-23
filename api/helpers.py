@@ -3,7 +3,7 @@ from json import dumps
 from time import process_time_ns, sleep, time
 from math import degrees, sin, cos, atan2, sqrt, radians
 from pyproj import Transformer
-from serial_servo import servoSerial
+# from serial_servo import servoSerial
 from requests import post
 
 import openpyxl
@@ -314,7 +314,7 @@ def moveLasers(height, laser1, laser2):
     print("base:", angles["base1"], ", top:", angles["top1"])
     print('======================')
     command = servoCommand(angles)
-    servoSerial.write(command)
+    # servoSerial.write(command)
 
 
 def rgb(waypoint, bay_to_waypoint):
@@ -339,7 +339,7 @@ def rgb(waypoint, bay_to_waypoint):
     rgb_piles[1]['color'] = waypoint[1]['color'].strip(
     ) if 'color' in waypoint[1].keys() else -1
     command = "%s\n" % dumps(rgb_piles)
-    rgb_port.write(command.decode())
+    rgb_port.write(command.encode())
 
 
 create_projs('2229')

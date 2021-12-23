@@ -3,7 +3,7 @@ import serial
 
 while True:
     try:
-        servoSerial = serial.Serial('/dev/ttyACM1')
+        servoSerial = serial.Serial('/dev/ttyUSB0')
         print('.. servos connected')
         break
     except:
