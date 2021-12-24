@@ -39,6 +39,7 @@ export default {
     heading: 0,
     lat: 0,
     lng: 0,
+    distY: [0, 0],
     truck: [
       [0, 0],
       [0, 0],

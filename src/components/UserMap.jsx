@@ -9,6 +9,7 @@ import { useLocalStorage, colors, colorsFill } from "../js/helpers";
 import { playColor, playOther } from "../js/audio";
 import mapboxgl from "mapbox-gl";
 import marooka from "../assets/marooka-top.bmp";
+import { LineLayer } from "deck.gl";
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass =
@@ -61,8 +62,6 @@ const UserMap = () => {
   const socketListener = () => {
     socket.on("message", (msg) => {
       const parsedMsg = JSON.parse(msg);
-      console.log(parsedMsg);
-
       setCenter(parsedMsg);
       setViewState({
         ...viewState,
@@ -85,8 +84,10 @@ const UserMap = () => {
       ]);
 
       setVerticalLine([
-        { lat: parsedMsg.truck[4][0], lng: parsedMsg.truck[4][1] },
-        { lat: parsedMsg.truck[5][0], lng: parsedMsg.truck[5][1] },
+        {
+          from: [parsedMsg.truck[4][1], parsedMsg.truck[4][0]],
+          to: [parsedMsg.truck[5][1], parsedMsg.truck[5][0]],
+        },
       ]);
 
       setHorizontalLine([
@@ -343,6 +344,15 @@ const UserMap = () => {
             getLineColor={colors.lightgreen}
             getLineWidth={0.1}
             getElevation={0.5}
+          />
+          <LineLayer
+            data={verticalLine}
+            pickable={true}
+            widthUnits="meters"
+            getWidth={0.3}
+            getSourcePosition={(d) => d.from}
+            getTargetPosition={(d) => d.to}
+            getColor={[20, 80, 100]}
           />
         </DeckGL>
       </div>
