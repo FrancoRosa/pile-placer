@@ -32,24 +32,56 @@ export const useLocalStorage = (key, initialValue) => {
     }
   };
   return [storedValue, setValue];
-}
+};
 
-export const sortByColor = waypoints => {
-  const byColor = {}
-  waypoints.forEach(waypoint => {
-    if (byColor[waypoint.color?.trim()]) byColor[waypoint.color?.trim()] += 1
-    else byColor[waypoint.color?.trim()] = 1 
+export const sortByColor = (waypoints) => {
+  const byColor = {};
+  waypoints.forEach((waypoint) => {
+    if (byColor[waypoint.color?.trim()]) byColor[waypoint.color?.trim()] += 1;
+    else byColor[waypoint.color?.trim()] = 1;
   });
-  return byColor
-}
+  return byColor;
+};
 
-export const sortByColorPlaced = waypoints => {
-  const byColor = {}
-  waypoints.forEach(waypoint => {
-    if (waypoint.placed){
-      if (byColor[waypoint.color?.trim()]) byColor[waypoint.color?.trim()] += 1
-      else byColor[waypoint.color?.trim()] = 1 
+export const sortByColorPlaced = (waypoints) => {
+  const byColor = {};
+  waypoints.forEach((waypoint) => {
+    if (waypoint.placed) {
+      if (byColor[waypoint.color?.trim()]) byColor[waypoint.color?.trim()] += 1;
+      else byColor[waypoint.color?.trim()] = 1;
     }
   });
-  return byColor
-}
+  return byColor;
+};
+
+export const colors = {
+  black: [0, 0, 0],
+  blue: [0, 0, 255],
+  brown: [165, 42, 42],
+  darkblue: [0, 0, 139],
+  green: [0, 255, 0],
+  lightblue: [135, 206, 235],
+  lightgreen: [144, 238, 144],
+  orange: [255, 165, 0],
+  pink: [255, 105, 180],
+  purple: [128, 0, 128],
+  red: [255, 0, 0],
+  white: [255, 255, 255],
+  yellow: [255, 255, 0],
+};
+
+export const colorsFill = {
+  black: [0, 0, 0, 128],
+  blue: [0, 0, 255, 128],
+  brown: [165, 42, 42, 128],
+  darkblue: [0, 0, 139, 128],
+  green: [0, 255, 0, 128],
+  lightblue: [135, 206, 235, 128],
+  lightgreen: [144, 238, 144, 128],
+  orange: [255, 165, 0, 128],
+  pink: [255, 105, 180, 128],
+  purple: [128, 0, 128, 128],
+  red: [255, 0, 0, 128],
+  white: [255, 255, 255, 128],
+  yellow: [255, 255, 0, 128],
+};

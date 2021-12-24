@@ -7,6 +7,8 @@ from os import uname, path
 from werkzeug.utils import secure_filename
 import json
 
+import logging
+
 rpi = uname()[4] != 'x86_64'
 
 UPLOAD_FOLDER = 'cvs_files'
@@ -16,6 +18,8 @@ if rpi:
 ALLOWED_EXTENSIONS = {'csv', 'xlsx'}
 
 app = Flask(__name__)
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 CORS(app)
 app.config['SECRET_KEY'] = 'secret'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER

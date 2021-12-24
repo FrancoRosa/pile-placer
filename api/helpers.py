@@ -5,7 +5,9 @@ from math import degrees, sin, cos, atan2, sqrt, radians
 from pyproj import Transformer
 # from serial_servo import servoSerial
 from requests import post
+
 import openpyxl
+import serial
 
 
 print(getcwd())
@@ -269,12 +271,12 @@ def create_projs(epsg_code):
 def servoCommand(angles):
     def baseAngle(angle):
         if angle > 0:
-            return angle-90
-        if angle < 0:
-            return 90 + 180+angle
+            return angle - 90
+        if angle <= 0:
+            return angle + 270
 
     def topAngle(angle):
-        return angle
+        return 180-angle
 
     command = {
         "turrets": [
@@ -292,7 +294,12 @@ def servoCommand(angles):
     }
     print("command base:", command["turrets"][0]["base"])
     print("command top:", command["turrets"][0]["top"])
-    serialCommand = dumps(command) + '\n'
+    if command["turrets"][0]["base"] > 0 and command["turrets"][0]["top"] > 0:
+        command = f'{int(baseAngle(angles["base1"])):03},{int(topAngle(angles["top1"])):03},001\n'
+    else:
+        command = '080,080,001\n'
+    print("servo command:", command)
+    serialCommand = command
     return serialCommand.encode('utf-8')
 
 
@@ -303,15 +310,16 @@ def moveLasers(height, laser1, laser2):
         "base2": degrees(atan2(laser2["y"], laser2["x"])),
         "top2": degrees(atan2(float(height), laser2["abs"])),
     }
-    print('==========')
-    print("base:", angles["base1"])
-    print("top:", angles["top1"])
+    print('======================')
+    print("base:", angles["base1"], ", top:", angles["top1"])
+    print('======================')
     command = servoCommand(angles)
-    servoSerial.write(command)
+    # servoSerial.write(command)
 
 
 def rgb(waypoint, bay_to_waypoint):
-    rgb_url = 'http://localhost:9998/api/rgb'
+    rgb_port = serial.Serial('/dev/ttyS0')
+
     rgb_piles = [
         {
             'distance': 1,
@@ -330,7 +338,12 @@ def rgb(waypoint, bay_to_waypoint):
     ) if 'color' in waypoint[0].keys() else -1
     rgb_piles[1]['color'] = waypoint[1]['color'].strip(
     ) if 'color' in waypoint[1].keys() else -1
+<<<<<<< HEAD
     post(rgb_url, json={'piles': rgb_piles}, timeout=0.25)
+=======
+    command = "%s\n" % dumps(rgb_piles)
+    rgb_port.write(command.encode())
+>>>>>>> offline
 
 
 create_projs('2229')

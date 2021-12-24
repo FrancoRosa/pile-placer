@@ -190,3 +190,8 @@ input[type="range"]::-webkit-slider-thumb {
 .slider {
   width: 90%;
 }
+
+.deck-tooltip {
+  font-size: 0.8em;
+  font-family: Helvetica, Arial, sans-serif;
+}

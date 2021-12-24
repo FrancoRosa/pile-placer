@@ -6,7 +6,6 @@ import { useLocalStorage } from "../js/helpers";
 import epsgCodes from "../assets/epsg_codes.pdf";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileAlt, faSearch } from "@fortawesome/free-solid-svg-icons";
-import layout from "../assets/layout.png";
 import marookaSize from "../assets/marooka-size.png";
 import marookaSide from "../assets/marooka-side.png";
 
@@ -144,8 +143,10 @@ const Config = () => {
           <hr />
           <FileInput />
         </div>
+
         <div className="column is-centered has-text-centered">
-          <img src={layout} />
+          <img src={marookaSize} />
+          <img src={marookaSide} />
         </div>
         <div className="column is-one-third is-centered has-text-centered mt-4">
           <img src={marookaSide} />
